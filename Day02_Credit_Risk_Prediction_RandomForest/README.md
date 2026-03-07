@@ -1,27 +1,27 @@
-Day 2 — Credit Risk Prediction using Random Forest
-📌 Project Overview
+DAY 2 — CREDIT RISK PREDICTION USING RANDOM FOREST
+PROJECT OVERVIEW
 
-In this project, we build a Random Forest classifier to predict credit risk using the German Credit Dataset.
+In this project we build a Random Forest classifier to predict credit risk using the German Credit Dataset.
 
 The objective is to determine whether a loan applicant is high risk (likely to default) or low risk based on financial and demographic attributes.
 
-This project is part of the 30 Days of Machine Learning challenge, where each day focuses on implementing and understanding a machine learning model while building a complete ML pipeline.
+This project is part of the 30 Days of Machine Learning Challenge, where each day focuses on implementing and understanding a machine learning model while building a complete ML pipeline.
 
-📊 Problem Statement
+PROBLEM STATEMENT
 
 Financial institutions must assess the creditworthiness of loan applicants to minimize default risk.
 
-Incorrectly approving a risky borrower can lead to significant financial loss.
+Incorrectly approving a risky borrower can lead to financial losses.
 
 Using historical credit data, we train a machine learning model that predicts whether a borrower is:
 
-0 → Good credit
+Label	Meaning
+0	Good credit
+1	Bad credit (High risk)
+DATASET
 
-1 → Bad credit (high risk)
+Dataset used: German Credit Dataset
 
-📂 Dataset
-
-Dataset: German Credit Dataset
 Source: UCI Machine Learning Repository
 
 Attribute	Value
@@ -29,95 +29,103 @@ Total samples	1000
 Total features	20
 Target variable	Risk
 
-Example features:
+Example dataset features:
 
 Feature	Description
-Age	Age of applicant
-Credit Amount	Loan amount
-Duration	Loan duration
-Savings Account	Savings status
+Age	Age of the applicant
+Credit Amount	Total loan amount
+Duration	Loan duration in months
+Savings Account	Savings account category
 Checking Account	Checking account status
-Employment Duration	Length of employment
-⚙️ Machine Learning Pipeline
+Employment Duration	Years of employment
+MACHINE LEARNING PIPELINE
+
+The project follows a standard machine learning workflow:
+
 Raw Dataset
-      ↓
+↓
 Exploratory Data Analysis
-      ↓
+↓
 Data Cleaning
-      ↓
+↓
 Feature Encoding
-      ↓
+↓
 Train-Test Split
-      ↓
+↓
 Baseline Random Forest Model
-      ↓
+↓
 Hyperparameter Tuning
-      ↓
-Evaluation Metrics
-      ↓
+↓
+Model Evaluation
+↓
 Feature Importance Analysis
-🔎 Exploratory Data Analysis (EDA)
 
-Before training the model, we explored the dataset to understand its structure and distributions.
+EXPLORATORY DATA ANALYSIS (EDA)
 
-Key inspection steps:
+Before training the model we analyze the dataset structure.
 
+Dataset Inspection
 df.info()
 df.describe()
 df.isnull().sum()
 
-These checks help identify:
+These commands reveal:
 
-Data types
+data types
 
-Missing values
+missing values
 
-Statistical properties
+statistical properties
 
-Feature distributions
+feature distributions
 
-Example Distribution Plot
+Age Distribution Visualization
 import matplotlib.pyplot as plt
 
 plt.hist(df["age"], bins=20)
 plt.title("Age Distribution")
 plt.show()
 
-X-axis: Age values
-Y-axis: Frequency (number of samples)
+Explanation:
 
-🧹 Data Preprocessing
+Axis	Meaning
+X-axis	Age values
+Y-axis	Frequency (number of people in each age group)
+DATA PREPROCESSING
 Handling Missing Values
 
 Missing values were handled using domain-aware strategies.
 
-Feature	Strategy
+Feature	Method
 Age	Median
 Credit Amount	Mean
-Categorical variables	Mode or category mapping
+Categorical variables	Mode
 
-These approaches preserve dataset distribution while removing null values.
+This preserves distribution while removing null values.
 
 Feature Encoding
 
-Categorical features were converted into numeric format.
+Categorical variables were converted into numerical representations.
 
-Tree-based models like Random Forest can work with integer-encoded categories, so extensive scaling or normalization was not required.
+Random Forest can work with integer encoded categorical values, so extensive scaling was not required.
 
-🔀 Train-Test Split
+TRAIN TEST SPLIT
 
-The dataset was split into training and testing sets:
+Dataset split into training and testing data.
 
-80% → Training Data
+Dataset	Percentage
+Training data	80%
+Testing data	20%
 
-20% → Testing Data
-
-Using stratified sampling:
+Implementation:
 
 train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
-🌲 Baseline Model — Random Forest
 
-We first trained a baseline Random Forest model without hyperparameter tuning.
+Stratified sampling ensures the class distribution remains consistent.
+
+BASELINE MODEL — RANDOM FOREST
+
+We first trained a baseline Random Forest classifier.
 
 from sklearn.ensemble import RandomForestClassifier
 
@@ -128,166 +136,96 @@ rf = RandomForestClassifier(
 
 rf.fit(X_train, y_train)
 
-Random Forest is an ensemble algorithm that combines multiple decision trees trained on random subsets of data.
+Random Forest is an ensemble learning algorithm that combines multiple decision trees trained on random subsets of the data.
 
-Final predictions are determined by majority voting.
+Final predictions are determined by majority voting across trees.
 
-🧠 Mathematical Intuition
+MATHEMATICAL INTUITION
 
-Random Forest prediction:
+Random Forest prediction can be expressed as:
 
-𝑦
-^
-=
-𝑚
-𝑜
-𝑑
-𝑒
-(
-𝑇
-1
-(
-𝑥
-)
-,
-𝑇
-2
-(
-𝑥
-)
-,
-.
-.
-.
-,
-𝑇
-𝑛
-(
-𝑥
-)
-)
-y
-^
-	​
-
-=mode(T
-1
-	​
-
-(x),T
-2
-	​
-
-(x),...,T
-n
-	​
-
-(x))
+ŷ = mode(T₁(x), T₂(x), … , Tₙ(x))
 
 Where:
 
-𝑇
-𝑖
-T
-i
-	​
-
- = individual decision tree
-
-𝑥
-x = feature vector
+Symbol	Meaning
+Tᵢ	Individual decision tree
+x	Input feature vector
 
 Randomization occurs through:
 
-Bootstrap sampling of data
+bootstrap sampling
 
-Random feature selection during splits
+random feature selection
 
 This reduces variance and overfitting.
 
-⏱ Time Complexity
+TIME COMPLEXITY
 
-Training complexity:
+Training complexity of Random Forest:
 
-𝑂
-(
-𝑇
-⋅
-𝑁
-log
-⁡
-𝑁
-)
-O(T⋅NlogN)
+O(T × N log N)
 
-Where:
+Variable	Meaning
+T	Number of trees
+N	Number of samples
 
-T = number of trees
+Each decision tree requires sorting operations to evaluate splits, costing approximately O(N log N).
 
-N = number of samples
+HYPERPARAMETER TUNING
 
-Explanation:
-
-Each decision tree evaluates splits that require sorting.
-
-Sorting operations cost roughly O(N log N).
-
-Random Forest trains T trees, making total complexity T × N log N.
-
-🔧 Hyperparameter Tuning
-
-To improve performance, we used GridSearchCV.
+Hyperparameters were optimized using GridSearchCV.
 
 Parameters tuned:
 
 Parameter	Description
 n_estimators	Number of trees
 max_depth	Maximum tree depth
-min_samples_split	Minimum samples required for split
-min_samples_leaf	Minimum samples in leaf node
-max_features	Number of features considered per split
+min_samples_split	Minimum samples required to split
+min_samples_leaf	Minimum samples in a leaf node
+max_features	Features considered for splits
 
 Example search space:
 
-n_estimators = [100, 200, 300]
-max_depth = [None, 10, 20]
-min_samples_split = [2, 5]
-max_features = ["sqrt", "log2"]
-📈 Evaluation Metrics
+n_estimators = [100,200,300]
+max_depth = [None,10,20]
+min_samples_split = [2,5]
+max_features = ["sqrt","log2"]
+MODEL EVALUATION METRICS
 
-Because credit risk datasets are often imbalanced, multiple metrics were used.
+Since credit datasets are often imbalanced, multiple evaluation metrics were used.
 
 Metric	Purpose
-Accuracy	Overall correctness
+Accuracy	Overall prediction correctness
 Precision	Correctly predicted risky borrowers
 Recall	Ability to detect risky borrowers
 F1 Score	Balance between precision and recall
-ROC-AUC	Overall ranking performance
-📉 ROC-AUC Explained
+ROC-AUC	Ranking ability of the classifier
+ROC-AUC EXPLAINED
 
-ROC = Receiver Operating Characteristic
+ROC stands for Receiver Operating Characteristic.
 
-ROC curve plots:
+The ROC curve plots:
 
 True Positive Rate
 
 False Positive Rate
 
-AUC represents the area under the ROC curve, measuring the model’s ability to distinguish between classes.
+AUC represents the Area Under the Curve.
 
 AUC Score	Interpretation
 0.5	Random guessing
 0.7	Acceptable
 0.8	Good
 0.9	Excellent
-📊 Baseline Model Results
+BASELINE MODEL RESULTS
 Metric	Score
 Accuracy	0.74
 Precision	0.69
 Recall	0.63
 F1 Score	0.66
 ROC-AUC	0.79
-🚀 Tuned Model Results
+TUNED MODEL RESULTS
 
 After hyperparameter tuning:
 
@@ -298,11 +236,11 @@ Recall	0.68
 F1 Score	0.70
 ROC-AUC	0.83
 
-The tuned model shows improved ability to identify high-risk borrowers.
+The tuned model demonstrates improved ability to detect high-risk borrowers.
 
-📊 Feature Importance
+FEATURE IMPORTANCE
 
-Random Forest calculates feature importance based on impurity reduction across all trees.
+Random Forest calculates feature importance using impurity reduction across trees.
 
 Example output:
 
@@ -312,14 +250,14 @@ Duration	0.16
 Age	0.13
 Checking Account	0.12
 
-These features contribute the most to predicting credit risk.
+These features contribute most strongly to credit risk prediction.
 
-📚 Key Learnings
+KEY LEARNINGS
 
-Random Forest reduces overfitting through bagging.
+Random Forest reduces overfitting through bagging
 
-Hyperparameter tuning improves predictive performance.
+Hyperparameter tuning improves predictive performance
 
-Feature importance provides model interpretability.
+Feature importance improves model interpretability
 
-ROC-AUC is essential for evaluating imbalanced classification problems.
+ROC-AUC is critical for evaluating imbalanced classification tasks
