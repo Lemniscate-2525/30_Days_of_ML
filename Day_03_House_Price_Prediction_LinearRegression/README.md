@@ -57,10 +57,10 @@ StandardScaler was used to normalize features.
 
 Scaling ensures features have:
 
-Mean = 0  
-Standard deviation = 1
+Mean(mu) = 0  
+Standard deviation(sigma) = 1
 
-This improves gradient descent convergence and prevents large-scale features from dominating training.
+This improves gradient descent convergence and prevents large-scale features from dominating training. Scaling is usually not required here as the model is linear and not distance based, but here scaling smoothens the optimization hence it is used. 
 
 ---
 
@@ -76,7 +76,7 @@ x → input features
 w → model weights  
 b → bias
 
-The model learns weights that minimize **Mean Squared Error (MSE)**.
+The model learns weights that minimize **Mean Squared Error (MSE)**.(Loss Fn)
 
 ---
 
