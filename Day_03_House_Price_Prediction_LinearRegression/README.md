@@ -80,6 +80,82 @@ The model learns weights that minimize **Mean Squared Error (MSE)**.(Loss Fn)
 
 ---
 
+---
+
+## ⏱ Time Complexity
+
+Training complexity for Linear Regression depends on solving the **least squares optimization problem**.
+
+The analytical solution is given by the **Normal Equation:**
+
+$$w = (X^TX)^{-1} X^Ty$$
+
+| Symbol | Meaning |
+|---|---|
+| X | Feature matrix |
+| y | Target vector |
+| w | Model weights |
+
+**Main computational steps:**
+
+**1. Computing the matrix multiplication XᵀX**
+```
+O(n × d²)
+```
+
+**2. Matrix inversion of (XᵀX)**
+```
+O(d³)
+```
+
+**3. Multiplying with Xᵀy**
+```
+O(n × d)
+```
+
+**Overall training complexity:**
+```
+O(n d² + d³)
+```
+
+| Variable | Meaning |
+|---|---|
+| n | Number of samples |
+| d | Number of features |
+
+Since most real-world datasets have **n >> d**, the dominant term is typically:
+```
+O(n d²)
+```
+
+---
+
+## ⏱ Prediction Complexity
+
+Prediction requires computing the **dot product** between the feature vector and learned weights:
+
+$$\hat{y} = w^Tx + b$$
+
+**Prediction complexity per sample:**
+```
+O(d)
+```
+
+**For n samples:**
+```
+O(n × d)
+```
+
+---
+
+## 💾 Space Complexity
+
+Linear Regression stores **one weight per feature** and a bias term.
+```
+O(d)
+```
+ **d** -> is the number of features.
+
 ## Evaluation Metrics
 
 | Metric | Meaning |
