@@ -11,11 +11,11 @@ A structured **30-day challenge implementing Machine Learning and Deep Learning 
 
 The goal of this repository is to:
 
-- understand **mathematical intuition behind ML models**
-- build **complete end-to-end ML pipelines**
-- implement **deep learning architectures from scratch**
-- explore **modern transformer models**
-- document experiments clearly
+- Understand **mathematical intuition behind ML models**
+- Build **complete end-to-end ML pipelines**
+- Implement **deep learning architectures from scratch**
+- Explore **modern transformer models**
+- Document experiments clearly
 
 Each day focuses on a **specific algorithm or architecture**, implemented on a real-world problem.
 
@@ -242,11 +242,11 @@ All datasets are used for **educational experimentation**.
 
 This challenge focuses on building strong intuition around:
 
-- selecting appropriate models for different tasks
-- building reproducible ML pipelines
-- understanding sequence models and attention
-- implementing transformer architectures
-- documenting ML experiments clearly
+- Selecting appropriate models for different tasks
+- Building reproducible ML pipelines
+- Understanding sequence models and attention
+- Implementing transformer architectures
+- Documenting ML experiments clearly
 
 ---
 
