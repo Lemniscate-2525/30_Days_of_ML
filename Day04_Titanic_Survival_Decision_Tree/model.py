@@ -7,6 +7,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import cross_val_score
 
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
@@ -67,6 +68,12 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, rando
 clf = DecisionTreeClassifier(max_depth = 4, random_state = 42)
 clf.fit(X_train, y_train)
 
+# Cross Validation
+scores = cross_val_score(clf, X, y, cv=5)
+
+print("Cross Validation Scores:", scores)
+print("Mean CV Score:", scores.mean())
+print("Std Dev:", scores.std())
 
 # Predictions : 
 y_pred = clf.predict(X_test)
