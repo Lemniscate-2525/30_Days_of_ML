@@ -186,7 +186,7 @@ The mean score provides a more reliable estimate of model performance compared t
 
 ## Decision Tree Structure
 
-![Decision Tree](images/tree.png)
+![Decision Tree](tree.png)
 
 The decision tree visualization helps understand how the model splits features such as sex, passenger class, and fare to determine survival probability.
 
@@ -194,7 +194,7 @@ The decision tree visualization helps understand how the model splits features s
 
 ## Confusion Matrix
 
-![Confusion Matrix](images/confusion_matrix.png)
+![Confusion Matrix](cf.png)
 
 The confusion matrix shows the number of correct and incorrect predictions for each class.
 
