@@ -166,6 +166,38 @@ Confusion Matrix
 
 ---
 
+# Cross Validation
+
+To ensure the model generalizes well and is not dependent on a single train-test split, 5-fold cross validation was performed.
+
+The dataset is divided into 5 folds. The model is trained on 4 folds and validated on the remaining fold. This process repeats until every fold has served as the validation set.
+
+Example output:
+
+```
+Cross Validation Scores: [0.80 0.83 0.79 0.82 0.81]
+Mean CV Score: 0.81
+Std Dev: 0.014
+```
+
+The mean score provides a more reliable estimate of model performance compared to a single train-test split.
+
+# Model Visualization
+
+## Decision Tree Structure
+
+![Decision Tree](images/tree.png)
+
+The decision tree visualization helps understand how the model splits features such as sex, passenger class, and fare to determine survival probability.
+
+---
+
+## Confusion Matrix
+
+![Confusion Matrix](images/confusion_matrix.png)
+
+The confusion matrix shows the number of correct and incorrect predictions for each class.
+
 # Feature Importance
 
 Decision Trees provide feature importance scores.
