@@ -3,6 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
 ![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Scikit--Learn-orange)
 ![Deep Learning](https://img.shields.io/badge/Deep%20Learning-PyTorch-red)
+![Deep Learning](https://img.shields.io/badge/Deep%20Learning-Tensor--Flow-white)
 ![Challenge](https://img.shields.io/badge/Challenge-30%20Days-green)
 ![Repo Size](https://img.shields.io/github/repo-size/Lemniscate-2525/30_Days_of_ML)
 ![Last Commit](https://img.shields.io/github/last-commit/Lemniscate-2525/30_Days_of_ML)
