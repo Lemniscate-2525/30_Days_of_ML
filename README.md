@@ -5,8 +5,8 @@
 ![Deep Learning](https://img.shields.io/badge/Deep%20Learning-PyTorch-red)
 ![Deep Learning](https://img.shields.io/badge/Deep%20Learning-Tensor--Flow-white)
 ![Challenge](https://img.shields.io/badge/Challenge-30%20Days-green)
-![Repo Size](https://img.shields.io/github/repo-size/Lemniscate-2525/30_Days_of_ML)
-![Last Commit](https://img.shields.io/github/last-commit/Lemniscate-2525/30_Days_of_ML)
+![Repo Size](https://img.shields.io/github/Repo-Size/Lemniscate-2525/30_Days_of_ML)
+![Last Commit](https://img.shields.io/github/Last-Commit/Lemniscate-2525/30_Days_of_ML)
 
 A structured **30-day challenge implementing Machine Learning and Deep Learning models on real datasets**, progressing from **classical ML algorithms to modern attention-based architectures and transformers**.
 
