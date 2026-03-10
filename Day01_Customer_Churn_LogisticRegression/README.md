@@ -173,7 +173,7 @@ This ensures all features contribute equally to model training.
 
 ---
 
-# Logistic Regression — Mathematical Intuition
+# Mathematical Intuition
 
 Logistic Regression models the probability that a sample belongs to a particular class.
 
