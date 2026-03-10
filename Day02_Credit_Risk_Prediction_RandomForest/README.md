@@ -1,4 +1,4 @@
-# Credit Risk Prediction using Random Forest
+# Credit Risk Prediction
 
 ---
 
