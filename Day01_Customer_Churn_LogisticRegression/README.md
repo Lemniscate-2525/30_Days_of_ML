@@ -177,6 +177,8 @@ This ensures all features contribute equally to model training.
 
 Logistic Regression models the probability that a sample belongs to a particular class.
 
+![Sigmoid Function](sf.png)
+
 First, the model computes a **linear combination of features**:
 
 \[
@@ -256,7 +258,7 @@ Using multiple metrics provides a more complete understanding of model performan
 
 # Confusion Matrix
 
-![Confusion Matrix](confusion_matrix.png)
+![Confusion Matrix](cm1.png)
 
 The confusion matrix shows:
 
@@ -271,7 +273,7 @@ This helps identify the types of errors made by the classifier.
 
 # ROC Curve
 
-![ROC Curve](roc_curve.png)
+![ROC Curve](roc1.png)
 
 The ROC curve shows the tradeoff between:
 
@@ -298,7 +300,7 @@ Large positive coefficients indicate features that increase churn probability.
 
 Large negative coefficients indicate features that reduce churn probability.
 
-![Feature Importance](feature_importance.png)
+![Feature Importance](fi1.png)
 
 ---
 
