@@ -179,34 +179,34 @@ Logistic Regression models the probability that a sample belongs to a particular
 
 ![Sigmoid Function](sf.png)
 
-First, the model computes a **linear combination of features**:
+First, the model computes a linear combination of the input features:
 
-\[
-z = w^T x + b
-\]
+```
+z = wᵀx + b
+```
 
 Where:
 
-- \(x\) = feature vector  
-- \(w\) = model weights  
-- \(b\) = bias  
+- **x** = feature vector  
+- **w** = model weights  
+- **b** = bias term  
 
-This value is passed through the **sigmoid function**:
+This value is then passed through the **sigmoid function**:
 
-\[
-\sigma(z) = \frac{1}{1 + e^{-z}}
-\]
+```
+σ(z) = 1 / (1 + e⁻ᶻ)
+```
 
-The sigmoid function maps any real value into the range:
+The sigmoid function converts any real value into a probability between **0 and 1**.
 
-\[
-0 \leq P(y=1) \leq 1
-\]
+```
+0 ≤ P(y = 1) ≤ 1
+```
 
 Decision rule:
 
 ```
-If probability ≥ 0.5 → churn
+If P(y = 1) ≥ 0.5 → churn
 Else → no churn
 ```
 
