@@ -1,5 +1,5 @@
 
-# Customer Churn Prediction using Logistic Regression
+# Customer Churn Prediction 
 
 ## Project Overview
 
