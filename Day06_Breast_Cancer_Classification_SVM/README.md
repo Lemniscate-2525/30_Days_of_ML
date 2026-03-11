@@ -6,7 +6,7 @@ Early detection of breast cancer significantly improves treatment success rates.
 
 In this project, we implement a **Support Vector Machine (SVM)** classifier to predict whether a tumor is **malignant or benign** using diagnostic features extracted from cell nuclei images.
 
-The focus of this implementation is building a **structured machine learning pipeline**, including:
+The focus of this implementation is building a **structured ML Pipeline**, including:
 
 - Exploratory Data Analysis
 - Feature scaling
@@ -216,6 +216,75 @@ This phenomenon is sometimes called the **blessing of dimensionality**.
 
 It explains why **linear SVM performs well in high-dimensional datasets** such as text classification and bioinformatics.
 
+
+
+# Decision Boundary, Margin and Support Vectors
+
+To better understand how Support Vector Machines work, the dataset was reduced to **two dimensions using PCA** and the decision boundary was visualized.
+
+![SVM Decision Boundary](sv_m.png)
+
+This visualization shows three key geometric concepts of SVM:
+
+---
+
+## Hyperplane
+
+The **hyperplane** is the decision boundary that separates the two classes.
+
+For a linear SVM, the hyperplane is defined by:
+
+```
+w · x + b = 0
+```
+
+Where:
+
+- **w** → weight vector  
+- **x** → feature vector  
+- **b** → bias  
+
+In 2D, this boundary appears as a **line**.  
+In higher dimensions, it becomes a **plane or hyperplane**.
+
+---
+
+## Margin
+
+The **margin** is the distance between the hyperplane and the closest data points from each class.
+
+SVM tries to **maximize this margin**, which improves the model’s ability to generalize to unseen data.
+
+Mathematically, margin is proportional to:
+
+```
+2 / ||w||
+```
+
+Maximizing the margin reduces overfitting and makes the classifier more robust.
+
+---
+
+## Support Vectors
+
+The **support vectors** are the data points closest to the decision boundary.
+
+These points are critical because:
+
+- They completely define the position of the hyperplane
+- Removing non-support vector points usually does not change the boundary
+- They represent the most informative samples in the dataset
+
+In the visualization, support vectors are shown as **highlighted or circled points**.
+
+---
+
+## Intuition
+
+Instead of trying to correctly classify all points with a complex boundary, SVM focuses on finding the boundary that is **most confident and stable**.
+
+By maximizing the margin and relying only on support vectors, SVM achieves strong generalization performance, especially in high-dimensional datasets.
+
 ---
 
 # Hyperparameters
@@ -386,20 +455,6 @@ False Positive Rate
 ```
 
 The **Area Under the Curve (ROC-AUC)** measures how well the model distinguishes between classes.
-
----
-
-# Support Vector Visualization
-
-![SVM Margin Visualization](sv_m.png)
-
-This visualization shows:
-
-- Decision Boundary
-- Margin
-- Support Vectors
-
-Support vectors are the data points closest to the hyperplane.
 
 ---
 
