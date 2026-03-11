@@ -111,7 +111,7 @@ Observations:
 
 A correlation heatmap helps visualize relationships between features.
 
-![Correlation Heatmap](correlation_heatmap.png)
+![Correlation Heatmap](corr.png)
 
 This visualization highlights highly correlated features and helps understand the feature structure.
 
@@ -361,7 +361,7 @@ ROC-AUC is particularly useful for binary classification.
 
 # Confusion Matrix
 
-![Confusion Matrix](confusion_matrix.png)
+![Confusion Matrix](cf2.png)
 
 The confusion matrix shows the number of:
 
@@ -376,7 +376,7 @@ This helps analyze classification errors.
 
 # ROC Curve
 
-![ROC Curve](roc_curve.png)
+![ROC Curve](roc2.png)
 
 The ROC curve visualizes the tradeoff between:
 
@@ -391,7 +391,7 @@ The **Area Under the Curve (ROC-AUC)** measures how well the model distinguishes
 
 # Support Vector Visualization
 
-![SVM Margin Visualization](svm_margin.png)
+![SVM Margin Visualization](sv_m.png)
 
 This visualization shows:
 
@@ -473,14 +473,14 @@ many noisy features exist
 training time becomes prohibitive
 ```
 
-In such cases, tree-based models or neural networks may scale better.
+In such cases, tree-based models or NN may scale better.
 
 ---
 
 # Key Learnings
 
-- SVM maximizes the margin between classes
-- only support vectors define the decision boundary
-- kernel functions enable nonlinear classification
-- feature scaling is critical for SVM performance
-- hyperparameter tuning significantly affects model behavior
+- SVM maximizes the margin between classes.
+- Only support vectors define the decision boundary.
+- Kernel functions enable nonlinear classification.
+- Feature Scaling is critical for SVM performance.
+- Hyperparameter tuning significantly affects model behavior.
