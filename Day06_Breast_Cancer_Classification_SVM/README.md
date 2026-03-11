@@ -1,4 +1,4 @@
-# Breast Cancer Classification using Support Vector Machines (SVM)
+# Breast Cancer Classification 
 
 ## Project Overview
 
