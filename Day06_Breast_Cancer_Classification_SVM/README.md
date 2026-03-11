@@ -86,10 +86,10 @@ EDA is performed to understand the dataset structure before modeling.
 
 Typical checks include:
 
-- dataset shape
-- feature statistics
-- class distribution
-- correlation analysis
+- Dataset Shape
+- Feature Statistics
+- Class Distribution
+- Correlation Analysis
 
 Example analysis performed:
 
@@ -101,9 +101,9 @@ df["target"].value_counts()
 
 Observations:
 
-- dataset contains **30 numerical features**
-- classes are **slightly imbalanced**
-- many features show strong correlation
+- Dataset contains **30 numerical features**
+- Classes are **slightly imbalanced**
+- Many features show strong correlation
 
 ---
 
@@ -329,17 +329,17 @@ Cross validation helps produce a more reliable performance estimate.
 
 In **5-fold cross validation**:
 
-1. dataset is divided into 5 parts
-2. model trains on 4 folds
-3. remaining fold is used for validation
-4. process repeats 5 times
-5. final score is averaged
+1. Dataset is divided into 5 parts.
+2. Model trains on 4 folds.
+3. Remaining fold is used for validation.
+4. Process repeats 5 times.
+5. Final score is averaged.
 
 Benefits:
 
-- reduces variance
-- improves evaluation stability
-- detects overfitting
+- Reduces variance.
+- Improves evaluation stability.
+- Detects OF.
 
 ---
 
@@ -365,10 +365,10 @@ ROC-AUC is particularly useful for binary classification.
 
 The confusion matrix shows the number of:
 
-- true positives
-- true negatives
-- false positives
-- false negatives
+- TP
+- TN
+- FP
+- FN
 
 This helps analyze classification errors.
 
@@ -395,9 +395,9 @@ The **Area Under the Curve (ROC-AUC)** measures how well the model distinguishes
 
 This visualization shows:
 
-- decision boundary
-- margin
-- support vectors
+- Decision Boundary
+- Margin
+- Support Vectors
 
 Support vectors are the data points closest to the hyperplane.
 
