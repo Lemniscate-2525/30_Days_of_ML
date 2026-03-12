@@ -362,3 +362,110 @@ Additional memory is required to store the dataset during training.
 - Importance of feature scaling
 - Using cross validation for robust model evaluation
 - Interpreting model coefficients as feature importance
+
+---
+
+# Why Logistic Regression?
+
+Logistic Regression is a strong baseline model for structured tabular datasets like customer churn.
+
+It is especially useful when:
+
+- The relationship between features and target is approximately linear
+- Interpretability of model predictions is important
+- Fast training and real-time inference are required
+
+In production churn systems, logistic regression is often deployed as a **first benchmark model** before testing more complex algorithms.
+
+---
+
+# Engineering Tradeoffs
+
+| Aspect | Logistic Regression |
+|------|------|
+| Training Speed | Very Fast |
+| Inference Latency | Extremely Low |
+| Interpretability | High |
+| Non-linear Modeling | Limited |
+| Feature Scaling Requirement | Mandatory |
+
+Because it learns a **linear decision boundary**, performance may degrade when churn behaviour depends on complex feature interactions.
+
+---
+
+# Failure Case Analysis
+
+After evaluating predictions, misclassified samples were inspected.
+
+Observed limitations:
+
+- Customers with similar tenure and billing patterns but different churn outcomes were difficult to separate linearly  
+- Logistic Regression struggles when churn depends on **non-linear relationships between categorical service features**
+- Model performance is sensitive to feature scaling and encoding quality  
+
+This motivates testing tree-based and ensemble models in later experiments.
+
+---
+
+# Training Time Scaling Experiment
+
+To understand model scalability, training time was measured by increasing dataset size fractions.
+
+Observation:
+
+- Training time increases approximately linearly with dataset size  
+- This empirically validates theoretical training complexity: O(n x d)
+
+This property makes Logistic Regression highly suitable for large-scale churn prediction pipelines.
+
+---
+
+# Inference Constraints
+
+Prediction requires computing a **Dot product between feature vector and learned weights.**
+
+Implications:
+
+- Extremely low inference latency.  
+- Suitable for real-time prediction APIs.  
+- Can handle very high request throughput.  
+
+This is a major advantage compared to kernel methods or deep models.
+
+---
+
+# When NOT to Use Logistic Regression
+
+- When strong non-linear feature interactions exist.  
+- When decision boundary is highly complex.  
+- When dataset contains hierarchical or sequential patterns.  
+- When feature engineering is limited.  
+
+In such cases, tree ensembles or neural networks may perform better.
+
+---
+
+# Future Improvements : 
+
+- Regularization tuning (L1 vs L2)
+- Interaction feature engineering  
+- Probability calibration  
+- Ensemble comparison (Random Forest / Gradient Boosting / XGBoost)
+- Drift monitoring for changing customer behaviour  
+
+---
+
+# Model Updates
+
+### v1 — Initial Implementation  
+Baseline logistic regression with preprocessing, cross-validation and evaluation.
+
+### v2 — Engineering Upgrade (12-3-2026)  
+- Added training time measurement.  
+- Added inference latency analysis.  
+- Added failure case auditing.  
+- Added dataset scaling experiment.  
+- Added engineering tradeoff discussion.  
+
+---
+
