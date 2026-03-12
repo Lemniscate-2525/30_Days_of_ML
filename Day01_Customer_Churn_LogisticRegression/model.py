@@ -55,14 +55,34 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# Model Training :
-clf = LogisticRegression(max_iter = 1000, solver="lbfgs")
+# Training Time Measurement : 
+
+start_train = time.time()
+
+clf = LogisticRegression(max_iter=1000, solver="lbfgs")
 clf.fit(X_train, y_train)
+
+end_train = time.time()
+train_time = end_train - start_train
+
+print(f"\nTraining Time: {train_time:.4f} seconds")
 
 # Cross Validation :
 cv_scores = cross_val_score(clf, X_train, y_train, cv = 5)
 print(cv_scores)
 print(cv_scores.mean())
+
+# Inference Latency Measurement : 
+
+start_inf = time.time()
+
+y_pred = clf.predict(X_test)
+y_prob = clf.predict_proba(X_test)[:, 1]
+
+end_inf = time.time()
+inf_time = (end_inf - start_inf) / len(X_test)
+
+print(f"Inference Latency per sample: {inf_time:.8f} seconds")
 
 # Predictions : 
 y_pred = clf.predict(X_test)
@@ -84,7 +104,13 @@ print(f"ROC_AUC: {ra:.4f}")
 print("\n")
 print("Confusion Matrix:\n", cm)
 
+# Failure Case Analysis : 
+
+misclassified = X_test[y_test != y_pred]
+print(f"\nNumber of Misclassified Samples: {len(misclassified)}")
+
 # Visualization : 
+
 plt.figure(figsize = (6,6))
 sns.heatmap(cm, annot = True, fmt = "d" , cmap = "Blues")
 plt.ylabel("Actual")
@@ -106,6 +132,7 @@ plt.legend()
 plt.show()
 
 #Feature Importance :
+
 importance = clf.coef_[0]
 
 feat_imp = pd.DataFrame({"Feature": X.columns, "importance": importance}).sort_values("importance", ascending = False)
@@ -116,4 +143,24 @@ feat_imp = pd.DataFrame({"Feature": X.columns, "importance": importance}).sort_v
 feat_imp.head(10).plot(x="Feature", y="importance", kind="barh", figsize=(6,6))
 
 plt.title("Top Feature Importances")
+plt.show()
+
+# Scaling Experiment (Dataset Size vs Train Time) : 
+
+sizes = [0.2, 0.4, 0.6, 0.8, 1.0]
+times = []
+
+for s in sizes:
+    X_sub = X_train[:int(len(X_train) * s)]
+    y_sub = y_train[:int(len(y_train) * s)]
+
+    start = time.time()
+    LogisticRegression(max_iter=1000).fit(X_sub, y_sub)
+    times.append(time.time() - start)
+
+plt.figure(figsize=(6, 6))
+plt.plot(sizes, times, marker='o')
+plt.xlabel("Dataset Fraction")
+plt.ylabel("Training Time")
+plt.title("Training Time Scaling")
 plt.show()
