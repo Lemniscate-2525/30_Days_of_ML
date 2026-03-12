@@ -539,3 +539,122 @@ In such cases, tree-based models or NN may scale better.
 - Kernel functions enable nonlinear classification.
 - Feature Scaling is critical for SVM performance.
 - Hyperparameter tuning significantly affects model behavior.
+
+---
+
+# Why Support Vector Machine?
+
+Support Vector Machines are powerful classifiers for datasets where classes can be separated using a clear margin.
+
+Advantages:
+
+- Effective in high dimensional spaces.
+- Works well when number of features > number of samples.
+- Robust to overfitting due to margin maximization.
+- Can model non-linear boundaries using kernel trick.  
+
+This makes SVM suitable for medical datasets like breast cancer detection where decision boundaries may not be purely linear.
+
+---
+
+# Engineering Tradeoffs
+
+| Aspect | SVM |
+|------|------|
+| Training Speed | Slow for large datasets |
+| Inference Latency | Moderate |
+| Interpretability | Low |
+| Non-linear Modeling | Strong (with kernels) |
+| Memory Usage | High (stores support vectors) |
+
+---
+
+# Failure Case Analysis
+
+Observed limitations:
+
+- Training becomes computationally expensive as dataset size increases. 
+- Sensitive to hyperparameters **C** and **gamma**.
+- Requires precise feature scaling. 
+- Kernel methods can overfit when gamma is too large.  
+- Poor scalability beyond ~100k samples without approximation methods.  
+
+Misclassified samples were inspected to understand boundary ambiguity in overlapping regions.
+
+---
+
+# Training Time Scaling Experiment
+
+Training time was measured by increasing Dataset size fractions.
+
+Observation:
+
+- Non-linear increase in training time due to quadratic / cubic optimization complexity.
+- Confirms theoretical behavior: O(n^2*d) to O(n^3).
+
+
+This makes SVM less suitable for extremely large tabular datasets.
+
+---
+
+# Inference Constraints
+
+Prediction requires computing similarity between test sample and support vectors.
+
+Implications:
+
+- Latency depends on number of support vectors.  
+- Larger margin → fewer support vectors → faster inference.  
+- Kernel choice directly affects prediction speed.  
+
+---
+
+# Kernel Selection Insight
+
+Two kernels were compared:
+
+| Kernel | Behavior |
+|------|------|
+| Linear | Faster training, simpler boundary |
+| RBF | Captures complex patterns but slower |
+
+RBF performed better due to non-linear separability in feature space.
+
+---
+
+# PCA Decision Boundary Visualization Insight
+
+Dimensionality reduction using PCA enabled visualization of:
+
+- Margin width  
+- Support vectors  
+- Boundary curvature  
+
+This provides geometric intuition of kernel transformation.
+
+---
+
+# Future Improvements :
+
+- Hyperparameter tuning using RandomizedSearchCV.  
+- Kernel approximation (Nystroem / Linear SVM hybrid).
+- Feature selection to reduce dimensionality.  
+- Probability calibration.  
+- Comparison with Gradient Boosting and XGBoost.  
+
+---
+
+# Model Updates
+
+### v1 — Initial Implementation  
+SVM with scaling, kernel comparison, ROC curve and PCA boundary visualization.
+
+### v2 — Engineering Upgrade (12-3-2026)  
+- Added training time measurement.  
+- Added inference latency analysis.  
+- Added failure case inspection.  
+- Added dataset scaling experiment.  
+- Added kernel tradeoff discussion.  
+
+---
+
