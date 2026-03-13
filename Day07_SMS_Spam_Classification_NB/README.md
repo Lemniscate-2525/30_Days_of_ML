@@ -96,55 +96,79 @@ TF-IDF internally performs tokenization, lowercasing and stopword removal.
 
 ## TF-IDF Mathematical Intuition
 
-\[
-TFIDF(t,d) = TF(t,d)\times \log\left(\frac{N}{DF(t)}\right)
-\]
+TF-IDF assigns importance to a word based on how frequently it appears in a document and how rare it is across all documents.
 
-Common words get lower importance.  
-Discriminative words get higher importance.
+Formula:
+
+TFIDF(t, d) = TF(t, d) * log( N / DF(t) )
+
+Where:
+
+- TF(t, d) → frequency of term *t* in document *d*
+- DF(t) → number of documents containing term *t*
+- N → total number of documents
+
+This reduces importance of common words and increases importance of discriminative tokens.
 
 ---
 
 ## Bayes Theorem
 
-\[
-P(y|x)=\frac{P(x|y)P(y)}{P(x)}
-\]
+Naive Bayes is based on Bayes theorem:
 
-Since \(P(x)\) is constant:
+P(y | x) = [ P(x | y) * P(y) ] / P(x)
 
-\[
-P(y|x)\propto P(x|y)P(y)
-\]
+Since P(x) is constant across classes:
+
+P(y | x) ∝ P(x | y) * P(y)
+
+The model predicts the class with the highest posterior probability.
 
 ---
 
-## Multinomial Naive Bayes Model
+## Multinomial Naive Bayes Mathematical Model
+
+For text classification, the feature vector represents token frequencies.
 
 Likelihood model:
 
-\[
-P(x|y)=\prod_{i=1}^{D} P(w_i|y)^{x_i}
-\]
+P(x | y) = Π ( P(w_i | y) ^ x_i )
 
-Log form:
+Taking log to avoid numerical underflow:
 
-\[
-\hat{y}=\arg\max_y \left[\log P(y)+\sum_{i=1}^{D}x_i\log P(w_i|y)\right]
-\]
+score(y) = log P(y) + Σ [ x_i * log P(w_i | y) ]
+
+The class with the highest score is selected.
 
 ---
 
-## Laplace Smoothing (Alpha)
+## Laplace Smoothing (Alpha Parameter)
 
-\[
-P(w|y)=\frac{count(w,y)+\alpha}{\sum count+\alpha V}
-\]
+Without smoothing:
 
-Alpha prevents zero probability collapse.
+If a token never appears in training spam messages:
 
-- Small α → trust data  
-- Large α → smoother distribution  
+P(word | spam) = 0  
+
+This makes the entire probability zero.
+
+To avoid this:
+
+P(word | y) = ( count(word, y) + alpha ) / ( total_words_y + alpha * V )
+
+Where:
+
+- alpha → smoothing parameter
+- V → vocabulary size
+
+Intuition:
+
+- Small alpha → trust training data more
+- Large alpha → assume more uniform distribution
+
+Standard choice:
+
+alpha = 1 (Laplace smoothing)
 
 ---
 
@@ -214,7 +238,7 @@ Misclassification scenarios:
 Training:
 
 \[
-O(ND)
+O(N*D)
 \]
 
 Prediction:
@@ -238,11 +262,9 @@ Sparse representation reduces memory usage.
 
 ## Inference Latency
 
-\[
-Latency=\frac{Total\ Prediction\ Time}{Number\ of\ Samples}
-\]
+Average prediction latency per message:
 
-Naive Bayes enables real-time spam filtering systems.
+Latency = Total Prediction Time / Number of Samples
 
 ---
 
