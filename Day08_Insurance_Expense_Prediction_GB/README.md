@@ -59,7 +59,7 @@ Observations:
 
 ### Pairplot Visualization
 
-![Pairplot](pair.png)
+![Pairplot](pp.png)
 
 Insights:
 
@@ -111,25 +111,76 @@ Each tree learns to **correct previous prediction errors.**
 
 ---
 
-##  Functional Gradient Descent Mathematics
+## Functional Gradient Descent Intuition in Gradient Boosting
 
-Loss Function (Mean Squared Error):
+The goal of training is to minimize prediction loss.
 
-**L = Σ (y − F(x))²**
+For regression using Mean Squared Error :
 
-Gradient:
+L = Σ ( yᵢ − F(xᵢ) )²
 
-**∂L/∂F = −2(y − F(x))**
+Where:
 
-Negative Gradient Direction:
-
-**Residual ≈ y − prediction**
-
-Thus Gradient Boosting performs **Gradient Descent in Function Space.**
+- yᵢ → Actual Value  
+- F(xᵢ) → Model Prediction  
 
 ---
 
-##  Learning Rate (η) — Step Size Interpretation
+### Gradient Meaning
+
+The derivative of the loss with respect to the prediction function is :
+
+dL/dF(xᵢ) = −2 ( yᵢ − F(xᵢ) )
+
+This quantity represents the **Direction in which loss Increases the fastest.**
+To reduce loss, the model must move in the opposite direction.
+
+Therefore, the negative gradient becomes :
+
+− dL/dF(xᵢ) = 2 ( yᵢ − F(xᵢ) )
+
+Ignoring the constant factor:
+
+Residual ≈ ( yᵢ − prediction )
+
+---
+
+### What the Tree Actually Learns : 
+
+Each boosting stage trains a decision tree to approximate these residuals.
+
+This means the tree is not directly predicting the final target value.  
+Instead, it predicts **Extant by which the current prediction should change to reduce loss.**
+
+---
+
+### Model Update Rule
+
+The prediction function is updated as:
+
+F_new(x) = F_old(x) + η · h(x)
+
+Where:
+
+- η → learning rate (step size).
+- h(x) → tree prediction (approximation of negative gradient).
+
+Thus, Gradient Boosting performs **gradient descent in function space**, updating predictions iteratively in the direction that most rapidly decreases loss.
+
+---
+
+### Key Intuition
+
+At every stage:
+
+- The model identifies the direction of steepest increase in loss.  
+- Then it updates predictions by moving in the opposite direction.  
+- This sequential correction mechanism allows the ensemble to approximate complex nonlinear relationships.
+
+
+---
+
+##  Learning Rate (η) :
 
 Update:
 
@@ -145,7 +196,7 @@ Learning rate controls how far prediction moves opposite gradient direction.
 
 ---
 
-##  Important Hyperparameters — Conceptual Role
+##  Important Hyperparameters :
 
 ### n_estimators  
 Number of boosting stages.
@@ -173,8 +224,8 @@ Random fraction of data per tree → variance reduction.
 
 | Model | RMSE | R² Score | Training Time | Inference Latency |
 |------|------|---------|--------------|----------------|
-| Baseline Gradient Boosting | 4313.93 | 0.8801 | 0.50 sec | 1.81e-05 sec |
-| Tuned Gradient Boosting | (add) | (add) | (add) | (add) |
+| Baseline Gradient Boosting | 4313.93 | 0.8801 | 0.50 | 0.000021 |
+| Tuned Gradient Boosting | 4335.86 | 0.8789 | 39.194146 | 0.000013 |
 
 ---
 
@@ -222,7 +273,7 @@ Memory usage increases linearly with ensemble size.
 
 ##  Boosting Stage Error Curve
 
-![Boost Curve](boost_curve.png)
+![Boost Curve](bse.png)
 
 Error reduces as boosting progresses until convergence.
 
@@ -238,7 +289,7 @@ Random residual distribution indicates reduced bias.
 
 ##  Feature Importance
 
-![Feature Importance](feat_imp.png)
+![Feature Importance](fimp.png)        ![Feature_Importance(Tuned)](fimpt.png) 
 
 Top predictors:
 
