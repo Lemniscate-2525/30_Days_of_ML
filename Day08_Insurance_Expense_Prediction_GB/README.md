@@ -4,7 +4,7 @@
 
 Insurance companies must estimate expected medical expenses of customers to design premium pricing strategies, manage financial risk, and identify high-risk segments.
 
-This project builds a **non-linear regression model using Gradient Boosting** to predict annual insurance expenses from demographic and lifestyle features.
+This project builds a **Regression model using Gradient Boosting** to predict annual insurance expenses from demographic and lifestyle features.
 
 Focus areas:
 
