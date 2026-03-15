@@ -220,6 +220,66 @@ Random fraction of data per tree → variance reduction.
 
 ---
 
+## Hyperparameter Tuning
+
+After establishing a baseline Gradient Boosting model, Hyperparameter Tuning was performed to improve generalization performance and reduce prediction error.
+
+### Why Hyperparameter Tuning?
+
+Gradient Boosting performance is highly sensitive to Parameters that control :
+
+- Model capacity (tree depth, number of estimators).
+- Optimization stability (learning rate).
+- Bias–Variance tradeoff.
+
+Default or manually chosen parameters may lead to :
+
+- Underfitting (insufficient model complexity).
+- Overfitting (excessively deep trees or too many boosting stages).
+
+Systematic tuning helps identify a configuration that minimizes Validation error.
+
+---
+
+### Best Parameter Combination
+
+The optimal configuration obtained through cross-validated search was:
+
+- learning_rate = 0.1  
+- max_depth = 2  
+- n_estimators = 100  
+
+#### Interpretation 
+
+- A higher learning rate allowed faster convergence with fewer trees.
+- Shallow trees (depth = 2) acted as weak learners, reducing risk of OF.
+- Fewer estimators reduced computational cost while maintaining strong predictive power.
+
+This combination achieved a better balance between **bias reduction and variance control.**
+
+---
+
+### Why Hyperparameter Tuning Increases Training Time 
+
+Hyperparameter tuning evaluates multiple model configurations.
+
+If:
+
+- P parameter combinations are tested  
+- K cross-validation folds are used  
+
+Total model trainings = P × K
+
+Since each Gradient Boosting training is sequential and computationally intensive, tuning can significantly increase total training time.
+
+However, this cost provides:
+
+- More reliable performance estimates. 
+- Better Generalization.  
+- Reduced risk of selecting suboptimal models.
+
+Thus, tuning represents a tradeoff between **Computational Expense and Predictive Performance.**
+
 ##  Model Performance Comparison
 
 | Model | RMSE | R² Score | Training Time | Inference Latency |
