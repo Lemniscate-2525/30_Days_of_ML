@@ -47,7 +47,7 @@ Regression Task: Continuous Value Prediction
 
 ### Correlation Heatmap
 
-![Correlation Heatmap](corr.png)
+![Correlation Heatmap](corrd8.png)
 
 Observations:
 
@@ -230,7 +230,7 @@ Error reduces as boosting progresses until convergence.
 
 ##  Residual Plot
 
-![Residual Plot](residual.png)
+![Residual Plot](resd8.png)
 
 Random residual distribution indicates reduced bias.
 
