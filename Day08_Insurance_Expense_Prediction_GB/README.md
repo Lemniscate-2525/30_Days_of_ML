@@ -37,7 +37,7 @@ Insurance pricing exhibits strong **non-linear relationships and feature interac
 
 Target Variable:
 
-**expenses — annual insurance medical cost**
+**Expenses;  Annual insurance medical cost**
 
 Regression Task: Continuous Value Prediction  
 
