@@ -40,6 +40,27 @@ This is a nonlinear regression task with skewed distribution and interaction eff
 
 ---
 
+## Exploratory Data Analysis
+
+Understanding the dataset structure and feature relationships is essential before modeling.
+
+### Expense Distribution
+
+![Expense Distribution](edad9.png)
+
+The target variable shows a right-skewed distribution, indicating presence of high-cost outliers.
+
+---
+
+### Feature Correlation Heatmap
+
+![Correlation Heatmap](corrd8.png)
+
+Smoking status shows the strongest positive correlation with insurance expenses.  
+BMI and age also demonstrate meaningful relationships.
+
+---
+
 ## Additive Model Representation
 
 XGBoost builds prediction as a sum of trees.
@@ -64,11 +85,11 @@ At boosting iteration `t`, the model tries to minimize:
 
 Objective = Training Loss + Model Complexity Penalty
 
-Objective:
+Objective :
 
     Obj(t) = Σ L( y_i , ŷ_i^(t−1) + f_t(x_i) )  +  Ω( f_t )
 
-Where the regularization term is:
+Where the regularization term is :
 
     Ω( f_t ) = γ * T  +  (1/2) * λ * Σ ( w_j² )
 
@@ -195,19 +216,19 @@ This leads to:
 
 ## Training Time
 
-Training time depends on:
+Training time depends on :
 
-- number of trees (n_estimators)  
-- tree depth  
-- dataset size  
-- hyperparameter search  
+- number of trees (n_estimators). 
+- tree depth. 
+- dataset size.
+- hyperparameter tuning.  
 
-Baseline Training Time: **(add value)**  
-Tuned Training Time: **(add value)**  
+Baseline Training Time : 0.101504
+Tuned Training Time : 77.837326
 
-Training complexity (approx):
+Training Complexity :
 
-Training ≈ O( T * N log N )
+Training ≈ O(T * N log N)
 
 Histogram optimization reduces practical cost.
 
@@ -217,14 +238,12 @@ Histogram optimization reduces practical cost.
 
 Each prediction requires traversal of all trees.
 
-Prediction complexity:
+Prediction complexity : Prediction ≈ O(T * depth)
 
-Prediction ≈ O( T * depth )
+Per-sample Inference Latency :
 
-Per-sample Inference Latency:
-
-Baseline Latency: **(add value)**  
-Tuned Latency: **(add value)**  
+Baseline Latency : 0.000020
+Tuned Latency : 0.000029
 
 Tree ensembles typically provide very fast real-time inference.
 
@@ -246,15 +265,65 @@ Memory grows linearly with ensemble size.
 
 ## Evaluation Metrics
 
-Primary Metric:
+Primary Metric :
 
 RMSE = sqrt( mean( (y − y_hat)^2 ) )
 
 Captures large errors important in financial modeling.
 
-Secondary Metric:
+Secondary Metric :
 
 R² = explained variance ratio.
+
+---
+
+## Model Performance Comparison
+
+| Model | RMSE | R² Score | Training Time (sec) | Inference Latency (sec/sample) |
+|------|------|----------|--------------------|-------------------------------|
+| Baseline XGBoost | 4519.78 | 0.8684 | 0.10 | 0.000020 |
+| Tuned XGBoost | 4375.50 | 0.8767 | 77.84 | 0.000029 |
+
+### Interpretation
+
+- Hyperparameter tuning reduced RMSE, indicating improved prediction accuracy.  
+- R² increased, meaning the tuned model explains more variance in insurance expenses.  
+- Training time increased significantly due to cross-validated search over multiple parameter combinations.  
+- Inference latency increased slightly because the tuned model typically uses more complex ensemble structure.
+
+This demonstrates the tradeoff between **predictive performance and computational cost** in boosted tree systems.
+
+---
+
+## Residual Analysis
+
+![Residual Plot](respd9.png)
+
+Residuals are approximately centered around zero, suggesting reduced systematic bias.
+
+---
+
+## Error Distribution
+
+![Error Distribution](ped9.png)
+
+The distribution highlights occasional large prediction errors, mainly due to extreme expense outliers.
+
+---
+
+## Feature Importance
+
+![Feature Importance](fimpd9.png)
+
+Smoking status remains the dominant predictor, followed by BMI and age.
+
+---
+
+## Boosting Error Curve
+
+![Boosting Curve](bevisd9.png)
+
+Training error decreases steadily as boosting iterations increase, while validation error stabilizes, indicating controlled learning dynamics.
 
 ---
 
