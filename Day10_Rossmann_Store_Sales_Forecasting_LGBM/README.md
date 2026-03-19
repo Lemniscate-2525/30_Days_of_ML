@@ -10,7 +10,7 @@
 
 Predict **daily store-level sales** across 1,115 Rossmann drug stores using structured retail features. The goal is to build a robust regression model that captures nonlinear demand behaviour across promotions, holidays, store types, and time.
 
-**Input features include : **
+**Input Features :**
 - Store type and assortment class
 - Promotion status and promotion intervals
 - Competition distance and opening dates
