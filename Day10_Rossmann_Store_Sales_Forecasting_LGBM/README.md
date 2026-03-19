@@ -50,7 +50,7 @@ Sales exhibits strong **right skew** with a long tail of extreme revenue days. T
 
 Most pairwise linear correlations are weak. This confirms that linear models will underfit and nonlinear tree-based partitioning is required.
 
-![Correlation Heatmap](edad10.png)
+![Correlation Heatmap](eda10.png)
 
 ---
 
@@ -208,7 +208,7 @@ Residuals distributed around zero with no strong systematic trend; the model is 
 
 Error distribution is heavy-tailed due to rare extreme promotional spikes. The model underestimates outlier events, which is expected behaviour for ensemble regressors without explicit outlier modelling.
 
-![Error Distribution](error_distd10.png)
+![Error Distribution](errordistd10.png)
 
 ---
 
