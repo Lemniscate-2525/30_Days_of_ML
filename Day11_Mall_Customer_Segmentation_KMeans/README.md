@@ -104,7 +104,7 @@ KMeans uses Lloyd's Algorithm, an optimization procedure :
 
 **Step 1 -> Assignment :**
 
-$$c_i = \arg\min_k \| x_i - \mu_k \|^2$$
+$$c_i = \arg\min_k \|x_i - \mu_k \|^2$$
 
 Assign each point to the nearest centroid. This is a hard, winner-takes-all assignment.
 
