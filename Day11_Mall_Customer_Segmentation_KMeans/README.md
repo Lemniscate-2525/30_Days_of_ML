@@ -265,7 +265,7 @@ Higher CH is better. This is essentially a clustering analog of the F-statistic 
 
 ### 6. Manual Grid Search with Silhouette Scoring : 
 
-`GridSearchCV` is designed for supervised learning and requires a train/test split — meaningless in clustering since there are no labels to evaluate against on a held-out set.
+`GridSearchCV` is designed for supervised learning and requires a train/test split; meaningless in clustering since there are no labels to evaluate against on a held-out set.
 
 The approach here is a structured parameter sweep that replicates the intent of GridSearchCV without the supervised machinery:
 
