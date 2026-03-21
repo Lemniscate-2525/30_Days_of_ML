@@ -85,9 +85,9 @@ After scaling, both features contribute equally to the distance metric. This is 
 
 ## KMeans Objective Function : 
 
-KMeans minimizes within-cluster variance, formally called the **inertia** or **distortion** :
+KMeans minimizes within-cluster variance, formally called the **Inertia** or **Distortion** :
 
-$$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2$$
+$$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \mu_k \|^2$$
 
 Where:
 - $C_k$ is the set of points assigned to cluster $k$
@@ -122,11 +122,11 @@ Each iteration is guaranteed to reduce or maintain $J$. However, the objective i
 
 KMeans implicitly assumes clusters are :
 
-- **Spherical** — the Euclidean distance metric defines circular decision boundaries in 2D
-- **Convex** — no curved or horseshoe-shaped clusters
-- **Similarly sized** — large clusters can absorb smaller nearby ones
-- **Similarly dense** — sparse clusters get fragmented or merged with denser neighbors
-- **Well separated** — overlapping clusters confuse centroid placement
+- **Spherical** : the Euclidean distance metric defines circular decision boundaries in 2D
+- **Convex** : no curved or horseshoe-shaped clusters
+- **Similarly sized** : large clusters can absorb smaller nearby ones
+- **Similarly dense** : sparse clusters get fragmented or merged with denser neighbors
+- **Well separated** : overlapping clusters confuse centroid placement
 
 KMeans fails on ring-shaped, crescent-shaped, or manifold-structured data. It is the right tool here because the scatter plot confirms blob-shaped clusters.
 
@@ -249,13 +249,13 @@ Lower DB is better. A good clustering has tight clusters ($S_i$ small) far from 
 
 ### 5. Calinski-Harabasz Score : 
 
-Variance ratio criterion — ratio of between-cluster dispersion to within-cluster dispersion:
+Variance ratio criterion; ratio of between-cluster dispersion to within-cluster dispersion:
 
 $$CH = \frac{B / (K - 1)}{W / (n - K)}$$
 
 Where between-cluster dispersion : $$B = \sum_{k=1}^{K} n_k \| \mu_k - \mu \|^2$$
 
-And within-cluster dispersion : $$W = \sum_{k=1}^{K} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2$$
+And within-cluster dispersion : $$W = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \mu_k \|^2$$
 
 Higher CH is better. This is essentially a clustering analog of the F-statistic — it asks: is the variance explained by cluster structure significantly larger than the residual within-cluster variance? Tends to favor compact, well-separated clusters.
 
