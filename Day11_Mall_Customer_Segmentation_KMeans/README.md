@@ -4,7 +4,7 @@
 
 ## Problem Statement : 
 
-Segment mall customers into meaningful behavioral groups using two structured behavioral features:
+Segment mall customers into meaningful behavioral groups using two structured behavioral features :
 
 - Annual Income (k$)
 - Spending Score (1-100)
@@ -17,7 +17,7 @@ This is an unsupervised clustering problem. The model must identify natural geom
 
 ## Customer Segmentation Importance : 
 
-Raw customer data is noisy and high-dimensional. Clustering compresses it into actionable archetypes. Once segments are identified, a business can:
+Raw customer data is noisy and high-dimensional. Clustering compresses it into actionable archetypes. Once segments are identified, a business can :
 
 - Run targeted marketing campaigns per segment.
 - Plan inventory around spending behavior.
@@ -75,7 +75,7 @@ Spending score shows multi-modal behavior. Multiple local peaks suggest the pres
 
 KMeans is a distance-based algorithm. It computes Euclidean distance between every point and every centroid at each step. If one feature has a range of 0-100 and another has a range of 15-135, the larger-scale feature will dominate the distance computation regardless of its actual predictive signal.
 
-**StandardScaler** transforms each feature to zero mean and unit variance:
+**StandardScaler** transforms each feature to zero mean and unit variance :
 
 $$x' = \frac{x - \mu}{\sigma}$$
 
@@ -85,7 +85,7 @@ After scaling, both features contribute equally to the distance metric. This is 
 
 ## KMeans Objective Function : 
 
-KMeans minimizes within-cluster variance, formally called the **inertia** or **distortion**:
+KMeans minimizes within-cluster variance, formally called the **inertia** or **distortion** :
 
 $$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \| x_i - \mu_k \|^2$$
 
@@ -98,17 +98,17 @@ This is also referred to as Within-Cluster Sum of Squares (WCSS). Minimizing $J$
 
 ---
 
-## Alternating Optimization : Lloyd's Algorithm
+## Optimization : Lloyd's Algorithm
 
-KMeans uses Lloyd's Algorithm, an alternating optimization procedure:
+KMeans uses Lloyd's Algorithm, an optimization procedure :
 
-**Step 1 -> Assignment:**
+**Step 1 -> Assignment :**
 
 $$c_i = \arg\min_k \| x_i - \mu_k \|^2$$
 
 Assign each point to the nearest centroid. This is a hard, winner-takes-all assignment.
 
-**Step 2 -> Update:**
+**Step 2 -> Update :**
 
 $$\mu_k = \frac{1}{|C_k|} \sum_{x_i \in C_k} x_i$$
 
@@ -120,7 +120,7 @@ Each iteration is guaranteed to reduce or maintain $J$. However, the objective i
 
 ## Geometric Assumptions : 
 
-KMeans implicitly assumes clusters are:
+KMeans implicitly assumes clusters are :
 
 - **Spherical** — the Euclidean distance metric defines circular decision boundaries in 2D
 - **Convex** — no curved or horseshoe-shaped clusters
