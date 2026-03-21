@@ -257,7 +257,7 @@ Where between-cluster dispersion : $$B = \sum_{k=1}^{K} n_k \| \mu_k - \mu \|^2$
 
 And within-cluster dispersion : $$W = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \mu_k \|^2$$
 
-Higher CH is better. This is essentially a clustering analog of the F-statistic — it asks: is the variance explained by cluster structure significantly larger than the residual within-cluster variance? Tends to favor compact, well-separated clusters.
+Higher CH is better. This is essentially a clustering analog of the F-statistic; it asks whether the variance explained by cluster structure significantly larger than the residual within-cluster variance. Score tends to favor compact, well-separated clusters.
 
 ![Calinski-Harabasz Curve](chc.png)
 
@@ -279,7 +279,7 @@ for k in k_range_vals:
 k_grid = max(scores, key=scores.get)
 ```
 
-Every $K$ in the search range is evaluated on the same data using the silhouette scorer. The $K$ with the highest score is selected. This is functionally equivalent to exhaustive grid search — systematic, reproducible, and interpretable.
+Every $K$ in the search range is evaluated on the same data using the silhouette scorer. The $K$ with the highest score is selected. This is functionally equivalent to exhaustive grid search; systematic, reproducible, and interpretable.
 
 ---
 
@@ -345,17 +345,17 @@ Each plot shows the geometric segmentation produced by each K-selection method. 
 
 KMeans can produce misleading results in several structural scenarios :
 
-**Non-convex clusters:** KMeans draws linear Voronoi boundaries between centroids. If the true cluster shape is a ring, crescent, or spiral, those boundaries cut through the actual cluster structure. Use DBSCAN or spectral clustering instead.
+**Non-convex clusters :** KMeans draws linear Voronoi boundaries between centroids. If the true cluster shape is a ring, crescent, or spiral, those boundaries cut through the actual cluster structure. Use DBSCAN or spectral clustering instead.
 
-**Varying cluster density:** KMeans assigns each point to the nearest centroid by Euclidean distance. A sparse cluster far from its centroid will lose points to a denser nearby cluster. The denser cluster effectively colonizes the sparse one.
+**Varying cluster density :** KMeans assigns each point to the nearest centroid by Euclidean distance. A sparse cluster far from its centroid will lose points to a denser nearby cluster. The denser cluster effectively colonizes the sparse one.
 
-**Outliers shift centroids:** The centroid is a mean, making it sensitive to extreme values. A single distant outlier can pull a centroid away from the true cluster center, corrupting all assignments for that cluster.
+**Outliers shift centroids :** The centroid is a mean, making it sensitive to extreme values. A single distant outlier can pull a centroid away from the true cluster center, corrupting all assignments for that cluster.
 
-**Poor initialization (local minima):** Because the objective is non-convex, different starting centroids can converge to different final configurations. This is mitigated by `n_init=20` (run 20 times and keep the best), but is never fully eliminated.
+**Poor initialization (local minima) :** Because the objective is non-convex, different starting centroids can converge to different final configurations. This is mitigated by `n_init=20` (run 20 times and keep the best), but is never fully eliminated.
 
-**Distance concentration in high dimensions:** As $d$ grows, all pairwise Euclidean distances converge to the same value. Cluster boundaries become meaningless because no point is meaningfully closer to one centroid than another. This is the curse of dimensionality applied to clustering.
+**Distance concentration in high dimensions :** As $d$ grows, all pairwise Euclidean distances converge to the same value. Cluster boundaries become meaningless because no point is meaningfully closer to one centroid than another. This is the curse of dimensionality applied to clustering.
 
-**Business-meaningful micro-segments ignored:** If $K$ is chosen purely by geometric metrics, small but commercially important segments (e.g., ultra-high-spend outliers) can be absorbed into larger clusters. Metric-optimal $K$ is not always business-optimal $K$.
+**Business-meaningful micro-segments ignored :** If $K$ is chosen purely by geometric metrics, small but commercially important segments (e.g., ultra-high-spend outliers) can be absorbed into larger clusters. Metric-optimal $K$ is not always business-optimal $K$.
 
 ---
 
@@ -366,5 +366,5 @@ KMeans can produce misleading results in several structural scenarios :
 - The Elbow method is intuitive but subjective without the second-difference formalization.
 - KMeans assumes spherical, equally-sized, equally-dense clusters. Always verify these assumptions visually in EDA before trusting metric outputs.
 - Scaling is not optional. It is a mathematical prerequisite for distance-based algorithms.
-- `n_init=20` is not excessive. KMeans is sensitive to initialization and multiple restarts are cheap insurance against bad local minima.
+- `n_init = 20` is not excessive. KMeans is sensitive to initialization and multiple restarts are cheap insurance against bad local minima.
 - Grid search in unsupervised settings means systematic hyperparameter evaluation over an internal metric, not cross-validated generalization. The distinction matters when interpreting results.
