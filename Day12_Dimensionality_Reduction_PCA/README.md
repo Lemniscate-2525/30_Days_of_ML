@@ -265,7 +265,7 @@ $$O(d^2 + dk)$$
 
 Store the covariance matrix ($d \times d$) and the projection matrix ($d \times k$). The data itself requires $O(Nd)$ but this is shared with the rest of the pipeline.
 
-**Practical implication :** PCA is cheap on this dataset ($N = 569$, $d = 30$). The real gain is in the downstream classifier — Logistic Regression trained on $k = 10$ features instead of 30 converges faster, has fewer parameters to estimate, and makes predictions with fewer multiply-accumulate operations per sample.
+**Practical implication :** PCA is cheap on this dataset ($N = 569$, $d = 30$). The real gain is in the downstream classifier; Logistic Regression trained on $k = 10$ features instead of 30 converges faster, has fewer parameters to estimate, and makes predictions with fewer multiply-accumulate operations per sample.
 
 ---
 
@@ -273,10 +273,10 @@ Store the covariance matrix ($d \times d$) and the projection matrix ($d \times 
 
 PCA assumes:
 
-- **Variance equals information : ** High-variance directions are assumed to be signal. Low-variance directions are assumed to be noise. This is reasonable in many settings but fails when the signal is weak and the noise is large.
-- **Linear structure : ** PCA finds linear projections. If the meaningful structure in the data lies on a nonlinear manifold (e.g., a swiss roll or a sphere), PCA cannot find it. Kernel PCA or autoencoders are needed.
-- **Gaussian-like data : ** Variance is a complete summary of spread only for Gaussian distributions. For multimodal or heavy-tailed data, variance-maximizing directions may not be the most discriminative.
-- **Scale invariance requires preprocessing : ** PCA is not scale invariant. Features with larger ranges will dominate the covariance matrix. StandardScaler is mandatory before PCA.
+- **Variance equals information :** High-variance directions are assumed to be signal. Low-variance directions are assumed to be noise. This is reasonable in many settings but fails when the signal is weak and the noise is large.
+- **Linear structure :** PCA finds linear projections. If the meaningful structure in the data lies on a nonlinear manifold (e.g., a swiss roll or a sphere), PCA cannot find it. Kernel PCA or autoencoders are needed.
+- **Gaussian-like data :** Variance is a complete summary of spread only for Gaussian distributions. For multimodal or heavy-tailed data, variance-maximizing directions may not be the most discriminative.
+- **Scale invariance requires preprocessing :** PCA is not scale invariant. Features with larger ranges will dominate the covariance matrix. StandardScaler is mandatory before PCA.
 
 ---
 
