@@ -1,4 +1,4 @@
-# 30 Days of Machine Learning — From Classical ML to Modern Deep Learning
+# 30 Days of Machine Learning; From Classical ML to Modern Deep Learning
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
 ![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Scikit--Learn-orange)
