@@ -9,7 +9,7 @@ Segment mall customers into meaningful behavioral groups using two structured be
 - Annual Income (k$)
 - Spending Score (1-100)
 
-**Goal : ** Discover latent customer segments in feature space without any supervision signal.
+**Goal :** Discover latent customer segments in feature space without any supervision signal.
 
 This is an unsupervised clustering problem. The model must identify natural geometric groupings purely from the structure of the data: no labels, no loss function, no ground truth.
 
@@ -19,11 +19,11 @@ This is an unsupervised clustering problem. The model must identify natural geom
 
 Raw customer data is noisy and high-dimensional. Clustering compresses it into actionable archetypes. Once segments are identified, a business can:
 
-- Run targeted marketing campaigns per segment
-- Plan inventory around spending behavior
-- Design loyalty programs for high-income low-spend customers
-- Identify at-risk low-engagement segments early
-- Model customer lifetime value per cluster
+- Run targeted marketing campaigns per segment.
+- Plan inventory around spending behavior.
+- Design loyalty programs for high-income low-spend customers.
+- Identify at-risk low-engagement segments early.
+- Model customer lifetime value per cluster.
 
 Unlike supervised learning, clustering does not predict a target. It reveals structure that already exists but is invisible in tabular form.
 
@@ -302,12 +302,12 @@ No single metric is sufficient. Triangulating across all six gives a robust pict
 
 | Method | K | Inertia | Silhouette | Davies-Bouldin | Calinski-Harabasz | Avg Intra Dist | Avg Inter Dist | Train Time | Inference Latency |
 |--------|---|---------|------------|----------------|-------------------|----------------|----------------|------------|-------------------|
-| Empirical | | | | | | | | | |
-| Silhouette | | | | | | | | | |
-| Davies-Bouldin | | | | | | | | | |
-| Calinski-Harabasz | | | | | | | | | |
-| Elbow | | | | | | | | | |
-| Grid Search | | | | | | | | | |
+| Empirical | 10 | 29.69 | 0.4362 | 0.7645 | 263.35 | 0.3693 | 2.1229 | 0.0479 | 0.000350 |
+| Silhouette | 5 | 65.57 | 0.5547 | 0.5722 | 248.65 | 0.5270 | 2.2888 | 0.0424 | 0.000350 |
+| Davies_Bouldin | 5 | 65.57 | 0.5547 | 0.5722 | 248.65 | 0.5270 | 2.2888 | 0.0501 | 0.000345 |
+| Calinski_Harabasz | 9 | 32.39 | 0.4571 | 0.7633 | 270.95 | 0.3916 | 2.2737 | 0.0524 | 0.000553 |
+| Elbow | 6 | 55.06 | 0.5399 | 0.6546 | 243.09 | 0.4980 | 2.3774 | 0.0388 | 0.000323 |
+| GridSearchCV | 5 | 65.57 | 0.5547 | 0.5722 | 248.65 | 0.5270 | 2.2888 | 0.0380 | 0.000383 |
 
 ---
 
@@ -325,11 +325,11 @@ Each plot shows the geometric segmentation produced by each K-selection method. 
 
 **Davies-Bouldin K**
 
-![Clusters Davies-Bouldin](clusters_db.png)
+![Clusters Davies-Bouldin](clusters_davies_bouldin.png)
 
 **Calinski-Harabasz K**
 
-![Clusters Calinski-Harabasz](clusters_ch.png)
+![Clusters Calinski-Harabasz](clusters_calinski_harabasz.png)
 
 **Elbow K**
 
@@ -337,7 +337,7 @@ Each plot shows the geometric segmentation produced by each K-selection method. 
 
 **Grid Search K**
 
-![Clusters Grid Search](resghcv.png)
+![Clusters Grid Search](clusters_gridsearchcv.png)
 
 ---
 
