@@ -163,7 +163,7 @@ For PCA, encoding the constraint as $g(w) = w^\top w - 1 = 0$ and forming Lagran
 
 $$\mathcal{L}(w, \lambda) = w^\top \Sigma w - \lambda (w^\top w - 1)$$
 
-The $-\lambda(\cdot)$ term penalizes violations of the constraint. At the optimum, the penalty term is zero (constraint is satisfied), so $\mathcal{L}$ equals the objective. 
+$\lambda(\cdot)$ term penalizes violations of the constraint. At the optimum, the penalty term is zero (constraint is satisfied), so $\mathcal{L}$ equals the objective. 
 The multiplier $\lambda$ floats to whatever value enforces the constraint.
 
 Take the gradient with respect to $w$ and set to zero :
@@ -257,7 +257,7 @@ Full eigendecomposition of the $d \times d$ covariance matrix. For $d = 30$ this
 
 $$O(N d k)$$
 
-Multiply the $N \times d$ data matrix by the $d \times k$ projection matrix. For inference on a single new point, cost is $O(dk)$ — constant in $N$.
+Multiply the $N \times d$ data matrix by the $d \times k$ projection matrix. For inference on a single new point, cost is $O(dk)$ constant in $N$.
 
 **Space complexity :**
 
