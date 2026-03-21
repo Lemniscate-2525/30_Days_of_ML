@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 
 import time
 
+from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 
 from sklearn.cluster import KMeans
@@ -119,71 +121,63 @@ method_k = {
 # Model Training, Inference Latency, Training Time : 
 res = []
 for meth, k in method_k.items():
-  start = time.time()
+    start = time.time()
 
-  cls = KMeans(n_clusters = k, random_state = 42, n_init = 20)
-  labels = cls.fit_predict(X_scaled)
+    cls = KMeans(n_clusters = k, random_state = 42, n_init = 20)
+    labels = cls.fit_predict(X_scaled)
 
-  train_time = time.time() - start
+    train_time = time.time() - start
 
-  start = time.time()
-  cls.predict(X_scaled[:1])
-  inf_latency = time.time() - start
+    start = time.time()
+    cls.predict(X_scaled[:1])
+    inf_latency = time.time() - start
 
-  inertia = cls.inertia_
-  sil = silhouette_score(X_scaled, labels)
-  db = davies_bouldin_score(X_scaled, labels)
-  ch = calinski_harabasz_score(X_scaled, labels)
-  
-# Intra Cluster Dist : 
-  intra = 0
-  for i in range(k):
-    pts = X_scaled[labels == i]
-    centroid = cls.cluster_centers_[i]
-    intra += np.mean(np.linalg.norm(pts - centroid, axis = 1))
-  intra = intra/k
+    inertia = cls.inertia_
+    sil = silhouette_score(X_scaled, labels)
+    db = davies_bouldin_score(X_scaled, labels)
+    ch = calinski_harabasz_score(X_scaled, labels)
 
-# Inter Cluster Dist : 
-  centroids = cls.cluster_centers_
-  inter = 0
-  count = 0
-  for i in range(k):
-      for j in range(i+1, k):
-          inter += np.linalg.norm(centroids[i] - centroids[j])
-          count += 1
-  inter = inter/count
+    # Intra Cluster Dist :
+    intra = 0
+    for i in range(k):
+        pts = X_scaled[labels == i]
+        centroid = cls.cluster_centers_[i]
+        intra += np.mean(np.linalg.norm(pts - centroid, axis = 1))
+    intra = intra / k
 
-  res.append([
-        meth,
-        k,
-        inertia,
-        sil,
-        db,
-        ch,
-        intra,
-        inter,
-        train_time,
-        inf_latency
+    # Inter Cluster Dist :
+    centroids = cls.cluster_centers_
+    inter = 0
+    count = 0
+    for i in range(k):
+        for j in range(i + 1, k):
+            inter += np.linalg.norm(centroids[i] - centroids[j])
+            count += 1
+    inter = inter / count
+
+    res.append([
+        meth, k, inertia, sil, db, ch,
+        intra, inter, train_time, inf_latency
     ])
 
-# Visualization for each method : 
+    # Visualization per method :
+    plt.figure(figsize = (6, 5))
+    sns.scatterplot(
+        x = X_scaled[:, 0],
+        y = X_scaled[:, 1],
+        hue = labels,
+        palette = "tab10")
 
-plt.figure(figsize = (6, 5))
-sns.scatterplot(
-x = X_scaled[:,0],
-y = X_scaled[:,1],
-hue = labels,
-palette = "tab10")
+    plt.scatter(
+        cls.cluster_centers_[:, 0],
+        cls.cluster_centers_[:, 1],
+        c = "black",
+        s = 200,
+        marker = "X")
 
-plt.scatter(
-km.cluster_centers_[:,0],
-km.cluster_centers_[:,1],
-c = "black",
-s = 200,
-marker = "X")
-
-plt.title(f"Clusters using {meth} K = {k}")
-plt.show()
+    plt.title(f"Clusters using {meth} K={k}")
+    plt.savefig(f"clusters_{meth.lower()}.png", bbox_inches = "tight")
+    plt.show()
 
 # Comparison Table : 
 
@@ -207,18 +201,18 @@ print(results)
 
 # Metrics vs K Visualisation : 
 plt.plot(k_range_vals, inertia_list)
-plt.title("Elbow Curve")
+plt.title("Elbow Curve : ")
 plt.show()
 
 plt.plot(k_range_vals, sil_list)
-plt.title("Silhouette Curve")
+plt.title("Silhouette Curve : ")
 plt.show()
 
 plt.plot(k_range_vals, db_list)
-plt.title("Davies Bouldin Curve")
+plt.title("Davies Bouldin Curve : ")
 plt.show()
 
 plt.plot(k_range_vals, ch_list)
-plt.title("CH Score Curve")
+plt.title("CH Score Curve : ")
 plt.show()
 
