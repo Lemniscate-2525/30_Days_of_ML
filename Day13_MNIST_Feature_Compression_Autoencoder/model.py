@@ -58,6 +58,20 @@ start_train = time.time()
 
 autoencoder.fit(X_train, X_train, epochs = 10, batch_size = 256, shuffle = True, validation_data = (X_test, X_test), verbose = 1)
 
+# Loss Curve Visualization : 
+history = autoencoder.fit(X_train, X_train, epochs = 10, batch_size = 256, shuffle = True, validation_data = (X_test, X_test), verbose = 1)
+
+plt.figure(figsize = (6, 6))
+plt.plot(history.history["loss"], label = "Train Loss")
+plt.plot(history.history["val_loss"], label = "Val Loss")
+
+plt.title("Autoencoder Training Loss Curve : ")
+plt.xlabel("Epoch")
+plt.ylabel("MSE Loss")
+plt.legend()
+
+plt.show()
+
 train_time = time.time() - start_train
 
 
