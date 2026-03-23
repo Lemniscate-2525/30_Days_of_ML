@@ -243,7 +243,7 @@ This is why autoencoders generalize. The compression constraint acts as an impli
 
 Training and validation loss decrease together epoch by epoch, confirming the model is learning genuine structure.
 
-![Training Loss Curve](ae_training_loss.png)
+![Training Loss Curve](visd13.png)
 
 | Epoch | Train Loss | Val Loss |
 |-------|------------|----------|
