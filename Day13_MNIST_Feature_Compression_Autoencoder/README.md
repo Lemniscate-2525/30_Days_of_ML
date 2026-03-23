@@ -1,4 +1,4 @@
-# Nonlinear Feature Compression : 
+# Non-linear Feature Compression : 
 
 ---
 
