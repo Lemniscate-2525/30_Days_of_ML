@@ -4,7 +4,7 @@
 
 ## Problem : 
 
-Learn a compressed representation of high-dimensional image data while preserving maximum reconstructive information, and compare it against the linear baseline of PCA.
+Learn a compressed representation of high-dim image data while preserving maximum reconstructive information, and compare it against the linear baseline of PCA.
 
 Dataset: MNIST handwritten digits. Each sample is a 28x28 grayscale image, flattened into a vector :
 
