@@ -198,10 +198,10 @@ Where :
 | Condition | Score | Interpretation |
 |-----------|-------|----------------|
 | $E[h(x)] \to 0$ | $s \to 1$ | Isolated in very few splits -> definite anomaly |
-| $E[h(x)] = c(n)$ | $s = 0.5$ | Average depth —> indistinguishable from normal |
-| $E[h(x)] \to n-1$ | $s \to 0$ | Never isolated —> deeply embedded in dense cluster |
+| $E[h(x)] = c(n)$ | $s = 0.5$ | Average depth -> indistinguishable from normal |
+| $E[h(x)] \to n-1$ | $s \to 0$ | Never isolated -> deeply embedded in dense cluster |
 
-The score is bounded in $[0, 1]$. Points are flagged as anomalies when $s > 0.5$, or equivalently when the contamination threshold determines the top-$\psi$% of scores.
+The score is bounded in $[0, 1]$. Points are flagged as anomalies when $s > 0.5$, or equivalently when the contamination threshold determines the top $\psi$% of scores.
 
 ---
 
