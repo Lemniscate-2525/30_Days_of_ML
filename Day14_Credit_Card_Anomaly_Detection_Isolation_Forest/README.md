@@ -314,12 +314,12 @@ At very high recall (catching nearly all frauds), both models converge; catching
 
 ---
 
-## Key Takeaways
+## Key Takeaways : 
 
-- Isolation Forest exploits the two fundamental properties of anomalies — they are few and structurally different — to isolate them in fewer random splits than normal points.
+- Isolation Forest exploits the two fundamental properties of anomalies; they are few and structurally different and uses them to isolate in fewer random splits than normal points.
 - The anomaly score $s(x, n) = 2^{-E[h(x)]/c(n)}$ is theoretically grounded in BST search cost, giving a normalized, interpretable score in $[0, 1]$.
-- Sub-sampling to $\psi = 256$ is not an approximation — it is a theoretically optimal choice that prevents both masking and swamping simultaneously.
-- Training and inference complexity are both independent of $N$, the total dataset size. This is the property that makes Isolation Forest production-viable at massive scale.
-- Accuracy and ROC-AUC are invalid under extreme class imbalance. PR-AUC is the correct metric — it ignores true negatives and focuses entirely on the quality of positive detections.
-- The contamination parameter sets the decision threshold, not the score distribution. Setting it to the true fraud prevalence dramatically improves operational precision without touching the underlying model.
-- RobustScaler on `Amount` is not required by the algorithm — it improves random threshold sampling efficiency by compressing the skewed distribution into a range where uniform random splits are more informative.
+- Sub-sampling to $\psi = 256$ is not an approximation; it is the optimal choice that prevents both masking and swamping simultaneously.
+- Training and inference complexity are both independent of $N$, the total dataset size. This is the property that makes Isolation Forest **production-viable** at massive scale.
+- Accuracy and ROC-AUC are invalid under extreme class imbalance. **PR-AUC is the correct metric** as it ignores true negatives and focuses entirely on the quality of positive detections.
+- The **contamination parameter sets the decision threshold**, not the score distribution. Setting it to the true fraud prevalence dramatically improves operational precision without touching the underlying model.
+
