@@ -71,7 +71,7 @@ Isolation Forest turns this observation into an algorithm.
 Before building the model, it is worth understanding why simpler approaches fail here; 
 
 **Distance-based methods (for eg KNN):** Compute the distance from each point to its $k$ nearest neighbors. Points far from their neighbors are flagged. Works in low dimensions but breaks down here because V1-V28 are 28-dimensional PCA features. 
-In high dimensions, all pairwise distances concentrate around the same value — there is no meaningful "far" vs "close." The method also requires computing distances to all training points at inference time, which is $O(N \cdot d)$ per query, very slow for streaming fraud detection at scale.
+In high dimensions, all pairwise distances concentrate around the same value; there is no meaningful "far" vs "close." The method also requires computing distances to all training points at inference time, which is $O(N \cdot d)$ per query, very slow for streaming fraud detection at scale.
 
 **Clustering-based methods (for eg DBSCAN):** Flag points that do not belong to any cluster as anomalies. Fails under class imbalance because the massive cluster of normal transactions dominates. 
 Fraud points that are geographically adjacent to the normal cluster get absorbed into it. Also sensitive to the choice of $\epsilon$ and $\text{minPts}$, which require labeled data to tune properly thus defeating the purpose of unsupervised detection.
@@ -277,7 +277,7 @@ The tuned model improves PR-AUC from 0.166 to 0.185 and dramatically improves Pr
 The tuned model trades some Recall for precision, producing a far more operationally useful detector.
 
 Training time increases from 0.52s to 6.4s due to 3x more trees and the fixed $\psi = 256$ sub-sampling overhead. 
-Inference latency remains practically zero — $O(t \log \psi)$; making this viable for real-time transaction scoring.
+Inference latency remains practically zero; $O(t \log \psi)$; making this viable for real-time transaction scoring.
 
 ---
 
