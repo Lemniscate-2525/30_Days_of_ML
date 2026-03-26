@@ -91,10 +91,10 @@ This low multicollinearity means linear models like Logistic Regression will not
 
 Every model has a different inductive bias; a different set of assumptions about what structure in data looks like;
 
--Logistic Regression assumes linear decision boundaries. 
--Random Forest captures axis-aligned nonlinear interactions. 
--XGBoost captures sequential residual patterns.
--KNN captures local density geometry.
+- Logistic Regression assumes linear decision boundaries.
+- Random Forest captures axis-aligned nonlinear interactions. 
+- XGBoost captures sequential residual patterns.
+- KNN captures local density geometry.
 
 According to the **No Free Lunch** theorem; no single model is universally best. 
 But their errors are not identical; when RF misclassifies a sample, LogReg may get it right, and vice versa. Stacking exploits this error diversity. Rather than voting equally (bagging) or correcting residuals sequentially (boosting), stacking **learns how to combine** base model outputs using a second-level model called the meta-learner.
