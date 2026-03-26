@@ -139,19 +139,19 @@ For each fold :
 After all $K$ iterations, every training sample has exactly one prediction from a model that never saw it during training. These are the OOF predictions; ie. probability estimates on training data.
 
 **Mathematically :** For base model $m$ and fold $k$:
- 
+
 $$\hat{p}_{m,k} = f_m^{(-k)}(x_i) \quad \forall \; i \in \text{fold}_k$$
- 
+
 Where $f_m^{(-k)}$ denotes model $m$ trained on all folds except $k$.
- 
-After all folds:
- 
-$$M_{\text{train}}[:,m] = [\hat{p}_{m,1},\; \hat{p}_{m,2},\; \ldots,\; \hat{p}_{m,N}]$$
- 
+
+After all folds, column $m$ of the meta-training matrix is:
+
+$$\hat{P}_{m} = [\hat{p}_{m,1},\; \hat{p}_{m,2},\; \ldots,\; \hat{p}_{m,N}]$$
+
 For the test set, the base model is retrained on all $K$ folds and predictions from each fold's model are averaged:
- 
-$$M_{\text{test}}[:,m] = \frac{1}{K} \sum_{k=1}^{K} f_m^{(-k)}(X_{\text{test}})$$
- 
+
+$$\hat{P}_{m}^{\text{test}} = \frac{1}{K} \sum_{k=1}^{K} f_m^{(-k)}(X_{\text{test}})$$
+
 This averaging reduces variance in the test predictions. The final meta-training matrix has shape $(N_{\text{train}}, 4)$ one column per base model, all OOF probabilities.
 
 ---
