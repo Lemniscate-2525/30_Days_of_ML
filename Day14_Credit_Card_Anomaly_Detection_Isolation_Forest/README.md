@@ -136,7 +136,7 @@ This isomorphism is not cosmetic; it allows the derivation of a theoretical base
 
 ---
 
-## Sub-sampling:  ($\psi = 256$)
+## Sub-sampling :  ($\psi = 256$)
 
 Isolation Forest does not train on the full dataset. It draws a small sub-sample of size $\psi$ (psi) for each tree. The default and theoretically optimal value is $\psi = 256$.
 
