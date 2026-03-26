@@ -267,13 +267,13 @@ The gain from stacking is marginal but consistent, which is exactly the use case
 
 ### ROC Curve : 
 
-![ROC Curve](roc_curve.png)
+![ROC Curve](rocd15.png)
 
 XGB and Stacking overlap at the top — both significantly outperform KNN, which lags across all operating points. The ROC curves confirm that XGB is the strongest single model and Stacking matches it rather than clearly surpassing it.
 
 ### Precision-Recall Curve : 
 
-![Precision-Recall Curve](pr_curve.png)
+![Precision-Recall Curve](prd15.png)
 
 The PR curve shows sharper differentiation between models than ROC; particularly at high recall. KNN degrades significantly. LogReg, RF, XGB, Tuned XGB, and Stacking are tightly clustered. 
 This clustering at the PR level confirms that these models are all solving the same underlying structure and the marginal gain from stacking is small.
