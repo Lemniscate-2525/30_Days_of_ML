@@ -138,21 +138,21 @@ For each fold :
 
 After all $K$ iterations, every training sample has exactly one prediction from a model that never saw it during training. These are the OOF predictions; ie. probability estimates on training data.
 
-**Mathematically :** 
-
+**Mathematically :** For base model $m$ and fold $k$:
+ 
 $$\hat{p}_{m,k} = f_m^{(-k)}(x_i) \quad \forall \; i \in \text{fold}_k$$
-
+ 
 Where $f_m^{(-k)}$ denotes model $m$ trained on all folds except $k$.
-
-After all folds :
-
-$$\text{meta\_train}[:,m] = [\hat{p}_{m,1},\; \hat{p}_{m,2},\; \ldots,\; \hat{p}_{m,N}]$$
-
-For the test set, the base model is retrained on all $K$ folds and predictions from each fold's model are averaged :
-
-$$\text{meta\_test}[:,m] = \frac{1}{K} \sum_{k=1}^{K} f_m^{(-k)}(X_{\text{test}})$$
-
-This averaging **reduces variance** in the test predictions. The final meta-training matrix has shape $(N_{\text{train}}, 4)$ ; one column per base model, all OOF probabilities.
+ 
+After all folds:
+ 
+$$M_{\text{train}}[:,m] = [\hat{p}_{m,1},\; \hat{p}_{m,2},\; \ldots,\; \hat{p}_{m,N}]$$
+ 
+For the test set, the base model is retrained on all $K$ folds and predictions from each fold's model are averaged:
+ 
+$$M_{\text{test}}[:,m] = \frac{1}{K} \sum_{k=1}^{K} f_m^{(-k)}(X_{\text{test}})$$
+ 
+This averaging reduces variance in the test predictions. The final meta-training matrix has shape $(N_{\text{train}}, 4)$ one column per base model, all OOF probabilities.
 
 ---
 
@@ -255,7 +255,7 @@ With a 75/25 class split and a business context (income prediction), the followi
 | Tuned XGB | 0.8013 | 0.6500 | 0.7178 | - | 44.843 | 6.51e-06 |
 | Stacking | 0.7939 | 0.6400 | 0.7087 | 0.9263 | 0.0654 | 8.17e-08 |
 
-Note: Tuned XGB ROC-AUC was not correctly captured in the output due to a bug in the results dictionary (`"ROC_AUC": (y_test, tuned_prob)` — missing the `roc_auc_score` call). The stacking meta-learner training time (0.065s) reflects only the LogReg fit on OOF features, not the full OOF generation cost.
+Note: Tuned XGB ROC-AUC was not correctly captured in the output due to a bug in the results dictionary (`"ROC_AUC": (y_test, tuned_prob)` missing the `roc_auc_score` call). The stacking meta-learner training time (0.065s) reflects only the LogReg fit on OOF features, not the full OOF generation cost.
 
 XGB and Stacking achieve the highest ROC-AUC (0.9267 and 0.9263 respectively). 
 Stacking does not dramatically exceed its best base learner here; which is expected on a well-behaved structured dataset with moderate imbalance and low feature redundancy. 
@@ -269,7 +269,7 @@ The gain from stacking is marginal but consistent, which is exactly the use case
 
 ![ROC Curve](rocd15.png)
 
-XGB and Stacking overlap at the top — both significantly outperform KNN, which lags across all operating points. The ROC curves confirm that XGB is the strongest single model and Stacking matches it rather than clearly surpassing it.
+XGB and Stacking overlap at the top; both significantly outperform KNN, which lags across all operating points. The ROC curves confirm that XGB is the strongest single model and Stacking matches it rather than clearly surpassing it.
 
 ### Precision-Recall Curve : 
 
