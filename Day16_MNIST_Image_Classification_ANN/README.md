@@ -294,7 +294,7 @@ Per-class breakdown :
 
 ## Training Curve Visualization : 
 
-![Training Loss and Accuracy](visd116.png)
+![Training Loss and Accuracy](visd16.png)
 
 | Epoch | Train Loss | Train Acc | Val Acc |
 |-------|------------|-----------|---------|
@@ -316,17 +316,7 @@ After epoch 3 the curve flattens into diminishing returns. The train/val accurac
 
 ## Confusion Matrix Visualization : 
 
-### Training Loss Curve : 
-
-![Training Loss Curve](visd16.png)
-
-### Loss and Accuracy Curves : 
-
-![Loss and Accuracy](visd1116.png)
-
-### Confusion Matrix : 
-
-![Confusion Matrix](visd11116.png) 
+![Confusion Matrix](visd116.png) 
 
 The confusion matrix reveals which digit pairs the network struggles to distinguish. 
 
@@ -336,6 +326,11 @@ The confusion matrix reveals which digit pairs the network struggles to distingu
 - Class 9 misclassified as 7 in 9 cases because the tail of 9 and the diagonal of 7 create similar pixel activations.
 
 These are the same confusions a human makes on messy handwriting, which confirms the network is responding to genuine structural ambiguity, not artifacts.
+
+
+### Loss and Accuracy Curves : 
+
+![Loss and Accuracy](visd1116.png)
 
 ---
 
