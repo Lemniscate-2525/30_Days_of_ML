@@ -355,8 +355,8 @@ These are the same confusions a human makes on messy handwriting, which confirms
 
 ## Key Takeaways : 
 
-- A fully connected ANN is a **universal function approximator**, given enough neurons it can represent any continuous function. It lacks is structural inductive bias, which CNNs provide through local connectivity and weight sharing.
+- A fully connected ANN is a **universal function approximator**, given enough neurons it can represent any continuous function. It lacks is structural inductive bias.
 - ReLU in hidden layers and Softmax at the output are not interchangeable, each is chosen for a specific reason ReLU avoids gradient vanishing in hidden layers, Softmax produces valid probability distributions at the output.
-- Cross-entropy loss paired with Softmax produces a **clean gradient** $\hat{Y} - Y$ ,the prediction error directly. 
+- Cross-entropy loss paired with Softmax produces a **clean gradient** $\hat{Y}-Y$ ,the prediction error directly. 
 - Dropout is a **structural regularizer** it forces the network to distribute representations across neurons rather than memorizing through specific pathways.
 - At 101,770 parameters and ~98% test accuracy on MNIST, this ANN is already near the ceiling for what a flat pixel-to-class mapping can achieve without spatial structure. 
