@@ -89,7 +89,7 @@ The network is a two-layer fully connected ANN :
 
 $$784 \xrightarrow{\text{ReLU}} 128 \xrightarrow{\text{Dropout}(0.2)} \xrightarrow{\text{Softmax}} 10$$
 
-![ANN Architecture Diagram](ann_architecture.png)
+![ANN Architecture Diagram](ann_architecture.HTML)
 
 Each neuron in a hidden layer computes a weighted sum of all inputs from the previous layer, adds a bias, and passes the result through an activation function. This is the fundamental unit:
 
