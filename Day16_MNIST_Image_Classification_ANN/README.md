@@ -1,4 +1,4 @@
-# MNIST Digit Classification : 
+# MNIST Image Classification : 
 
 ---
 
