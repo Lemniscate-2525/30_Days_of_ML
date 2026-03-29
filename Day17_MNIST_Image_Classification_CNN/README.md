@@ -336,8 +336,6 @@ CNN is slower to train and slower at inference due to the convolution operations
 
 ![Loss and Accuracy Curves](visd17.png)
 
-![Loss and Accuracy Curves Alt](visd117.png)
-
 ![Confusion Matrix](viscon17.png)
 
 From the confusion matrix, the tightest remaining errors are :
