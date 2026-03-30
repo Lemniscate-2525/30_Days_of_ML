@@ -53,7 +53,7 @@ ResNet18 has 11.7 million parameters, accepts $224 \times 224 \times 3$ inputs, 
 
 ---
 
-## Exploratory Data Analysis
+## EDA : 
 
 The dataset contains NORMAL and PNEUMONIA chest X-rays. Class imbalance exists — pneumonia cases significantly outnumber normal cases in the training split (~3:1), which is clinically realistic but requires attention during evaluation.
 
@@ -65,27 +65,27 @@ X-rays are grayscale medical images with highly variable resolution. The key vis
 
 ---
 
-## Data Preprocessing
+## Data Preprocessing : 
 
-### The Golden Rule
+### The Golden Rule : 
 
-The new data must be preprocessed in exactly the same way as the data the base model was originally trained on. ResNet18 was trained on ImageNet RGB images, normalized with specific channel-wise statistics. If you feed it unnormalized or differently scaled inputs, the pretrained feature detectors fire on incorrect activation ranges and the feature representations are meaningless — like running a calibrated instrument with the wrong units.
+The new data must be preprocessed in exactly the same way as the data the base model was originally trained on. ResNet18 was trained on ImageNet RGB images, normalized with specific channel-wise statistics. If you feed it unnormalized or differently scaled inputs, the pretrained feature detectors fire on incorrect activation ranges and the feature representations are meaningless, like running a calibrated instrument with the wrong units.
 
-### Steps Applied
+### Steps  : 
 
-**1. Resize to 224x224**
+**1. Resize to 224x224 :**
 
-ResNet18's convolutional architecture is designed for 224x224 inputs. The spatial dimensions flow through 5 stages of downsampling, producing a 7x7 feature map before the global average pool. A different input size destroys this spatial hierarchy — the final feature map would have wrong dimensions.
+ResNet18's convolutional architecture is designed for 224x224 inputs. The spatial dimensions flow through 5 stages of downsampling, producing a 7x7 feature map before the global average pool. A different input size destroys this spatial hierarchy this way the final feature map would have wrong dimensions.
 
-**2. Channel duplication (grayscale to RGB)**
+**2. Channel duplication (grayscale to RGB) :**
 
 ImageNet models expect 3-channel RGB input. X-rays are single-channel grayscale. We replicate the grayscale channel three times:
 
 $$X_{\text{RGB}} = [X_{\text{gray}},\; X_{\text{gray}},\; X_{\text{gray}}] \in \mathbb{R}^{3 \times 224 \times 224}$$
 
-This is not the same as true RGB, but it is the correct approximation. The model's first convolutional layer expects 3 channels — feeding 1 channel would require reinitialization of the first layer weights, destroying the pretrained edge detectors.
+This is not the same as true RGB, but it is the correct approximation. The model's first convolutional layer expects 3 channels; feeding 1 channel would require reinitialization of the first layer weights, destroying the pretrained edge detectors.
 
-**3. ImageNet normalization**
+**3. ImageNet Normalization :**
 
 Normalize each channel using ImageNet's precomputed statistics:
 
@@ -101,13 +101,13 @@ These values were computed across the entire ImageNet dataset. Using any other n
 
 **4. Data augmentation (train set only)**
 
-Random horizontal flips and small rotations are applied during training. This artificially expands the effective dataset size and reduces overfitting. Augmentation is not applied to the validation set — we want to evaluate on clean, unmodified images.
+Random horizontal flips and small rotations are applied during training. This artificially expands the effective dataset size and reduces overfitting. Augmentation is not applied to the validation set, we want to evaluate on clean, unmodified images.
 
 ---
 
-## Transfer Learning: Two-Phase Training
+## Transfer Learning : Two-Phase Training
 
-### The Architecture
+### The Architecture : 
 
 Let the pretrained ResNet18 base (all layers except the final FC) be denoted $F(X;\, W_{\text{base}})$. It maps a 224x224x3 image to a 512-dimensional feature vector. The new classification head $H(Z;\, W_{\text{head}})$ maps this vector to a single binary logit:
 
@@ -115,9 +115,9 @@ $$\hat{y} = H(F(X;\, W_{\text{base}});\, W_{\text{head}}) = W_{\text{head}} \cdo
 
 The original ImageNet head (1000-class FC) is discarded and replaced with a single `nn.Linear(512, 1)`.
 
-### Loss Function
+### Loss Function : 
 
-Binary Cross-Entropy with Logits Loss — numerically more stable than applying sigmoid before BCE because it uses the log-sum-exp trick to avoid floating point overflow:
+Binary Cross-Entropy with Logits Loss, numerically more stable than applying sigmoid before BCE because it uses the log-sum-exp trick to avoid floating point overflow:
 
 $$\mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \left[ y_i \log\sigma(\hat{y}_i) + (1 - y_i)\log(1 - \sigma(\hat{y}_i)) \right]$$
 
@@ -125,7 +125,7 @@ Where $\sigma(\hat{y}_i) = 1/(1 + e^{-\hat{y}_i})$ is the sigmoid function appli
 
 ---
 
-### Phase 1: Feature Extraction (Frozen Base)
+### Phase 1 : Feature Extraction (Frozen Base)
 
 All base layer weights have `requires_grad = False`. This means PyTorch does not track gradients through them and backpropagation stops at the head:
 
@@ -137,13 +137,13 @@ $$W_{\text{head}} \leftarrow W_{\text{head}} - \alpha_{\text{head}} \cdot \nabla
 
 With $\alpha_{\text{head}} = 10^{-3}$.
 
-**Why do this first?** The new head is randomly initialized — its weights are garbage. If you immediately unfreeze the entire network with a randomly initialized head, the enormous loss from the random head produces large gradients that propagate through and corrupt the carefully learned pretrained weights before the head has a chance to stabilize. Phase 1 trains the head to a reasonable starting point first.
+The new head is **randomly initialized**, its weights are garbage. If you immediately unfreeze the entire network with a randomly initialized head, the enormous loss from the random head produces large gradients that propagate through and corrupt the carefully learned pretrained weights before the head has a chance to stabilize. Phase 1 trains the head to a reasonable starting point first.
 
-**Computational benefit:** Frozen layers require no gradient computation. The backward pass only touches the head — training is fast.
+**Computational benefit:** Frozen layers require no gradient computation. The backward pass only touches the head hence training is fast.
 
 ### Phase 2: Fine-Tuning (Unfrozen Base)
 
-All base layers are unfrozen — `requires_grad = True` for all parameters. Gradients now flow through the entire network:
+All base layers are unfrozen , `requires_grad = True` for all parameters. Gradients now flow through the entire network:
 
 $$\nabla_{W_{\text{base}}} \mathcal{L} \neq 0$$
 
@@ -158,11 +158,11 @@ $$W_{\text{head}} \leftarrow W_{\text{head}} - \alpha_{\text{head}} \cdot \nabla
 | Head | $\alpha_{\text{head}} = 10^{-3}$ |
 | Base | $\alpha_{\text{base}} = 10^{-5}$ |
 
-The base uses a learning rate 100x smaller than the head. The pretrained weights are already good — they need gentle nudging toward lung-specific features, not wholesale rewriting. The much smaller $\alpha_{\text{base}}$ ensures the general-purpose edge and texture detectors shift slightly toward medical imaging geometry without forgetting what made them useful in the first place.
+The base uses a learning rate 100x smaller than the head. The pretrained weights are already good, they need gentle nudging toward lung-specific features, not wholesale rewriting. The much smaller $\alpha_{\text{base}}$ ensures the general-purpose edge and texture detectors shift slightly toward medical imaging geometry without forgetting what made them useful in the first place.
 
 ---
 
-## Time, Space, and Inference Complexity
+## Time, Space, and Inference Complexity : 
 
 Let:
 - $N$ = training samples (5,216)
@@ -170,37 +170,37 @@ Let:
 - $F_l, C_l, k_l, H'_l, W'_l$ = filters, input channels, kernel size, output spatial dims at layer $l$
 - $E_1, E_2$ = epochs for phase 1 and phase 2
 
-**Training complexity:**
+**Training complexity :**
 
 Phase 1 (head only):
 
 $$O(E_1 \cdot N \cdot d_{\text{feat}} \cdot 1) = O(E_1 \cdot N \cdot 512)$$
 
-Only the final linear layer is computed in the backward pass. The forward pass through the frozen base is still computed but gradients are not tracked — PyTorch skips gradient tape for frozen parameters.
+Only the final linear layer is computed in the backward pass. The forward pass through the frozen base is still computed but gradients are not tracked as PyTorch skips gradient tape for frozen parameters.
 
-Phase 2 (full network):
+Phase 2 (full network) :
 
 $$O\!\left(E_2 \cdot N \cdot \sum_{l=1}^{L} F_l \cdot C_l \cdot k_l^2 \cdot H'_l \cdot W'_l\right)$$
 
 Full backpropagation through all 18 layers. Significantly more expensive than Phase 1, which is why we minimize $E_2$ and use a small $\alpha_{\text{base}}$.
 
-**Space complexity:**
+**Space complexity :**
 
 $$O\!\left(\sum_l F_l \cdot C_l \cdot k_l^2\right) \approx O(11.7 \times 10^6 \text{ params})$$
 
-Frozen in Phase 1 — only gradients for the head are stored. In Phase 2, gradients for all 11.7M parameters must be stored simultaneously, requiring significantly more GPU memory.
+Frozen in Phase 1, only gradients for the head are stored. In Phase 2, gradients for all 11.7M parameters must be stored simultaneously, requiring significantly more GPU memory.
 
-**Inference complexity per sample:**
+**Inference complexity per sample :**
 
 $$O\!\left(\sum_l F_l \cdot C_l \cdot k_l^2 \cdot H'_l \cdot W'_l + 512\right)$$
 
 One full forward pass through ResNet18. No gradient computation. Constant in $N$.
 
-Measured per-sample latency: **0.101 seconds** on CPU. On GPU (T4) this is sub-millisecond — the $O(1)$ forward pass does not bottleneck production inference pipelines regardless of model size.
+Measured per-sample latency : **0.101 seconds** on CPU. On GPU (T4) this is sub-millisecond — the $O(1)$ forward pass does not bottleneck production inference pipelines regardless of model size.
 
 ---
 
-## Results
+## Results : 
 
 ### Phase 1: Feature Extraction (5 epochs, frozen base)
 
@@ -212,7 +212,7 @@ Measured per-sample latency: **0.101 seconds** on CPU. On GPU (T4) this is sub-m
 | 4 | 0.1629 | 0.9367 | 0.2822 | 0.8125 |
 | 5 | 0.1549 | 0.9406 | 0.3270 | 0.8125 |
 
-Training time: 7 minutes 10 seconds. Best val acc: 0.875.
+Training time : 7 minutes 10 seconds. Best val acc: 0.875.
 
 ### Phase 2: Fine-Tuning (5 epochs, full network)
 
@@ -226,9 +226,9 @@ Training time: 7 minutes 10 seconds. Best val acc: 0.875.
 
 Training time: 7 minutes 25 seconds. Best val acc: 1.000.
 
-The Phase 2 unfreeze produces a sharp drop in validation loss from epoch 7 onward — exactly what differential learning rate fine-tuning is designed to achieve. The base learns lung-specific texture patterns that the frozen ImageNet features could not capture.
+The Phase 2 unfreeze produces a sharp drop in validation loss from epoch 7 onward, exactly what differential learning rate fine-tuning is designed to achieve. The base learns lung-specific texture patterns that the frozen ImageNet features could not capture.
 
-### Classification Report (Final)
+### Classification Report (Final) : 
 
 | Class | Precision | Recall | F1 | Support |
 |-------|-----------|--------|----|---------|
@@ -238,11 +238,11 @@ The Phase 2 unfreeze produces a sharp drop in validation loss from epoch 7 onwar
 
 Per-sample inference latency: 0.10081 seconds (CPU).
 
-Note: The validation set contains only 16 images — a known limitation of this dataset split. Results should be interpreted alongside the training dynamics rather than taken as a definitive generalization estimate.
+Note: The validation set contains only 16 images which is a known limitation of this dataset split. Results should be interpreted alongside the training dynamics rather than taken as a definitive generalization estimate.
 
 ---
 
-## Training Curves and Confusion Matrix
+## Training Curves and Confusion Matrix : 
 
 ![Training Loss and Accuracy Curves](visd18.png)
 
@@ -250,35 +250,32 @@ The dashed vertical line marks the Phase 1 to Phase 2 boundary at epoch 5. Val l
 
 ![Confusion Matrix](cmd18.png)
 
-Perfect confusion matrix: 8/8 NORMAL correctly identified, 8/8 PNEUMONIA correctly identified, zero false negatives. In medical diagnostics, false negatives (missed pneumonia) are far more costly than false positives — a model that achieves zero false negatives on the validation set is clinically preferable even if it produces some false positives.
+Perfect confusion matrix: 8/8 NORMAL correctly identified, 8/8 PNEUMONIA correctly identified, zero false negatives. In medical diagnostics, false negatives (missed pneumonia) are far more costly than false positives and a model that achieves zero false negatives on the validation set is clinically preferable even if it produces some false positives.
 
 ---
 
-## Failure Case Analysis
+## Failure Case Analysis : 
 
-**Catastrophic forgetting:** If Phase 1 is skipped and the entire network is immediately unfrozen with a high learning rate, the randomly initialized head produces enormous gradients in early epochs. These gradients propagate backward through all 18 layers and overwrite the pretrained ImageNet weights before the head has learned anything meaningful. The model forgets how to detect edges and textures and must relearn them from 5,000 images — which is not enough data. Final accuracy is typically worse than training from scratch because the random destruction of pretrained weights causes unstable early training dynamics.
+**Catastrophic forgetting :** If Phase 1 is skipped and the entire network is immediately unfrozen with a high learning rate, the randomly initialized head produces enormous gradients in early epochs. These gradients propagate backward through all 18 layers and overwrite the pretrained ImageNet weights before the head has learned anything meaningful. The model forgets how to detect edges and textures and must relearn them from 5,000 images, which is not enough data. Final accuracy is typically worse than training from scratch because the random destruction of pretrained weights causes unstable early training dynamics.
 
-**Severe domain mismatch:** ResNet18's pretrained features are edge detectors, texture detectors, and color gradient detectors learned from natural photographs. These transfer well to medical images because edges and textures are universal. However, for data with fundamentally different geometric structure — satellite hyperspectral imagery, seismic wave signals, radio telescope data, molecular electron density maps — the pretrained RGB filters are not just unhelpful, they are actively misleading. The first-layer filters respond to RGB gradients that have no correspondence to the signal structure, producing garbage feature vectors. This is called negative transfer: the pretrained weights hurt performance relative to random initialization. For these domains, training from scratch on domain-specific data or using domain-specific pretrained models is the correct approach.
+**Severe domain mismatch :** ResNet18's pretrained features are edge detectors, texture detectors, and color gradient detectors learned from natural photographs. These transfer well to medical images because edges and textures are universal. However, for data with fundamentally different geometric structure; satellite hyperspectral imagery, seismic wave signals, radio telescope data, molecular electron density maps where the pretrained RGB filters are not just unhelpful, they are actively misleading. The first-layer filters respond to RGB gradients that have no correspondence to the signal structure, producing garbage feature vectors. This is called negative transfer: the pretrained weights hurt performance relative to random initialization. For these domains, training from scratch on domain-specific data or using domain-specific pretrained models is the correct approach.
 
-**Dimensionality shock:** ResNet18's spatial downsampling is calibrated for 224x224 inputs. The network applies five stages of 2x downsampling, producing a 7x7 feature map that is then global-average-pooled to 512 dimensions. If you feed a 64x64 image without resizing, the final feature map is 2x2 — only 4 spatial positions to pool from, losing nearly all spatial information. If you feed a 512x512 image, the final feature map is 16x16 — the global pool averages 256 positions, diluting localized features. The model architecture implicitly assumes 224x224. Any other resolution breaks the spatial hierarchy.
+**Dimensionality shock :** ResNet18's spatial downsampling is calibrated for 224x224 inputs. The network applies five stages of 2x downsampling, producing a 7x7 feature map that is then global-average-pooled to 512 dimensions. If you feed a 64x64 image without resizing, the final feature map is 2x2 so only 4 spatial positions to pool from, losing nearly all spatial information. If you feed a 512x512 image, the final feature map is 16x16 so the global pool averages 256 positions, diluting localized features. The model architecture implicitly assumes 224x224. Any other resolution breaks the spatial hierarchy.
 
-**Class imbalance in medical data:** The training set has approximately 3x more pneumonia images than normal images. Without class weighting or resampling, the model is biased toward predicting pneumonia — maximizing accuracy by exploiting the prior. In clinical settings this inflates recall but degrades precision, producing excessive false positives. Weighted loss functions or stratified sampling address this.
+**Class imbalance in medical data :** The training set has approximately 3x more pneumonia images than normal images. Without class weighting or resampling, the model is biased toward predicting pneumonia thus maximizing accuracy by exploiting the prior. In clinical settings this inflates recall but degrades precision, producing excessive false positives. Weighted loss functions or stratified sampling address this.
 
-**Overfitting on tiny validation sets:** The validation set here is 16 images — 8 per class. A confusion matrix of 16/16 correct is statistically consistent with a model that has learned nothing beyond memorizing 16 specific images. Reliable evaluation requires at minimum hundreds of per-class validation samples. The training dynamics (loss curves, phase transition effect) provide more reliable evidence of learning than the final accuracy on 16 images.
+**Overfitting on tiny validation sets :** The validation set here is 16 images — 8 per class. A confusion matrix of 16/16 correct is statistically consistent with a model that has learned nothing beyond memorizing 16 specific images. Reliable evaluation requires at minimum hundreds of per-class validation samples. The training dynamics (loss curves, phase transition effect) provide more reliable evidence of learning than the final accuracy on 16 images.
 
 ---
 
-## Key Takeaways
+## Key Takeaways : 
 
-- Transfer Learning is the default approach for any computer vision problem with limited labeled data. Training deep CNNs from scratch requires hundreds of thousands of labeled images per class. Transfer Learning reduces this requirement by orders of magnitude.
-- The two-phase protocol is not optional. Phase 1 stabilizes the head before exposing pretrained weights to gradients. Phase 2 applies differential learning rates to gently shift the base without destroying it.
-- Preprocessing must exactly mirror the base model's training pipeline. Normalization statistics, channel count, and input resolution are not hyperparameters — they are fixed by the pretrained model.
+- Transfer Learning is the **default approach** for any computer vision problem with limited labeled data. Training deep CNNs from scratch requires hundreds of thousands of labeled images per class. Transfer Learning reduces this requirement by orders of magnitude.
+- The two-phase protocol is not optional. Phase 1 stabilizes the head before exposing pretrained weights to gradients. Phase 2 applies **differential learning rates** to gently shift the base without destroying it.
+- Preprocessing must exactly mirror the base model's training pipeline. Normalization statistics, channel count, and input resolution are not hyperparameters but they are fixed by the pretrained model.
 - Channel duplication (grayscale to RGB) is an approximation that works because the first-layer filters respond to local intensity gradients, which are preserved when the single channel is replicated. A true 3-channel image would be better, but this is the correct workaround.
 - Residual connections in ResNet solve the vanishing gradient problem by providing a direct gradient path through skip connections, making very deep networks trainable.
 - False negatives are more dangerous than false positives in medical diagnostics. Evaluation should weight Recall for the positive class above overall accuracy.
 
 ---
 
-## Runtime Environment Note
-
-This model was trained on Google Colab with a T4 GPU. The Chest X-Ray dataset was downloaded programmatically using the Kaggle API directly from within Colab, injecting credentials as environment variables and downloading via the Kaggle CLI. This avoids manual upload of a large dataset and is the standard workflow for Colab-based training on Kaggle datasets. If reproducing locally, replace the Kaggle API block with a local path to the downloaded dataset, or configure `~/.kaggle/kaggle.json` with your credentials.
