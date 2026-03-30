@@ -1,20 +1,20 @@
-# Pneumonia Detection using Transfer Learning with ResNet18
+# Pneumonia Detection using Transfer Learning : 
 
 ---
 
-## Problem Statement
+## Problem Statement : 
 
 Detect pneumonia from chest X-ray images using a pretrained deep convolutional neural network.
 
-**Dataset:** Chest X-Ray Images (Pneumonia) — Kaggle, originally from Guangzhou Women and Children's Medical Center.
+**Dataset:** Chest X-Ray Images (Pneumonia);  Kaggle, originally from Guangzhou Women and Children's Medical Center.
 
-**Target:** Binary classification — 0 = Normal, 1 = Pneumonia.
+**Target:** Binary classification; 0 = Normal, 1 = Pneumonia.
 
-**Why not train from scratch?** The dataset contains approximately 5,216 training images. A deep CNN with millions of parameters trained on 5,000 images will memorize noise rather than learn generalizable lung pathology features. The model would achieve near-perfect training accuracy and fail badly on unseen X-rays. Transfer Learning bypasses this constraint entirely by reusing weights already learned from 1.2 million diverse images.
+**We avoid training from scratch :** The dataset contains approximately 5,216 training images. A deep CNN with millions of parameters trained on 5,000 images will memorize noise rather than learn generalizable lung pathology features. The model would achieve near-perfect training accuracy and fail badly on unseen X-rays. Transfer Learning bypasses this constraint entirely by reusing weights already learned from 1.2 million diverse images.
 
 ---
 
-## What is Transfer Learning?
+## Transfer Learning : 
 
 A deep CNN trained on ImageNet has already learned to detect edges, textures, curves, blobs, and complex geometric shapes — not because we told it to, but because these are the features that distinguish 1,000 different object categories. These features are not specific to cars or dogs. They are universal properties of visual data.
 
@@ -24,7 +24,7 @@ Transfer Learning exploits this. Instead of learning 11 million parameters from 
 
 ---
 
-## ResNet18: Why This Architecture?
+## ResNet18 :
 
 ResNet18 is an 18-layer deep residual network. The key innovation of ResNet over plain deep CNNs is the **residual connection** — a skip connection that adds the input of a block directly to its output:
 
@@ -36,7 +36,7 @@ ResNet18 has 11.7 million parameters, accepts $224 \times 224 \times 3$ inputs, 
 
 ---
 
-## Experimental Pipeline
+## Pipeline : 
 
 1. Download Chest X-Ray dataset from Kaggle
 2. EDA: inspect class distribution and sample images
