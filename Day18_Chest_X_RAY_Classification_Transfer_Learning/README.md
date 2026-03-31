@@ -2,10 +2,10 @@
 
 ---
 
-## Problem Statement : 
+## Problem : 
 
 Detect pneumonia from chest X-ray images using a pretrained deep convolutional neural network.
-
+ 
 **Dataset:** Chest X-Ray Images (Pneumonia);  Kaggle, originally from Guangzhou Women and Children's Medical Center.
 
 **Target:** Binary classification; 0 = Normal, 1 = Pneumonia.
@@ -87,7 +87,7 @@ This is not the same as true RGB, but it is the correct approximation. The model
 
 **3. ImageNet Normalization :**
 
-Normalize each channel using ImageNet's precomputed statistics:
+Normalize each channel using ImageNet's precomputed statistics :
 
 $$x'_c = \frac{x_c - \mu_c}{\sigma_c}$$
 
@@ -151,7 +151,7 @@ $$W_{\text{base}} \leftarrow W_{\text{base}} - \alpha_{\text{base}} \cdot \nabla
 
 $$W_{\text{head}} \leftarrow W_{\text{head}} - \alpha_{\text{head}} \cdot \nabla_{W_{\text{head}}} \mathcal{L}$$
 
-**Differential learning rates** are critical here:
+**Differential learning rates** are critical here :
 
 | Component | Learning Rate |
 |-----------|--------------|
@@ -196,7 +196,7 @@ $$O\!\left(\sum_l F_l \cdot C_l \cdot k_l^2 \cdot H'_l \cdot W'_l + 512\right)$$
 
 One full forward pass through ResNet18. No gradient computation. Constant in $N$.
 
-Measured per-sample latency : **0.101 seconds** on CPU. On GPU (T4) this is sub-millisecond — the $O(1)$ forward pass does not bottleneck production inference pipelines regardless of model size.
+Measured per-sample latency : **0.101 seconds** on CPU. On GPU (T4) this is sub-millisecond; the $O(1)$ forward pass does not bottleneck production inference pipelines regardless of model size.
 
 ---
 
