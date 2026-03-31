@@ -16,7 +16,7 @@ Three features selected:
 | `DCC` | DC Current |
 | `DCV` | DC Voltage |
 
-**Task:** Multivariate time-series forecasting, given the last 50 timesteps, we have to predict the sensor values at $T+1$.
+**Task :** Multivariate time-series forecasting, given the last 50 timesteps, we have to predict the sensor values at $T+1$.
 
 **Final shape after chunked loading and downsampling :** $(261{,}551 \times 3)$
 
@@ -57,7 +57,6 @@ This temporal memory is the fundamental capability that makes RNNs the correct a
 
 261,551 timesteps, 3 features, zero missing values after forward-fill.
 
-![EDA Statistical Summary](eda18.png)
 
 | Stat | GenTorqSP | DCC | DCV |
 |------|-----------|-----|-----|
