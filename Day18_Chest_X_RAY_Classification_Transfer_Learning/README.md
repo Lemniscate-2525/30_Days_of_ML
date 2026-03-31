@@ -16,21 +16,21 @@ Detect pneumonia from chest X-ray images using a pretrained deep convolutional n
 
 ## Transfer Learning : 
 
-A deep CNN trained on ImageNet has already learned to detect edges, textures, curves, blobs, and complex geometric shapes — not because we told it to, but because these are the features that distinguish 1,000 different object categories. These features are not specific to cars or dogs. They are universal properties of visual data.
+A deep CNN trained on ImageNet has already learned to detect edges, textures, curves, blobs, and complex geometric shapes, not because we told it to, but because these are the features that distinguish 1,000 different object categories. These features are not specific to cars or dogs. They are universal properties of visual data.
 
 An edge detector in layer 2 of a ResNet trained on household objects is mathematically identical to the edge detector needed to analyze the boundary between healthy lung tissue and pneumonia-induced opacity. The geometry of edges does not change based on what the edge belongs to.
 
-Transfer Learning exploits this. Instead of learning 11 million parameters from 5,000 images — an impossible task — we borrow 11 million parameters already learned from 1.2 million images and adapt only the final classification layer to our specific problem. The computational savings are enormous: instead of training a deep network end-to-end for hundreds of epochs, we train one linear layer for a few epochs, then gently fine-tune the entire network at a much lower learning rate.
+Transfer Learning exploits this. Instead of learning 11 million parameters from 5,000 images which is an impossible task so we borrow 11 million parameters already learned from 1.2 million images and adapt only the final classification layer to our specific problem. The computational savings are enormous: instead of training a deep network end-to-end for hundreds of epochs, we train one linear layer for a few epochs, then gently fine-tune the entire network at a much lower learning rate.
 
 ---
 
 ## ResNet18 :
 
-ResNet18 is an 18-layer deep residual network. The key innovation of ResNet over plain deep CNNs is the **residual connection** — a skip connection that adds the input of a block directly to its output:
+ResNet18 is an 18-layer deep residual network. The key innovation of ResNet over plain deep CNNs is the **residual connection**, a skip connection that adds the input of a block directly to its output :
 
 $$A^{(l+2)} = \text{ReLU}(A^{(l)} + F(A^{(l)};\, W^{(l)}, W^{(l+1)}))$$
 
-Where $F(A^{(l)})$ is the transformation applied by the two convolutional layers in the block. If those layers learn nothing useful, $F \to 0$ and the block becomes an identity mapping — the network cannot get worse by adding depth. This solves the vanishing gradient problem in deep networks: gradients flow directly through the skip connection without passing through activation function derivatives.
+Where $F(A^{(l)})$ is the transformation applied by the two convolutional layers in the block. If those layers learn nothing useful, $F \to 0$ and the block becomes an identity mapping, the network cannot get worse by adding depth. This solves the vanishing gradient problem in deep networks: gradients flow directly through the skip connection without passing through activation function derivatives.
 
 ResNet18 has 11.7 million parameters, accepts $224 \times 224 \times 3$ inputs, and produces a 1000-class output by default. We replace that final classification head with a binary output.
 
@@ -38,28 +38,28 @@ ResNet18 has 11.7 million parameters, accepts $224 \times 224 \times 3$ inputs, 
 
 ## Pipeline : 
 
-1. Download Chest X-Ray dataset from Kaggle
-2. EDA: inspect class distribution and sample images
-3. Apply preprocessing transforms: resize to 224x224, convert grayscale to 3-channel, apply ImageNet normalization, apply augmentation (train only)
-4. Load pretrained ResNet18 weights
-5. Freeze all base layers (Phase 1: Feature Extraction)
-6. Replace final FC layer with a new binary output layer
-7. Train only the new head for 5 epochs with Adam ($lr = 10^{-3}$)
-8. Unfreeze all layers (Phase 2: Fine-Tuning)
-9. Train the full network for 5 more epochs with differential learning rates
-10. Evaluate on validation set: Accuracy, Precision, Recall, F1
-11. Plot training curves with phase boundary marked
-12. Confusion matrix on validation set
+1. Download Chest X-Ray dataset from Kaggle.
+2. EDA: inspect class distribution and sample images.
+3. Apply preprocessing transforms: resize to 224x224, convert grayscale to 3-channel, apply ImageNet normalization, apply augmentation (train only).
+4. Load pretrained ResNet18 weights.
+5. Freeze all base layers (Phase 1: Feature Extraction).
+6. Replace final FC layer with a new binary output layer.
+7. Train only the new head for 5 epochs with Adam ($lr = 10^{-3}$).
+8. Unfreeze all layers (Phase 2: Fine-Tuning).
+9. Train the full network for 5 more epochs with differential learning rates.
+10. Evaluate on validation set: Accuracy, Precision, Recall, F1.
+11. Plot training curves with phase boundary marked.
+12. Confusion matrix on validation set.
 
 ---
 
 ## EDA : 
 
-The dataset contains NORMAL and PNEUMONIA chest X-rays. Class imbalance exists — pneumonia cases significantly outnumber normal cases in the training split (~3:1), which is clinically realistic but requires attention during evaluation.
+The dataset contains NORMAL and PNEUMONIA chest X-rays. Class imbalance exists, pneumonia cases significantly outnumber normal cases in the training split (~3:1), which is clinically realistic but requires attention during evaluation.
 
-![Sample X-Ray Images](eda_xray_samples.png)
+![Sample X-Ray Images](eda17.png)
 
-![Class Distribution](eda_class_dist.png)
+![Class Distribution](eda117.png)
 
 X-rays are grayscale medical images with highly variable resolution. The key visual difference: normal lungs show clear, dark fields; pneumonia lungs show white opacity patches (consolidation) where fluid or infection has displaced air.
 
