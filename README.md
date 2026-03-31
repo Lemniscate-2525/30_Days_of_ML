@@ -1,4 +1,4 @@
-# 30 Days of Machine Learning; From Classical ML to Modern Deep Learning
+# 30 Days of Machine Learning; Starting from Classical ML, DL, Transformers all the way upto modern LLM Architecture.
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue)
 ![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Scikit--Learn-orange)
