@@ -112,12 +112,12 @@ This compresses a potentially multi-million-row file into a RAM-safe size while 
 
 ## The Sliding Window(2D to 3D) : 
 
-Raw SCADA data is a 2D matrix: $(N_{\text{timesteps}}, 3)$.
+Raw SCADA data is a 2D matrix: $(N_t, 3)$ where $N_t$ is the number of timesteps.
 
-An RNN expects a 3D tensor: $(\text{Batch},\; \text{Seq\_Len},\; \text{Features})$.
-
+An RNN expects a 3D tensor: $(\text{Batch},\; L,\; F)$ where $L$ = sequence length and $F$ = features.
+ 
 The sliding window creates training samples by stepping a window of length $L=50$ across the time axis:
-
+ 
 - Sample $i$: $X_i = \text{data}[i : i+50]$, shape $(50, 3)$
 - Target $i$: $y_i = \text{data}[i+50]$, shape $(3,)$
 
