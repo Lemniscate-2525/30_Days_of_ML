@@ -18,6 +18,51 @@ from sklearn.metrics import classification_report, confusion_matrix
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Executing on: {device}")
 
+# EDA :
+fig, axes = plt.subplots(2, 5, figsize = (12, 5))
+
+classes = ['NORMAL', 'PNEUMONIA']
+
+for col, cls in enumerate(classes):
+    cls_path = os.path.join('./chest_xray/train', cls)
+    imgs = os.listdir(cls_path)[:5]
+
+    for row, img_name in enumerate(imgs):
+        img = plt.imread(os.path.join(cls_path, img_name))
+        axes[col][row].imshow(img, cmap = 'gray')
+        axes[col][row].set_title(cls, fontsize = 8)
+        axes[col][row].axis('off')
+
+plt.suptitle("Sample X-Rays : NORMAL vs PNEUMONIA")
+plt.tight_layout()
+plt.savefig("eda_xray_samples.png", bbox_inches = 'tight')
+plt.show()
+
+# Class Distribution :
+train_counts = {cls: len(os.listdir(os.path.join('./chest_xray/train', cls))) for cls in classes}
+val_counts   = {cls: len(os.listdir(os.path.join('./chest_xray/val',   cls))) for cls in classes}
+test_counts  = {cls: len(os.listdir(os.path.join('./chest_xray/test',  cls))) for cls in classes}
+
+x = range(len(classes))
+width = 0.25
+
+plt.figure(figsize=(7, 4))
+plt.bar([i - width for i in x], train_counts.values(), width=width, label = 'Train')
+plt.bar([i         for i in x], val_counts.values(),   width=width, label = 'Val')
+plt.bar([i + width for i in x], test_counts.values(),  width=width, label = 'Test')
+
+plt.xticks(list(x), classes)
+plt.title("Class Distribution across Splits :")
+plt.ylabel("Count")
+plt.legend()
+plt.tight_layout()
+plt.savefig("eda_class_dist.png", bbox_inches='tight')
+plt.show()
+
+print("Train :", train_counts)
+print("Val   :", val_counts)
+print("Test  :", test_counts)
+
 # Data Preprocessing : 
 data_transforms = {'train' :  transforms.Compose([transforms.Resize((224, 224)), 
 transforms.RandomHorizontalFlip(), transforms.RandomRotation(10), transforms.ToTensor(),
@@ -28,7 +73,6 @@ transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 ]),
 }
 
-# EDA : 
 data_dir = 'chest_xray'
 image_datasets = {x: datasets.ImageFolder(f"{data_dir}/{x}", data_transforms[x]) for x in ['train', 'val']}
 dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size = 32, shuffle = True, num_workers = 2) for x in ['train', 'val']}
