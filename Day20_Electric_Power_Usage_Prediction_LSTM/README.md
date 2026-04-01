@@ -103,6 +103,8 @@ The DataLoader stacks these into batches of 256: shape $(256, 24, 1)$. Windows a
 
 ## LSTM Architecture and Gate Math : 
 
+![LSTM Architecture](lstm_arch.png)
+
 At every timestep $t$, the LSTM cell receives the current input $x_t \in \mathbb{R}^1$ and two carry vectors from the previous step: hidden state $h_{t-1} \in \mathbb{R}^{64}$ and cell state $C_{t-1} \in \mathbb{R}^{64}$.
 It runs **four** parallel computations : 
 
