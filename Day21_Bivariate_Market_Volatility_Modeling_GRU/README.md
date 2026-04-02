@@ -73,7 +73,7 @@ Fitting on the full dataset would leak future price statistics into the training
 
 Raw data after scaling is shape $(N_t, 2)$; one row per trading day, two features. The GRU requires $(B, T, F)$ -> batch, sequence, features.
 
-For window index $i$ with `seq_len=20`:
+For window index $i$ with `seq_len = 20`:
 
 $$X_i = \text{data}[i : i+20,\; :], \quad \text{shape } (20, 2)$$
 
@@ -165,7 +165,7 @@ $$\frac{\partial \mathcal{L}}{\partial h_{t-2}} \approx \frac{\partial \mathcal{
 When the update gate learns to remain open (near 1) for important historical signals, the product stays near 1 thus gradient does not vanish. 
 This is GRU's version of the Constant Error Carousel: the additive hidden state update replaces LSTM's additive cell state update, serving the same purpose with fewer parameters.
 
-Gradient clipping (`max_norm=1.0`) handles the opposite case ie. when gate values push gradients above 1, clipping prevents explosion.
+Gradient clipping (`max_norm = 1.0`) handles the opposite case ie. when gate values push gradients above 1, clipping prevents explosion.
 
 ---
 
@@ -174,9 +174,9 @@ Gradient clipping (`max_norm=1.0`) handles the opposite case ie. when gate value
 ```
 Input sequence: (Batch, 20, 2)
     |
-GRU Layer 1: hidden_dim=64, tanh         → (Batch, 20, 64)
+GRU Layer 1: hidden_dim = 64, tanh         → (Batch, 20, 64)
 Dropout: 0.1
-GRU Layer 2: hidden_dim=64, tanh         → (Batch, 20, 64)
+GRU Layer 2: hidden_dim = 64, tanh         → (Batch, 20, 64)
     |
 Take final timestep: out[:, -1, :]       → (Batch, 64)
     |
