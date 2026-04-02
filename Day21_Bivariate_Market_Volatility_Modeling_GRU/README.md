@@ -185,7 +185,7 @@ FC Layer: 64 → 1                         → (Batch, 1)
 Prediction: next-day close price (scaled)
 ```
 
-![GRU Architecture](gru_architecture.png)
+![GRU Architecture](gru_arch.png)
 
 ---
 
