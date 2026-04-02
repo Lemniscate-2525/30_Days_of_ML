@@ -3,7 +3,7 @@
 ---
 ## Problem : 
 
-Forecast the next-day closing price of Apple Inc. (AAPL) stock using historical price and volume data modeled as a sequential regression problem.
+Forecasting the next-day closing price of Apple Inc. (AAPL) stock using historical price and volume data modeled as a sequential regression problem.
 
 **Dataset :** S&P 500 stock data (5-year OHLCV history). Single asset extracted: AAPL, 1,259 trading days.
 
