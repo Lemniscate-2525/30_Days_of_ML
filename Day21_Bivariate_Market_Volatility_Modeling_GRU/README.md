@@ -239,7 +239,7 @@ The loss curve shows the characteristic GRU convergence pattern where we see a s
 
 **Regime non-stationarity :** The model learns the statistical properties of AAPL prices from 2013-2017. When the test window enters a different volatility regime, higher variance, different correlation between volume and price thn the fixed weights underperform. There is no online adaptation mechanism. A model that learned the 2013 bull market has no idea it is now in a 2018 correction.
 
-**Persistence trap :** The easiest way to minimize MSE on a price series is to predict $\hat{y}_{t+1} = y_t$ — the persistence strategy. If the model is **undertrained or the learning rate is poorly set**, it converges to this trivial solution. MSE alone cannot detect this. Directional accuracy is the diagnostic metric.
+**Persistence trap :** The easiest way to minimize MSE on a price series is to predict $\hat{y}_{t+1} = y_t$ ie. the persistence strategy. If the model is **undertrained or the learning rate is poorly set**, it converges to this trivial solution. MSE alone cannot detect this. Directional accuracy is the diagnostic metric.
 
 **Lookahead bias from Scaling :** If MinMaxScaler is fit on the full dataset before splitting, the scaler uses the test set's price range to normalize training data. The model implicitly "knows" that prices will eventually reach their test-set highs. This **inflates performance** while being completely invalid for real deployment.
 
