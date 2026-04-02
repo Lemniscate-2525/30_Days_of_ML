@@ -219,12 +219,12 @@ Training logged every 5 epochs:
 
 | Epoch | Train MSE | Val MSE |
 |-------|-----------|---------|
-| 5 | (from output) | (from output) |
-| 10 | (from output) | (from output) |
-| 15 | (from output) | (from output) |
-| 20 | (from output) | (from output) |
-| 25 | (from output) | (from output) |
-| 30 | (from output) | (from output) |
+| 5 | 0.09723 | 0.01730 |
+| 10 | 0.01070 | 0.05047 |
+| 15 | 0.00631 | 0.01761 |
+| 20 | 0.00408 | 0.00375 |
+| 25 | 0.00269 | 0.00503 |
+| 30 | 0.00528 | 0.01071 |
 
 Training time : 6.29s.
 Inference Latency : 0.0081s.
