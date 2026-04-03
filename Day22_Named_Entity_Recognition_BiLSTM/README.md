@@ -10,7 +10,7 @@ Tag every token in a sentence with its named entity category, Person, Organizati
 
 **Task :** Sequence labeling we are given a sentence of $N$ tokens, produce $N$ tag predictions, one per token.
 
-**Significance of BiLSTM over Vanilla LSTM : ** A standard LSTM reads left to right. When it reaches the word "bank" in "Akshat reached the bank of river Ganga", it has context about everything before it but nothing after. The word "river" after "bank" is strong evidence that "bank" is the river bank, not the financial bank.
+**Significance of BiLSTM over Vanilla LSTM :** A standard LSTM reads left to right. When it reaches the word "bank" in "Akshat reached the bank of river Ganga", it has context about everything before it but nothing after. The word "river" after "bank" is strong evidence that "bank" is the river bank, not the financial bank.
 A BiLSTM runs two LSTMs simultaneously; one forward, one backward and then concatenates their hidden states at every position. The classification layer sees full sentence context on both sides before making any prediction.
 
 ---
