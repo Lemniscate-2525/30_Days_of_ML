@@ -53,7 +53,7 @@ The full tag set used here (9 tags + 1 padding tag) :
 
 1. Load CoNLL-2003 via Hugging Face `datasets`.
 2. EDA: sequence length distribution, NER class distribution.
-3. Build vocabulary from training tokens — top 25,000 words, `<PAD>` and `<UNK>` reserved.
+3. Build vocabulary from training tokens, top 25,000 words, `<PAD>` and `<UNK>` reserved.
 4. Build `CoNLLData` Dataset: convert tokens to integer IDs, NER tags to integer labels.
 5. Build `pad_collate` function for dynamic batch padding.
 6. Train 2-layer bidirectional LSTM for 10 epochs with masked cross-entropy loss.
