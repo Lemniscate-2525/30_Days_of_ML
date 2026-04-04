@@ -140,6 +140,7 @@ def q3_acc(logits, targets, mask):
 scaler = torch.amp.GradScaler('cuda') if Device.type == 'cuda' else None
 
 train_loss_hist, val_loss_hist, train_acc_hist, val_acc_hist = [], [], [], []
+total_start_time = time.time()
 
 for e in range(epochs):
     model.train()
@@ -199,6 +200,8 @@ for e in range(epochs):
         
     print(f"Epoch {e+1:02d}/{epochs} | Train Loss: {avg_train_loss:.4f} (Q3: {avg_train_acc:.2f}) | Val Loss: {avg_val_loss:.4f} (Q3: {avg_val_acc:.2f}) | Time: {time.time()-start:.2f}s")
 
+print(f"\nTotal Training Time: {(time.time() - total_start_time)} s")
+
 # Visualization(Loss and Accuracy Curves) : 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize = (8, 8))
 
@@ -229,3 +232,11 @@ pred_struc = "".join([ind_to_struc[p] for p in preds])
 print(f"Amino Acid Sequence :\n{sample_prot_eg}")
 print(f"Predicted Structure :\n{pred_struc}")
 
+# Inference Latency : 
+start_time = time.perf_counter()
+with torch.no_grad():
+    preds = torch.argmax(model(x_infer), dim=-1).squeeze().tolist()
+latency = (time.perf_counter() - start_time) * 1000 
+
+predicted_structure = "".join([IDX_TO_STRUC[p] for p in preds])
+print(f"Inference Latency   : {latency:.2f} ms")
