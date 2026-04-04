@@ -120,12 +120,17 @@ Padding positions contribute zero to the loss and zero gradient to the weights a
 
 ### 1D Sequence to 3D Tensor : 
 
-Raw protein data is a list of amino acid strings ie. 1D sequences of variable length. The model expects $(B, T, F)$ ; batch, sequence length, features.
+Raw protein data is a list of amino acid strings i.e. 1D sequences of variable length. The model expects $(B, T, F)$; batch, sequence length, features.
 
 For sequence $i$:
-$$X_i = [\text{aa\_to\_ind}[a_1],\; \text{aa\_to\_ind}[a_2],\; \ldots,\; \text{aa\_to\_ind}[a_N]]$$
 
-After embedding: $(N,) \to (N, 64)$. After batching; $(B, T, 64)$ where $T$ is the max length in the batch.
+$$
+X_i = [\text{aa\\_to\\_ind}[a_1],\; \text{aa\\_to\\_ind}[a_2],\; \ldots,\; \text{aa\\_to\\_ind}[a_N]]
+$$
+
+After embedding: $(N,) \to (N, 64)$.
+
+After batching: $(B, T, 64)$ where $T$ is the max length in the batch.
 
 ---
 
@@ -134,16 +139,16 @@ After embedding: $(N,) \to (N, 64)$. After batching; $(B, T, 64)$ where $T$ is t
 ```
 Input:  (Batch, T)    amino acid integer indices
     |
-Embedding: 24 → 64d, padding_idx=0     → (Batch, T, 64)
+Embedding: 24 → 64d, padding_idx = 0     → (Batch, T, 64)
 Dropout 0.3
     |
 BiGRU Layer 1: 64 → 128 × 2 directions → (Batch, T, 256)
 Dropout 0.3
-BiGRU Layer 2: 256 → 128 × 2 directions→ (Batch, T, 256)
+BiGRU Layer 2: 256 → 128 × 2 directions → (Batch, T, 256)
     |
 FC Layer: 256 → 3 logits per residue   → (Batch, T, 3)
     |
-CrossEntropyLoss(ignore_index=-100)
+CrossEntropyLoss(ignore_index = -100)
 argmax → structure prediction per residue
 ```
 
@@ -151,29 +156,44 @@ argmax → structure prediction per residue
 
 ### Forward Pass Math : 
 
-**Embedding:**
-$$x_t = E[\text{token}_t] \in \mathbb{R}^{64}$$
+**Embedding :**
 
-**Forward GRU at each position $t$:**
+$$
+x_t = E[\text{token}_t] \in \mathbb{R}^{64}
+$$
 
-Reset gate:
-$$r_t = \sigma(W_r \cdot [\overrightarrow{h}_{t-1},\; x_t] + b_r)$$
+**Forward GRU at each position $t$ :**
 
-Update gate:
-$$z_t = \sigma(W_z \cdot [\overrightarrow{h}_{t-1},\; x_t] + b_z)$$
+Reset gate :
 
-Candidate:
-$$\tilde{h}_t = \tanh(W \cdot [r_t \odot \overrightarrow{h}_{t-1},\; x_t] + b)$$
+$$
+r_t = \sigma(W_r \cdot [\overrightarrow{h}_{t-1},\; x_t] + b_r)
+$$
 
-Hidden state update : 
-$$\overrightarrow{h}_t = (1 - z_t) \odot \overrightarrow{h}_{t-1} + z_t \odot \tilde{h}_t$$
+Update gate :
 
-**Backward GRU:** Identical equations, reading the sequence from position $T$ to $1$. Runs completely independently of the forward pass.
+$$
+z_t = \sigma(W_z \cdot [\overrightarrow{h}_{t-1},\; x_t] + b_z)
+$$
 
-**Concatenation:**
+Candidate :
+
+$$
+\tilde{h}_t = \tanh(W \cdot [r_t \odot \overrightarrow{h}_{t-1},\; x_t] + b)
+$$
+
+Hidden state update :
+
+$$
+\overrightarrow{h}_t = (1 - z_t) \odot \overrightarrow{h}_{t-1} + z_t \odot \tilde{h}_t
+$$
+
+**Backward GRU :** Identical equations, reading the sequence from position $T$ to $1$. Runs completely independently of the forward pass.
+
+**Concatenation :**
 $$h_t = [\overrightarrow{h}_t;\; \overleftarrow{h}_t] \in \mathbb{R}^{256}$$
 
-**Projection:**
+**Projection :**
 $$\hat{y}_t = W_c\, h_t + b_c \in \mathbb{R}^3$$
 
 Three logits per residue ie. one per structural class.
@@ -211,6 +231,11 @@ Hidden states for both directions must be cached per layer per timestep for BPTT
 $$O(T \cdot L \cdot 2 \cdot 3(H^2 + I \cdot H))$$
 
 Full bidirectional forward pass required before any residue can be classified but the backward GRU needs the complete sequence. No streaming output is possible. Average epoch time of ~2.1 seconds reflects the efficient GPU throughput on 3,000 short-to-medium length sequences.
+
+**Training Time and Inference Latency :**
+
+Training Time = 53 s
+Inference Latency = 
 
 ---
 
@@ -266,13 +291,13 @@ The three structural classes the model predicts :
 
 **Alpha Helix (H)**
 
-![Alpha Helix](helix.png)
+![Alpha Helix](helix.gif)
 
 Right-handed coil. Hydrogen bonds between residue $i$ and $i+4$ along the backbone. Rises 1.5Å per residue, 3.6 residues per turn.
 
 **Beta Sheet (E)**
 
-![Beta Sheet](sheet.png)
+![Beta Sheet](sheet.gif)
 
 Extended strands running side by side. Hydrogen bonds are lateral between strands, not along a single strand. Can be parallel (same N→C direction) or antiparallel (opposing directions).
 
