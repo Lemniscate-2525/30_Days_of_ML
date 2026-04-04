@@ -18,7 +18,9 @@ Predict the secondary structure of every amino acid residue in a protein sequenc
 
 A protein is a chain of amino acids linked by peptide bonds. The sequence of amino acids (primary structure) folds into local 3D geometries driven by hydrogen bonding and side-chain interactions (secondary structure), before folding further into a full 3D shape (tertiary structure).
 
+
 The Q3 classification problem operates at the secondary structure level :
+
 
 **Alpha Helix (H):** A right-handed coil stabilized by hydrogen bonds between residues $i$ and $i+4$. Compact, rod-like geometry. Common in membrane proteins and structural domains.
 
@@ -145,7 +147,7 @@ CrossEntropyLoss(ignore_index=-100)
 argmax → structure prediction per residue
 ```
 
-![BiGRU Architecture](bigru_architecture.png)
+![BiGRU Architecture](bigru_arch.png)
 
 ### Forward Pass Math : 
 
