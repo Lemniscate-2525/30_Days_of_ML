@@ -1,4 +1,4 @@
-# Protein Secondary Structure Prediction 
+# Protein Secondary Structure Prediction : 
 
 ---
 
@@ -234,8 +234,9 @@ Full bidirectional forward pass required before any residue can be classified bu
 
 **Training Time and Inference Latency :**
 
-Training Time = 53 s
-Inference Latency = 
+Training Time = 53s.
+
+Inference Latency = 1.04ms. 
 
 ---
 
