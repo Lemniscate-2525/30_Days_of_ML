@@ -35,7 +35,7 @@ Seven mathematical function types are defined as lambdas :
 sin(kx), cos(kx), tan(kx), exp(kx), log(kx+1), x^n, k*x
 ```
 
-where $k \in \{1,2,3\}$ and $n \in \{1,\ldots,5\}$ are sampled randomly. Two functions f_1 and f_2 are drawn, then combined by one of three operations, product ($f_1 \cdot f_2$), sum ($f_1 + f_2$), or composition ($f_1(f_2(x))$). SymPy differentiates the result and converts both the original and derivative to strings.
+where $k \in \{1,2,3\}$ and $n \in \{1,\ldots,5\}$ are sampled randomly. Two functions f_1 and f_2 are drawn, then combined by one of three operations, product ($f_1 \cdot f_2$), sum ($f_1 + f_2$), or composition (f_1(f_2(x))). SymPy differentiates the result and converts both the original and derivative to strings.
 
 **The Length constraint is critical ;** Only pairs with $4 \leq |f(x)| \leq 44$ and $4 \leq |f'(x)| \leq 64$ are kept.
 
