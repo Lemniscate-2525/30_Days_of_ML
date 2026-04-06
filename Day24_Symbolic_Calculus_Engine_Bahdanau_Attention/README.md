@@ -6,11 +6,12 @@
 
 Train a NN to compute the symbolic derivative of a mathematical expression, given a string like `x**2*exp(x)` as input, generate `x**2*exp(x)+2*x*exp(x)` as output.
 
-**Task :** Character-level s2s translation; map a source string (the function $f(x)$) to a target string (its derivative $f'(x)$).
+**Task :** Character-level s2s translation; map a source string (the function f(x)) to a target string (its derivative f'(x)).
 
 **Dataset :** Synthetically generated using SymPy; 12,000 training pairs, 1,000 validation pairs. No external dataset exists.
 
 This is not mathematics. This is pattern matching at scale. The model has no concept of the product rule, chain rule, or limits.
+
 It learns *statistical regularities in the mapping* from expression strings to derivative strings and if those regularities are sufficiently consistent and frequent in training data, it generalizes well enough to predict correct derivatives on new expressions.
 
 This distinction matters as the model will **fail confidently** on expression structures it has never seen, even if the **calculus is trivial**.
@@ -20,9 +21,11 @@ This distinction matters as the model will **fail confidently** on expression st
 ## Building Synthetic Daataset : 
 
 No public dataset of (function, derivative) string pairs exists for training neural sequence models. Creating one manually is impractical at the scale needed for deep learning. SymPy solves this problem.
+
 SymPy is a Python computer algebra system, it performs exact symbolic mathematics. Given a SymPy expression object, `sp.diff(expr, x)` returns the analytically correct derivative, guaranteed.
 
-This gives us an infinite-size, zero-noise oracle.
+This gives us an **infinite-size, zero-noise** oracle.
+
 
 ### Data Generation Process : 
 
@@ -32,11 +35,13 @@ Seven mathematical function types are defined as lambdas :
 sin(kx), cos(kx), tan(kx), exp(kx), log(kx+1), x^n, k*x
 ```
 
-where $k \in \{1,2,3\}$ and $n \in \{1,\ldots,5\}$ are sampled randomly. Two functions $f_1$ and $f_2$ are drawn, then combined by one of three operations, product ($f_1 \cdot f_2$), sum ($f_1 + f_2$), or composition ($f_1(f_2(x))$). SymPy differentiates the result and converts both the original and derivative to strings.
+where $k \in \{1,2,3\}$ and $n \in \{1,\ldots,5\}$ are sampled randomly. Two functions f_1 and f_2 are drawn, then combined by one of three operations, product ($f_1 \cdot f_2$), sum ($f_1 + f_2$), or composition ($f_1(f_2(x))$). SymPy differentiates the result and converts both the original and derivative to strings.
 
 **The Length constraint is critical ;** Only pairs with $4 \leq |f(x)| \leq 44$ and $4 \leq |f'(x)| \leq 64$ are kept.
 
-This is not an arbitrary filter, it is an architectural decision. Attention matrices scale as $O(N \times M)$. Allowing expressions of length 200 would produce attention matrices of size $200 \times 200 = 40{,}000$ weights per decoding step, causing VRAM exhaustion.
+This is not an arbitrary filter, it is an architectural decision. Attention matrices scale as $O(N \times M)$.
+Allowing expressions of length 200 would produce attention matrices of size $200 \times 200 = 40{,}000$ weights per decoding step, causing *VRAM exhaustion*.
+
 The length cap keeps sequences manageable while still capturing product rule and chain rule patterns.
 
 ---
@@ -93,13 +98,16 @@ Each character maps to an integer ID. The source sequence `x**2` becomes `[char_
 
 ---
 
-## Architecture : 
+## Architecture :  
+
+![Seq2Seq Bahdanau Attention Architecture](s2s_arch.png)
 
 The model is a classic Encoder-Decoder Seq2Seq augmented with Bahdanau (Additive) Attention.
 
 ### The Bottleneck : 
 
 Standard Seq2Seq compresses the entire input sequence into a single fixed-size hidden vector $h_T$, the encoder's final state. This vector must carry all information about the source expression for the decoder to work from. For short expressions this is manageable.
+
 For longer ones, information is lost thus the encoder literally runs out of representational capacity to store every character's contribution in $H = 128$ dimensions. The decoder blindly generates from this compressed summary.
 
 For symbolic differentiation this is catastrophic; becuase to generate the derivative of `x**2*exp(x)`, the decoder needs to reference the `x**2` part when generating `x**2*exp(x)` and the `exp(x)` part when generating `2*x*exp(x)`.
@@ -129,7 +137,7 @@ $$s_0 = \tanh(W_{\text{proj}} \cdot [h_N^{\rightarrow}; h_1^{\leftarrow}])$$
  
 ## Bahdanau Attention : 
 
-At each decoder step $i$, the attention mechanism computes a soft alignment over all encoder positions:
+At each decoder step $i$, the attention mechanism computes a *soft alignment* over all encoder positions : 
 
 **1. Alignment Score for each source position $j$ :**
 
@@ -187,11 +195,6 @@ The **50% ratio balances** these and the model learns to recover from its own mi
 
 ---
 
-## Architecture Diagram : 
-
-![Seq2Seq Bahdanau Attention Architecture](s2s_architecture.png)
-
----
 
 ## Loss Function and Metrics : 
 
@@ -266,7 +269,6 @@ The jump from 1.76% to 29.02% EMA in epoch 2 is the model learning the most freq
 By epoch 3 (72.67%), it has learned the product rule template. By epoch 5 (91.58%), chain rule patterns for trigonometric and exponential compositions are established.
 The epoch 7 dip to 90.39% reflects gradient noise from teacher forcing as the model occasionally trains on its own wrong predictions, before recovering at epoch 8-10.
 
-![Training Loss and Exact Match Accuracy](visd24.png)
 
 ### Inference Example : 
 
