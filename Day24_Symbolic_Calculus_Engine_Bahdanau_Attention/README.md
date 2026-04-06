@@ -66,14 +66,16 @@ The length cap keeps sequences manageable while still capturing product rule and
 
 ![Source and Target Character Length Distributions](eda24.png)
 
-Source expressions ($f(x)$) peak around length 14-15 characters; products and compositions of two moderately complex functions. Target derivatives ($f'(x)$) are longer on average, peaking around 20-25 characters, because differentiation expands expressions (the product rule produces two terms from one).
-The right tail extending to 50+ characters in the target distribution reflects chain rule compositions that generate deeply nested outputs.
+*Source Expressions* (f(x)) peak around length 14-15 characters; products and compositions of two moderately complex functions. *Target Derivatives* (f'(x)) are longer on average, peaking around 20-25 characters, because differentiation expands expressions (the product rule produces two terms from one).
+
+The right tail extending to 50+ characters in the target distribution reflects **chain rule compositions** that generate deeply nested outputs.
 
 ---
 
 ## Character-Level Tokenization : 
 
 The vocabulary is built from 72 characters; digits (0-9), lowercase letters (a-z), uppercase letters (A-Z), mathematical operators (`+`, `-`, `*`, `/`, `^`), parentheses, period, comma, space.
+
 Four special tokens are added :
 
 | Token | Index | Purpose |
@@ -92,6 +94,7 @@ Tokenizing at the word level requires :
 - Or, Subword tokenization (BPE) which would split `exp` and `(x)` arbitrarily, destroying the structural information the model needs.
 
 Character-level tokenization is the only vocabulary that is *both finite and complete* for arbitrary mathematical strings. Every possible expression the model will ever see is representable with the 72-character vocabulary.
+
 The cost is longer sequences but **the length cap** manages this.
 
 Each character maps to an integer ID. The source sequence `x**2` becomes `[char_to_ind['x'], char_to_ind['*'], char_to_ind['*'], char_to_ind['2']]`. The target sequence is wrapped with `<SOS>` and `<EOS>` tokens to signal the decoder when to start and stop generating.
@@ -110,10 +113,9 @@ Standard Seq2Seq compresses the entire input sequence into a single fixed-size h
 
 For longer ones, information is lost thus the encoder literally runs out of representational capacity to store every character's contribution in $H = 128$ dimensions. The decoder blindly generates from this compressed summary.
 
-For symbolic differentiation this is catastrophic; becuase to generate the derivative of `x**2*exp(x)`, the decoder needs to reference the `x**2` part when generating `x**2*exp(x)` and the `exp(x)` part when generating `2*x*exp(x)`.
-It cannot do this from a single summary vector; it needs access to all encoder states simultaneously.
+For symbolic differentiation this is catastrophic; becuase to generate the derivative of `x**2*exp(x)`, the decoder needs to reference the `x**2` part when generating `x**2*exp(x)` and the `exp(x)` part when generating `2*x*exp(x)`. It cannot do this from a single summary vector; it needs access to all encoder states simultaneously.
 
-Bahdanau Attention breaks this bottleneck entirely.
+**Bahdanau Attention breaks this bottleneck entirely.**
 
 ---
 
