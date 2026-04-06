@@ -223,7 +223,7 @@ Let $N$ = source length, $M$ = target length, $H$ = hidden dim (128), $I$ = embe
 
 **Training complexity :**
 
-Encoder BiGRU : $O(E \cdot K \cdot N \cdot 3(H^2 + I \cdot H) \cdot 2)$ — bidirectional, 3 GRU gate operations.
+Encoder BiGRU : $O(E \cdot K \cdot N \cdot 3(H^2 + I \cdot H) \cdot 2)$; bidirectional, 3 GRU gate operations.
 
 Attention at each Decoder step : $O(M \cdot N \cdot H)$; aligning decoder state against all $N$ encoder states.
 
