@@ -227,7 +227,7 @@ Let $N$ = source length (PGN), $M$ = target length (FEN), $d$ = model dim (64), 
 
 **Training complexity :**
 
-$$O\!\left(E \cdot K \cdot L \cdot (N^2 \cdot d + M^2 \cdot d + M \cdot N \cdot d)\right)$$
+$$O\left(E \cdot K \cdot L \cdot (N^2 \cdot d + M^2 \cdot d + M \cdot N \cdot d)\right)$$
 
 Three attention operations per decoder layer; encoder self-attention $O(N^2 d)$, decoder masked self-attention $O(M^2 d)$, cross-attention $O(MNd)$. All computed via *parallel matrix multiplications* so no sequential dependency. 
 
@@ -235,13 +235,13 @@ GPU utilization is near-100% unlike RNNs.
 
 **Space complexity :**
 
-$$O\!\left(L \cdot H \cdot (N^2 + M \cdot N)\right)$$
+$$O\left(L \cdot H \cdot (N^2 + M \cdot N)\right)$$
 
 The attention weight matrices must be stored for backpropagation. Each head stores one $N \times N$ matrix (encoder self-attention) and one $M \times N$ matrix (cross-attention), per layer. This is why **sequence length is the primary VRAM constraint**; doubling $N$ quadruples memory.
 
 **Inference complexity per sequence :**
 
-$$O\!\left(L \cdot (N^2 \cdot d + M^2 \cdot d + M \cdot N \cdot d)\right)$$
+$$O\left(L \cdot (N^2 \cdot d + M^2 \cdot d + M \cdot N \cdot d)\right)$$
 
 The encoder runs once over the full PGN. The decoder runs autoregressively ie. one step per output character recomputing attention over the growing target sequence at each step. Measured latency: **313.17 ms** for a 4-move game. The latency is dominated by the autoregressive decoder loop, not the attention computation itself.
 
