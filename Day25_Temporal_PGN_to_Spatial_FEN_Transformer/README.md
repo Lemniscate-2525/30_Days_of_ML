@@ -116,6 +116,8 @@ Each position gets a unique vector of sinusoids at different frequencies. Low-fr
 
 ## Architecture : 
 
+![Model Architechture](tran_arch.png)
+
 ```
 Source (PGN) :  char tokens → Embedding(64d) + PositionalEncoding → Encoder states.
 Target (FEN) :  char tokens → Embedding(64d) + PositionalEncoding → Decoder input.
