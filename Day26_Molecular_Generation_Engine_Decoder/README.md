@@ -110,7 +110,7 @@ The key preprocessing decision is how to frame the training objective. For a SMI
 
 ```
 src = [SOS, C, C, =, O]        (what the model sees)
-trg = [C,   C, =, O, EOS]      (what it must predict)
+trg = [C, C, =, O, EOS]      (what it must predict)
 ```
 
 At every position $t$, the model sees tokens $0$ through $t$ and must predict token $t+1$. The source is shifted one position ahead of the target. This is the language modeling objective: predict the next character given all previous characters. Training on this objective over 25,000 molecules teaches the model the conditional probability distribution of valid SMILES continuations.
@@ -149,9 +149,9 @@ Loss: CrossEntropyLoss(ignore_index = PAD) on shifted target
 The Transformer processes all positions in parallel; without position information, `CC=O` and `=OCC` would be identical inputs. 
 Sinusoidal positional encoding injects a unique coordinate vector at each position :
 
-$$PE_{(\text{pos},\, 2i)} = \sin\!\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right)$$
+$$PE_{(\text{pos},\, 2i)} = \sin\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right)$$
 
-$$PE_{(\text{pos},\, 2i+1)} = \cos\!\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right)$$
+$$PE_{(\text{pos},\, 2i+1)} = \cos\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right)$$
 
 Added elementwise to the token embedding. Position 0 (SOS) gets a different encoding from position 5 (a ring closure digit), allowing the model to reason about where in the molecule it currently is.
 
@@ -169,7 +169,7 @@ $$\text{scores} = \frac{QK^\top}{\sqrt{d_k}} + M_{\text{causal}}$$
 
 Where $M_{\text{causal}}$ is a lower-triangular mask; positions where $j > i$ receive $-\infty$, which becomes 0 after softmax. Position $i$ can attend only to positions $\leq i$; future tokens are invisible.
 
-$$\alpha = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}} + M_{\text{causal}}\right), \quad \text{output} = \alpha V$$
+$$\alpha = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}} + M_{\text{causal}}\right), \quad \text{output} = \alpha V$$
 
 All 8 head outputs are concatenated and projected: $\text{Concat}(\text{head}_1, \ldots, \text{head}_8)W_O$.
 
@@ -312,13 +312,13 @@ The $T^2$ term comes from the attention score matrix ($T \times T$ per head per 
 
 **Space complexity :**
 
-$$O\!\left(L \cdot H \cdot T^2\right)$$
+$$O\left(L \cdot H \cdot T^2\right)$$
 
-The causal attention matrix ($T \times T$) must be stored per head per layer for backpropagation. For $T = 60$, $L = 4$, $H = 8$: $4 \times 8 \times 3{,}600 = 115{,}200$ values per batch. Negligible at this scale; the bottleneck is the embedding matrix ($\text{vocab\_size} \times 128$) and weight-tied output layer.
+The causal attention matrix ($T \times T$) must be stored per head per layer for backpropagation. For $T = 60$, $L = 4$, $H = 8$; $4 \times 8 \times 3{,}600 = 115{,}200$ values per batch. Negligible at this scale; the bottleneck is the embedding matrix ($\mathrm{vocab\_size} \times 128$) and weight-tied output layer.
 
 **Inference complexity per molecule :**
 
-$$O\!\left(T^2 \cdot L \cdot d\right)$$
+$$O\left(T^2 \cdot L \cdot d\right)$$
 
 Autoregressive generation runs $T$ forward passes, each of length 1 through $T$. Total operations scale as $T^2$. Measured at 46-71 ms per molecule; batched inference would reduce this substantially.
 
