@@ -43,7 +43,7 @@ For each sample :
 
 1. Initialize a fresh `chess.Board()` at the starting position.
 2. Sample a random number of plies (half-moves) between 1 and 40.
-3. At each ply, select one of the first 5 legal moves (biasing toward pseudo-logical play — avoiding garbage random walks that produce unrealistic positions)
+3. At each ply, select one of the first 5 legal moves (biasing toward pseudo-logical play thus avoiding garbage random walks that produce unrealistic positions)
 4. Push the move onto the board.
 5. Export the move sequence as a PGN string using `chess.pgn.StringExporter`.
 6. Extract the board position as FEN using `board.fen().split(' ')[0]` (piece placement only, discarding active color/castling/en passant metadata).
@@ -157,7 +157,7 @@ The $\sqrt{d_k}$ scaling prevents dot products from growing large as $d_k$ incre
 
 **Attention Weights :**
 
-$$\alpha = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) \in \mathbb{R}^{M \times N}$$
+$$\alpha = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right) \in \mathbb{R}^{M \times N}$$
 
 Each row is a *probability distribution* over source positions which decides how much each target position should attend to each source position.
 
@@ -175,9 +175,9 @@ $$
 d_{model} = 64,\quad n_{heads} = 8,\quad d_k = \frac{d_{model}}{n_{heads}} = \frac{64}{8} = 8
 $$
 
-The full hidden vector is split into 8 independent chunks. Each head runs its own $Q, K, V$ projections on its 8-dimensional slice:
+The full hidden vector is split into 8 independent chunks. Each head runs its own $Q, K, V$ projections on its 8-dimensional slice :
 
-$$\text{head}_h = \text{Attention}(QW_Q^h,\; KW_K^h,\; VW_V^h), \quad W^h \in \mathbb{R}^{64 \times 8}$$
+$$\text{head}_h = \text{Attention}(QW_Q^h\;  KW_K^h\;  VW_V^h), \quad W^h \in \mathbb{R}^{64 \times 8}$$
 
 The 8 heads attend in parallel, each potentially learning a different type of alignment :
 - Head 1 might learn which piece type in PGN corresponds to which piece symbol in FEN.
@@ -213,11 +213,11 @@ Applied by filling masked positions with $-\infty$ before softmax, driving their
 
 **RNN/LSTM/GRU :** Theoretically handle infinite sequences, but gradient signal from position 1 has effectively zero influence by position 50 due to the multiplicative vanishing gradient. The sequence length is unlimited in theory, catastrophically limited in practice.
 
-**Transformer :** The attention matrix is $O(N^2)$ in memory. Every token attends to every other token. This is physically bounded as a sequence of length 500 requires a $500 \times 500 = 250{,}000$ entry attention matrix per head per layer. `MAX_SEQ_LEN = 150` is a hard architectural limit here, set to fit in GPU memory.
+**Transformer :** The attention matrix is $O(N^2)$ in memory. Every token attends to every other token. This is physically bounded as a sequence of length 500 requires a $500 \times 500 = 250{,}000$ entry attention matrix per head per layer. `max_seq_len = 150` is a hard architectural limit here, set to fit in GPU memory.
 
-The Transformer trades the infinite-but-degrading memory of RNNs for a finite-but-perfect memory up to `MAX_SEQ_LEN`. Within that window, every token has equal access to every other token thus no gradient decay, no information bottleneck. Beyond the window, the model cannot process the input at all.
+The Transformer trades the infinite-but-degrading memory of RNNs for a finite-but-perfect memory up to `max_seq_len`. Within that window, every token has equal access to every other token thus no gradient decay, no information bottleneck. Beyond the window, the model cannot process the input at all.
 
-For chess games up to ~20 moves (PGN strings typically under 100 characters), `MAX_SEQ_LEN = 150` is sufficient.
+For chess games up to ~20 moves (PGN strings typically under 100 characters), `max_seq_len = 150` is sufficient.
 
 ---
 
@@ -297,7 +297,7 @@ The attention map shows the decoder (y-axis: FEN characters) attending to encode
 
 **Small $d_{\text{model}}$ information bottleneck :** With $d_{\text{model}} = 64$ and 8 heads, each head has only $d_k = 8$ dimensions. This is extremely compressed but full-scale Transformers use $d_{\text{model}} = 512$ or $768$. The model is VRAM-constrained to small representations thus limiting the complexity of patterns it can encode.
 
-**Positional encoding coverage :** The sinusoidal PE is precomputed up to `MAX_SEQ_LEN = 150`. Any PGN sequence exceeding 150 characters will have its excess tokens assigned the PE for position 150 which may lead to collisions in positional encoding for different tokens. This is a hard failure mode for long games.
+**Positional encoding coverage :** The sinusoidal PE is precomputed up to `max_seq_len = 150`. Any PGN sequence exceeding 150 characters will have its excess tokens assigned the PE for position 150 which may lead to collisions in positional encoding for different tokens. This is a hard failure mode for long games.
 
 ---
 
