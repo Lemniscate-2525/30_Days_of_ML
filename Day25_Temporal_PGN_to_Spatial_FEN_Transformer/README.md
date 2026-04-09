@@ -104,9 +104,9 @@ Positional encoding adds a sinusoidal signal to each token embedding before it e
 
 For position $\text{pos}$ and embedding dimension $i$ :
 
-$$PE_{(\text{pos},\, 2i)} = \sin\!\left(\frac{\text{pos}}{10000^{2i / d_{\text{model}}}}\right)$$
+$$PE_{(\text{pos},\, 2i)} = \sin\left(\frac{\text{pos}}{10000^{2i / d_{\text{model}}}}\right)$$
 
-$$PE_{(\text{pos},\, 2i+1)} = \cos\!\left(\frac{\text{pos}}{10000^{2i / d_{\text{model}}}}\right)$$
+$$PE_{(\text{pos},\, 2i+1)} = \cos\left(\frac{\text{pos}}{10000^{2i / d_{\text{model}}}}\right)$$
 
 Each position gets a unique vector of sinusoids at different frequencies. Low-frequency dimensions encode coarse position (early vs. late in the sequence); high-frequency dimensions encode fine-grained local position. The model learns to use these signals to determine which move came first, which came second, without any recurrent state.
 
@@ -171,7 +171,9 @@ A weighted average of value vectors. Target position $i$ receives a blend of all
 
 ## Multi-Head Attention : (8 Heads, 8 Dimensions Each)
 
-With $d_{\text{model}} = 64$ and $\text{num\_heads} = 8$, each head operates on $d_k = 64 / 8 = 8$ dimensions.
+$$
+d_{model} = 64,\quad n_{heads} = 8,\quad d_k = \frac{d_{model}}{n_{heads}} = \frac{64}{8} = 8
+$$
 
 The full hidden vector is split into 8 independent chunks. Each head runs its own $Q, K, V$ projections on its 8-dimensional slice:
 
@@ -195,7 +197,13 @@ During training, the decoder receives the entire target FEN string shifted by on
 
 Without a mask, the decoder's self-attention at position $i$ can see all future positions $i+1, \ldots, M$ and it would simply copy from the future, learning nothing. The causal mask is a **lower triangular boolean matrix** :
 
-$$\text{mask}_{ij} = \begin{cases} 1 & \text{if } j \leq i \\ 0 & \text{if } j > i \end{cases}$$
+$$
+\text{mask}_{ij} =
+\begin{cases}
+1 & \text{if } j \leq i \\
+0 & \text{if } j > i
+\end{cases}
+$$
 
 Applied by filling masked positions with $-\infty$ before softmax, driving their attention weights to zero. Position $i$ can attend only to positions $\leq i$ so no future leakage.
 
