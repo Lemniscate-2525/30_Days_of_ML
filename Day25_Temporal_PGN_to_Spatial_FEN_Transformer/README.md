@@ -47,7 +47,7 @@ For each sample :
 4. Push the move onto the board.
 5. Export the move sequence as a PGN string using `chess.pgn.StringExporter`.
 6. Extract the board position as FEN using `board.fen().split(' ')[0]` (piece placement only, discarding active color/castling/en passant metadata).
-7. Keep only pairs where both strings are under `MAX_SEQ_LEN - 2 = 148` characters.
+7. Keep only pairs where both strings are under `max_seq_len - 2 = 148` characters.
 
 **8,000 training pairs, 500 validation pairs.** The length constraint is architectural as the attention matrix scales as $O(N^2)$ and long sequences cause OOM on the GPU.
 
