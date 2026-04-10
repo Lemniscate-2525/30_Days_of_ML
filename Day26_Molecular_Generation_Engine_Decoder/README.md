@@ -189,19 +189,19 @@ Where $\Phi$ is the standard normal CDF. GELU provides smooth gradients through 
 
 ### Weight Tying : 
 
-The output FC layer's weights are tied to the token embedding matrix:
+The output FC layer's weights are tied to the token Embedding Matrix :
 
 ```python
 self.fc_out.weight = self.embedding.weight
 ```
 
-This halves the effective parameter count for the embedding/output layers, regularizes the model by forcing the input and output representations of each token to align, and is standard in GPT-style models. A token's embedding vector and its output logit vector are constrained to be the same matrix; the model learns a representation that is simultaneously good for input encoding and output prediction.
+This halves the effective parameter count for the embedding/output layers, *regularizes the model* by forcing the input and output representations of each token to align, and is standard in GPT-style models. A token's embedding vector and its output logit vector are constrained to be the same matrix; the model learns a representation that is simultaneously good for input encoding and output prediction.
 
 ---
 
 ## Training: Phase 1 (Learning Chemical Grammar) : 
 
-The model trains by minimizing the cross-entropy loss on next-token prediction over all non-padding positions. This is the chemical grammar learning phase. The model sees partial SMILES strings and must predict the next character.
+The model trains by **minimizing the cross-entropy loss** on next-token prediction over all non-padding positions. This is the chemical grammar learning phase. The model sees partial SMILES strings and must predict the next character.
 
 What is actually being learned :
 - After `C`, the most likely next tokens are `C`, `(`, `=`, `1`, `N`, `O`; not random characters.
