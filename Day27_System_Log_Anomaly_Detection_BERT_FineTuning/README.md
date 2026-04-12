@@ -1,8 +1,8 @@
-# AIOps: Distributed System Anomaly Detection via LoRA Fine-Tuned DistilBERT
+# Distributed System Anomaly Detection via LoRA Fine-Tuned DistilBERT : 
 
 ---
 
-## Problem Statement
+## Problem : 
 
 Classify distributed system log lines as Normal or Anomaly in real time, using a pre-trained language model fine-tuned with minimal trainable parameters.
 
