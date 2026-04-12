@@ -14,7 +14,7 @@ Classify distributed system log lines as Normal or Anomaly in real time, using a
 
 ---
 
-## Why LoRA and Not Full Fine-Tuning?
+## LoRA over Full Fine-Tuning : 
 
 DistilBERT has 66,370,578 parameters. Full fine-tuning would update all 66 million parameters on a small log classification dataset.
 
@@ -26,7 +26,7 @@ LoRA solves both problems simultaneously. The pre-trained weights are frozen ent
 
 ---
 
-## Experimental Pipeline
+## Pipeline : 
 
 1. Download HDFS log dataset programmatically
 2. Strip ephemeral entropy (IP addresses, block IDs, timestamps) via contextual masking
