@@ -10,7 +10,9 @@ Classify distributed system log lines as Normal or Anomaly in real time, using a
 
 **Task :** Binary sequence classification. A single log line is the input; a label of 0 (Normal) or 1 (Anomaly) is the output.
 
-**Significance of Language Model for Logs :** Traditional log monitoring uses regex rules and keyword matching. These approaches break the moment log format changes, a new error code appears, or a novel failure mode occurs. A language model that has been pre-trained on billions of text tokens has learned semantic relationships between words; it understands that "block not found on DataNode" is semantically related to failure states even if that exact string was never in a rule. DistilBERT, fine-tuned on labeled logs, learns the contextual semantics of distributed system behavior rather than memorizing specific strings.
+**Significance of Language Model for Logs :** Traditional log monitoring uses regex rules and keyword matching. These approaches break the moment log format changes, a new error code appears, or a novel failure mode occurs. A language model that has been *pre-trained on billions of text tokens* has learned semantic relationships between words; it understands that "block not found on DataNode" is semantically related to failure states even if that exact string was never in a rule.
+
+DistilBERT is fine-tuned on labeled logs, learns the **contextual semantics of distributed system** behavior rather than memorizing specific strings.
 
 ---
 
