@@ -8,9 +8,7 @@ import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 from collections import Counter
 
-# ==========================================
-# 1. Global Setup & Config
-# ==========================================
+# Device Setup and Config : 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Deploying LOB-GPT on: {device}")
 
@@ -26,12 +24,8 @@ num_layers = 3
 state_dim = 4    
 act_dim = 3      
 
-# ==========================================
-# 2. Synthetic Market Microstructure Engine
-# ==========================================
-print("\n--- Phase 1: Generating & Profiling LOB Trajectories ---")
-
-def generate_market_trajectories(num_episodes=2000, max_steps=50):
+# Dataset Generation : 
+def generate_market_trajectories(num_episodes = 2000, max_steps = 50):
     trajectories = []
     
     for _ in range(num_episodes):
@@ -66,27 +60,28 @@ def generate_market_trajectories(num_episodes=2000, max_steps=50):
             rtg[i] = rewards[i] + (rtg[i+1] if i+1 < len(rewards) else 0) * discount
             
         trajectories.append({
-            'states': np.array(states, dtype=np.float32),
-            'actions': np.array(actions, dtype=np.int64),
-            'rtg': np.array(rtg, dtype=np.float32)
+            'states': np.array(states, dtype = np.float32),
+            'actions': np.array(actions, dtype = np.int64),
+            'rtg': np.array(rtg, dtype = np.float32)
         })
     return trajectories
 
 trajectories = generate_market_trajectories()
 
-# --- EDA Telemetry ---
-print("[SYSTEM] Rendering EDA distributions...")
+# EDA : 
 all_actions = np.concatenate([t['actions'] for t in trajectories])
 all_rtgs = np.concatenate([t['rtg'] for t in trajectories])
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize = (8, 8))
 
 act_counts = Counter(all_actions)
-ax1.bar(['Hold (0)', 'Buy (1)', 'Sell (2)'], [act_counts[0], act_counts[1], act_counts[2]], color=['gray', 'green', 'red'], edgecolor='black')
+ax1.bar(['Hold (0)', 'Buy (1)', 'Sell (2)'], [act_counts[0], act_counts[1], act_counts[2]], color = ['gray', 'green', 'red'], edgecolor = 'black')
+
 ax1.set_title('Distribution of Executed Actions')
 ax1.set_ylabel('Frequency')
 
 ax2.hist(all_rtgs, bins = 30, color = 'dodgerblue', edgecolor = 'black')
+
 ax2.set_title('RTG Distribution : ')
 ax2.set_xlabel('Cumulative Future Reward')
 
@@ -124,7 +119,9 @@ train_loader = DataLoader(DecisionTransformerDataset(trajectories), batch_size =
 
 # DT Architecture : 
 class LOBGPT(nn.Module):
+    
     def __init__(self, state_dim_in, act_dim_in, hidden_dim, heads, layers, max_timestep = 1000):
+        
         super().__init__()
         self.hidden_dim = hidden_dim
         
