@@ -193,9 +193,10 @@ The attention mechanism can learn that the RTG token at $t = 1$ is relevant to t
 
 Each of the three projected embeddings also receives a timestep embedding :
 
-$$e_{\text{token}} = e_{\text{modality}} + \text{Embed\_Timestep}(t)$$
+$$e_{\text{token}} = e_{\text{modality}} + \text{TimestepEmbedding}(t)$$
 
 The timestep embedding is a learned lookup table over 1,000 possible timestep indices. It injects positional information in a semantically meaningful way; the model knows not just that two tokens are in positions 24 and 25, but that they belong to the same timestep (both at $t = 5$) or different timesteps.
+
 This is *richer than sinusoidal PE* for trajectory data because temporal position matters differently in financial sequences than positional order matters in language.
 
 ---
@@ -236,20 +237,20 @@ Let $K$ = context length (20), $d$ = model dim (128), $H$ = heads (4), $L$ = lay
 
 **Training complexity :**
 
-$$O\!\left(E \cdot N \cdot L \cdot (3K)^2 \cdot d\right)$$
+$$O\left(E \cdot N \cdot L \cdot (3K)^2 \cdot d\right)$$
 
 The $3K$ factor reflects the triple interleaved sequence. The quadratic scaling in sequence length is the dominant term.
 Average epoch time of ~5s on 20,000 samples confirms fast training for short contexts.
 
 **Space complexity :**
 
-$$O\!\left(L \cdot H \cdot (3K)^2\right)$$
+$$O\left(L \cdot H \cdot (3K)^2\right)$$
 
 Attention matrices per layer; $4 \times (60 \times 60) = 14{,}400$ entries. For 3 layers: 43,200 values. Trivial at this scale; the memory constraint only activates for much longer contexts.
 
 **Inference per tick :**
 
-$$O\!\left(L \cdot (3K)^2 \cdot d\right)$$
+$$O\left(L \cdot (3K)^2 \cdot d\right)$$
 
 One full causal forward pass over the current context window. Measured latency: 1.84 to 34.57 ms per tick (first tick is slower due to CUDA warm-up; ticks 2-5 stabilize at ~2 ms).
 
