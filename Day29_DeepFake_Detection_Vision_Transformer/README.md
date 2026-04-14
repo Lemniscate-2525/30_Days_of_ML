@@ -130,7 +130,7 @@ This 128-dimensional vector is the holistic image representation used for classi
 
 $$Q = \mathbf{z}W_Q, \quad K = \mathbf{z}W_K, \quad V = \mathbf{z}W_V$$
 
-$$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$$
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V$$
 
 No causal mask; this is bidirectional. Every patch attends to every other patch simultaneously. This is critical for **detecting spectral artifacts**; the high-frequency spike at the top-left corner of the spectrum and the corresponding spike at the bottom-right corner are related by the symmetry of the Fourier transform.
 An attention head can learn to co-activate on these symmetric patches, identifying the artifact pattern even when individual patches look ambiguous in isolation.
@@ -156,7 +156,7 @@ Two logits; one for Real, one for Deepfake. Softmax gives probabilities. $\arg\m
 ```
 Input: (Batch, 1, 64, 64)   single-channel FFT magnitude spectrum
     |
-F.unfold(kernel=8, stride=8)
+F.unfold(kernel = 8, stride = 8)
     → (Batch, 64, 64)        64 patches of 64 values each
     |
 Linear(64 → 128)             patch embedding
@@ -189,7 +189,7 @@ Let $H, W$ = image dimensions (64, 64), $P$ = patch size (8), $N_p$ = number of 
 
 **FFT preprocessing complexity :**
 
-$$O(H \cdot W \cdot \log(H \cdot W))$$
+$$O(H\cdot W \cdot \log(H \cdot W))$$
 
 For a $64 \times 64$ image: $4{,}096 \times \log(4{,}096) = 4{,}096 \times 12 \approx 49{,}152$ operations. The 2D FFT decomposes into two passes of 1D FFTs (one over rows, one over columns), each $O(N \log N)$. This is the cheapest step in the pipeline; negligible compared to the Transformer.
 
@@ -208,7 +208,7 @@ Total parameters in the model are small; the **128d hidden dimension** keeps the
 
 **Inference per image :**
 
-$$O\!\left(H \cdot W \cdot \log(HW) + L \cdot (N_p + 1)^2 \cdot d\right)$$
+$$O\left(H \cdot W \cdot \log(HW) + L \cdot (N_p + 1)^2 \cdot d\right)$$
 
 FFT preprocessing plus one Transformer forward pass. No causal autoregression; the full forward pass completes in a single pass. Measured latency: 1.47 to 1.89 ms per image.
 
