@@ -4,9 +4,9 @@
 
 ## Problem : 
 
-Generate a sequence of limit order book trading actions (Buy, Hold, Sell) conditioned on a desired profit target, using a causal Transformer trained entirely on offline market trajectory data.
+Generate a sequence of limit order book trading actions **(Buy, Hold, Sell)** conditioned on a desired profit target, using a causal Transformer trained entirely on offline market trajectory data.
 
-**The key insight :** instead of telling the model "maximize reward," we tell it "here is the reward I want; generate the action sequence that achieves it." The model learns from historical trajectories what action sequences led to which outcomes, then at inference time we specify the outcome and the model generates the corresponding actions.
+**The Key Insight :** Instead of telling the model "maximize reward," we tell it "here is the reward I want; generate the action sequence that achieves it." The model learns from historical trajectories what action sequences led to which outcomes, then at inference time we specify the outcome and the model generates the corresponding actions.
 
 **State space :** 4 continuous features per timestep: bid-ask spread, mid price, bid volume, ask volume.
 
