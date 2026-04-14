@@ -328,7 +328,7 @@ The conservative target (RTG = 0.1) generates initial buys then switches to HOLD
 
 - Decision Transformers **reframe offline RL** as supervised sequence modeling. No environment interaction, no exploration, no reward credit assignment; just learn the mapping from (context, desired return) to next action from historical trajectories.
 - RTG conditioning enables return-level control at inference time. If we specify the outcome we want; the model generates the behavior that historically produced it.
-- *8Dimensional homogenization** via linear projection is the technical prerequisite for applying attention to mixed-modality sequences. You cannot compute dot products between incompatible representations; every modality must be projected into the same ambient space first.
+- **Dimensional homogenization** via linear projection is the technical prerequisite for applying attention to mixed-modality sequences. You cannot compute dot products between incompatible representations; every modality must be projected into the same ambient space first.
 - The triple interleave $[R_t, s_t, a_t]$ extends the effective sequence length by 3x, tripling the attention matrix size. **Flash Attention becomes mandatory** for production-length market contexts.
 - Timestep embeddings carry **richer positional information** than sinusoidal PE for trajectory data because they encode which triplet a token belongs to, not just its sequence position.
 - RTG calibration is critical. Out-of-distribution RTG targets produce undefined behavior. Model's action generation is bounded by the return levels it saw during training.
