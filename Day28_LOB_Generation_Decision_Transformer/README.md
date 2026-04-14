@@ -1,4 +1,4 @@
-# Decision Transformer for Quantitative Trade Execution : 
+# Quantitative Trade Execution : 
 
 ---
 
