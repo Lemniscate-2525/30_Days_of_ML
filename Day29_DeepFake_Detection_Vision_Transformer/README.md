@@ -27,7 +27,7 @@ The spectrum of a real natural image is *radially symmetric* and decays continuo
 3. AI generators break this law in a specific way. Convolutional generative models apply learned upsampling operations at fixed spatial scales. These operations introduce periodic patterns in the generated image at the frequency corresponding to the upsampling stride.
 4.  In frequency space, these appear as symmetric spikes or grid-like bright artifacts at specific frequencies, forming a cross or grid pattern that violates the smooth $1/f^2$ decay.
 
-5. The EDA confirms this directly; the real image FFT shows a bright central point (low-frequency energy) surrounded by smooth decay. The deepfake FFT shows the same central point plus **additional bright spikes at the corners** and along the axes; the periodic upsampling artifacts made visible by Fourier analysis.
+5. The EDA confirms this directly; the real image FFT shows a bright central point (low-frequency energy) surrounded by smooth decay. The deepfake FFT shows the same central point plus **additional bright spikes at the corners** and along the axes; the *periodic upsampling artifacts* made visible by Fourier analysis.
 
 
 A model that operates on frequency spectra is detecting physics violations, not memorizing visual patterns.
@@ -53,6 +53,7 @@ The magnitude spectrum is log-compressed (because raw FFT magnitudes span many o
 $$S(u, v) = \frac{\log(|F(u, v)| + \varepsilon) - \min}{\max - \min}$$
 
 The $\log$ compression is critical as without it, the DC component (central zero-frequency bin) dominates so overwhelmingly that all other frequency information is invisible after normalization. 
+
 Log scaling brings the full spectrum into a visible and learnable range.
 
 1,500 samples : 750 Real, 750 Deepfake. 80/20 train/test split.
@@ -64,7 +65,7 @@ Log scaling brings the full spectrum into a visible and learnable range.
 1. Generate 1,500 synthetic (real, fake) image pairs.
 2. Compute 2D FFT, shift DC to center, apply log magnitude, normalize.
 3. EDA: visualize real vs fake frequency spectrum side by side.
-4. Build `SpectralDataset`: each sample is a $(1, 64, 64)$ tensor (single-channel frequency map).
+4. Build `SpectralDataset` : each sample is a $(1, 64, 64)$ tensor (single-channel frequency map).
 5. Extract patches, project to 128d, prepend CLS token, add positional embedding.
 6. Train SpectralViT (3 layers, 4 heads, 128d) for 8 epochs.
 7. Evaluate: F1, AUROC, full classification report.
@@ -82,6 +83,7 @@ The real image spectrum (left) shows the expected natural decay pattern: bright 
 
 The deepfake spectrum (right) shows the same central bright spot plus visible bright spikes extending from the corners and along the horizontal and vertical axes.
 These are the Fourier signatures of the periodic upsampling grid $\sin(15x) \cdot \sin(15y)$. When a spatial signal has period $1/15$, its Fourier transform places energy at frequency 15 (and its harmonics).
+
 The cross-shaped artifact pattern is characteristic of *separable 2D* periodic functions.
 
 ---
@@ -90,13 +92,14 @@ The cross-shaped artifact pattern is characteristic of *separable 2D* periodic f
 
 ### Step 1 ->  Patchification : 
 
-The $64 \times 64$ frequency map is divided into non-overlapping $8 \times 8$ patches:
+The $64 \times 64$ frequency map is divided into non-overlapping $8 \times 8$ patches :
 
 $$N_p = \left(\frac{H}{P}\right)^2 = \left(\frac{64}{8}\right)^2 = 64 \text{ patches}$$
 
 Each patch is a $8 \times 8 = 64$-dimensional vector (flattened). The collection of 64 patches forms the sequence the Transformer will process.
 
 **Significance of Patches:** A Transformer requires a sequence of fixed-size tokens. Treating each pixel as a token would give $64 \times 64 = 4{,}096$ tokens, making the $O(N^2)$ attention matrix $4{,}096^2 \approx 16.7M$ entries per layer; prohibitively expensive. Patchifying reduces the sequence to 64 tokens and the attention matrix to $64^2 = 4{,}096$ entries per layer, making the computation tractable.
+
 The patch size of 8 is chosen to match the scale of upsampling artifacts; a generator operating at stride 8 produces periodic patterns with wavelength 8 pixels. Patches of size 8 capture exactly one period of the artifact; the patch embedding learns to detect its presence.
 
 ### Step 2 -> Linear Patch Embedding : 
@@ -203,7 +206,8 @@ The $+1$ accounts for the CLS token making the sequence length 65. The attention
 
 $$O\left(L \cdot H_a \cdot (N_p + 1)^2\right)$$
 
-Attention matrices per layer: $4 \times 65^2 = 16{,}900$ entries. For 3 layers: 50,700 floats. Parameter storage dominates: the patch embedding $W \in \mathbb{R}^{128 \times 64}$, positional embedding $\in \mathbb{R}^{65 \times 128}$, and Transformer weights.
+Attention matrices per layer: $4 \times 65^2 = 16{,}900$ entries. For 3 layers: 50,700 floats. Parameter storage dominates; the patch embedding $W \in \mathbb{R}^{128 \times 64}$, positional embedding $\in \mathbb{R}^{65 \times 128}$, and Transformer weights.
+
 Total parameters in the model are small; the **128d hidden dimension** keeps the model compact.
 
 **Inference per image :**
