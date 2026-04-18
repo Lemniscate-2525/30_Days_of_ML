@@ -58,7 +58,7 @@ Normal trajectories (green) show approximately uniform distribution across all 1
 
 ## Hyperparameters : 
 
-| Parameter | Value | Why |
+| Parameter | Value | Significance |
 |-----------|-------|-----|
 | `seq_len` | 128 | 128 ticks at microsecond frequency covers roughly 5-15 seconds of order book activity; sufficient to observe the precursor pattern of a liquidation cascade |
 | `d_model` | 256 | 256d hidden state. Large enough to represent the joint context of 128 tick tokens across 4 layers; small enough to train fast on 5,000 sequences |
@@ -74,7 +74,7 @@ Normal trajectories (green) show approximately uniform distribution across all 1
 
 GPT-2 style Transformers use three approximations that hurt financial sequence modeling. Llama-3 replaces all three.
 
-| Component | GPT (2017) | Llama-3 | Significance |
+| Component | GPT (2017) | Llama-3 | Improvement |
 |-----------|------------|---------|---------------------|
 | Normalization | LayerNorm (center + scale) | RMSNorm (scale only) | Fewer ops per layer; no meaningless mean centering for token sequences |
 | Positional encoding | Absolute sinusoidal or learned | RoPE (rotary relative) | Context extrapolation beyond training length; relative timing between ticks is what matters, not absolute position |
