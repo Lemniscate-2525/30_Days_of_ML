@@ -116,7 +116,9 @@ $$\text{freqs}(t, i) = t \cdot \theta_i$$
 
 These are converted to complex exponentials :
 
-$$\text{freqs\_cis}(t, i) = e^{i \cdot \text{freqs}(t,i)} = \cos(t\theta_i) + i\sin(t\theta_i)$$
+$$
+\mathrm{freqs\_cis}(t, i) = e^{i \cdot \mathrm{freqs}(t,i)} = \cos(t\theta_i) + i\sin(t\theta_i)
+$$
 
 **Applying RoPE to Q and K :** Each query/key vector is viewed as a sequence of 2D complex numbers. 
 The rotation at position $m$ is applied by complex multiplication;
@@ -130,6 +132,7 @@ $$\tilde{k}_n = k_n \cdot e^{in\theta}$$
 $$\tilde{q}_m^\top \tilde{k}_n = q_m^\top k_n \cdot e^{i(m-n)\theta}$$
 
 The absolute positions $m$ and $n$ appear only as their difference $m - n$ in the phase factor. The model learns relative temporal relationships between ticks directly. A sell burst at tick 50 followed by spread collapse at tick 70 has the same relative pattern ($\Delta t = 20$) regardless of where in the sequence it occurs.
+
 This is why *RoPE enables context length extrapolation*; the model is trained on relative distances, not absolute positions, so it generalizes to longer sequences naturally.
 
 ### 3. SwiGLU : Gated Feed-Forward Network
@@ -222,7 +225,7 @@ Let $N$ = sequence length (128), $d$ = model dim (256), $H$ = heads (8), $L$ = l
 
 **Training complexity :**
 
-$$O\!\left(E \cdot K \cdot L \cdot N^2 \cdot d\right)$$
+$$O\left(E \cdot K \cdot L \cdot N^2 \cdot d\right)$$
 
 Attention is the dominant term. Per layer: $N^2 \cdot d = 128^2 \times 256 = 4{,}194{,}304$ multiplications. Across 4 layers and 5 epochs, total operations are substantial; the Flash Attention tiling prevents this from becoming a memory bottleneck.
 
@@ -234,9 +237,9 @@ Flash Attention *stores only the running softmax statistics* (max and sum per ro
 
 **Inference complexity per sequence :**
 
-$$O\!\left(L \cdot N^2 \cdot d\right) \quad \text{without KV cache}$$
+$$O\left(L \cdot N^2 \cdot d\right) \quad \text{without KV cache}$$
 
-$$O\!\left(L \cdot N \cdot d\right) \quad \text{with KV cache (sequential inference)}$$
+$$O\left(L \cdot N \cdot d\right) \quad \text{with KV cache (sequential inference)}$$
 
 Batch inference (all 128 ticks at once): one full forward pass, dominated by attention. Sequential inference with KV cache: each new tick requires only $O(L \cdot N_{\text{current}} \cdot d)$ for Q computation and cache lookup.
 
