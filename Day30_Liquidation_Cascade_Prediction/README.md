@@ -156,11 +156,11 @@ For market data, this is especially valuable. A tick at position 70 showing extr
 
 ### 4. Causal Attention with Flash Attention : 
 
-The attention computation uses `F.scaled_dot_product_attention` with `is_causal=True`. This invokes Flash Attention when available.
+The attention computation uses `F.scaled_dot_product_attention` with `is_causal = True`. This invokes Flash Attention when available.
 
 **Standard attention** materializes the full $N \times N$ attention matrix in GPU HBM (high-bandwidth memory):
 
-$$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V$$
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right) V$$
 
 Memory: $O(N^2)$. For $N=128$ with 8 heads and 4 layers: $128^2 \times 8 \times 4 = 524{,}288$ attention entries. Manageable here; catastrophic for N=4,096.
 
@@ -168,7 +168,7 @@ Memory: $O(N^2)$. For $N=128$ with 8 heads and 4 layers: $128^2 \times 8 \times 
 
 $$\text{Memory:} \quad O(N) \quad \text{vs} \quad O(N^2) \text{ standard}$$
 
-For long-context LOB sequences (1,000+ ticks), Flash Attention is the only viable option. `is_causal=True` applies a causal mask; each tick can only attend to past ticks, preserving the temporal causal structure of market data.
+For long-context LOB sequences (1,000+ ticks), Flash Attention is the only viable option. `is_causal = True` applies a causal mask; each tick can only attend to past ticks, preserving the temporal causal structure of market data.
 
 ### 5. KV Cache (Inference Optimization) : 
 
