@@ -6,3 +6,4 @@ pydantic==2.5.2
 streamlit==1.28.2
 requests==2.31.0
 plotly==5.18.0
+matplotlib==3.8.2
