@@ -20,6 +20,9 @@ from torch.utils.data import DataLoader, Dataset
 
 # Device Setup & Configuration :  
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+weights_dir = "weights"
+os.makedirs(weights_dir, exist_ok=True)
+model_save_path = os.path.join(weights_dir, "llama_l3_engine.pth")
 
 # Hyperparameters : 
 batch_size = 32
