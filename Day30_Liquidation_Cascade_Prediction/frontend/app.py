@@ -26,7 +26,7 @@ top_col1, top_col2, top_col3 = st.columns(3)
 main_col, side_col = st.columns([3, 1])
 
 with side_col:
-    st.markdown("### 🎛️ Execution Control")
+    st.markdown("### Execution Control")
     if st.button("PULSE L3 FEED", use_container_width=True, type="primary"):
         with st.spinner("Intercepting Tick Data..."):
             # Synthetic 128-tick burst with a heavy liquidation drop
