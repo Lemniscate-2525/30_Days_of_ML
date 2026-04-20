@@ -18,7 +18,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("⚡ PROJECT ASCENSION: MARKET MICROSTRUCTURE RADAR")
+st.title("MARKET MICROSTRUCTURE RADAR")
 st.markdown("---")
 
 # --- Layout ---
