@@ -1,60 +1,59 @@
-import sys
-import os
-import torch
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-from typing import List
+from pydantic import BaseModel
+import torch
+import time
+import logging
 
-# Appendingcore to path so that we can import our engine : 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from core.config import device, vocab_size, d_model, num_layers, num_heads, seq_len, model_save_path
+from core.config import vocab_size, d_model, num_layers, num_heads, seq_len, device, model_save_path
 from core.model import LlamaModel
 
-# 1. Initializing Server : 
-app = FastAPI(title = "Llama-3 HFT Engine API")
+# Setup Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# 2. Loading Model into VRAM on startup : 
-model = LlamaModel(vocab_size, d_model, num_layers, num_heads, seq_len).to(device)
+app = FastAPI(title="Ascension Engine API")
 
-if os.path.exists(model_save_path):
-  
-    model.load_state_dict(torch.load(model_save_path, map_location = device))
+# --- Boot Sequence ---
+try:
+    logger.info(f"[SYSTEM] Compiling Llama-3 Microstructure Engine on {device}...")
+    # Initialize with the correct arguments from config
+    model = LlamaModel(vocab_size, d_model, num_layers, num_heads, seq_len).to(device)
+    
+    # Load the weights you downloaded from Colab
+    model.load_state_dict(torch.load(model_save_path, map_location=device))
     model.eval()
-  
-else:
-    print("[WARNING] Weights not found. Run scripts/train.py first.")
+    logger.info("[SYSTEM] Engine Armed and Locked.")
+except Exception as e:
+    logger.error(f"[FATAL ERROR] Engine Failed to Boot: {e}")
+    model = None
 
-# 3. Defining Input/Output formats(enforces the JSON structure) : 
-class TickSequence(BaseModel):
-    ticks: List[int] = Field(..., min_length = seq_len, max_length = seq_len)
+class TickPayload(BaseModel):
+    ticks: list[int]
 
-class PredictionResponse(BaseModel):
-  
-    probability: float
-    cascade_imminent: bool
-    latency_ms: float
-
-# 4. The Execution Endpoint : 
-@app.post("/predict", response_model = PredictionResponse)
-async def predict_cascade(data: TickSequence):
-    import time
-    start = time.perf_counter()
+@app.post("/predict")
+def predict_cascade(payload: TickPayload):
+    if model is None:
+        raise HTTPException(status_code=500, detail="Engine offline due to boot failure.")
+    
+    if len(payload.ticks) != seq_len:
+        raise HTTPException(status_code=400, detail=f"Expected {seq_len} ticks, got {len(payload.ticks)}")
 
     try:
-        # Converting incoming JSON list to PyTorch Tensor -> Shape: (1, 128)
-        input_tensor = torch.tensor([data.ticks], dtype=torch.long, device = device)
+        start_time = time.time()
         
+        # Forward Pass
         with torch.no_grad():
-            logits = model(input_tensor)
+            x_tensor = torch.tensor([payload.ticks], dtype=torch.long).to(device)
+            logits = model(x_tensor)
             prob = torch.sigmoid(logits).item()
+        
+        latency = (time.time() - start_time) * 1000
 
-        latency = (time.perf_counter() - start) * 1000
-
-        return PredictionResponse(
-            probability = prob,
-            cascade_imminent = prob > 0.85,
-            latency_ms = latency
-        )
+        return {
+            "probability": prob,
+            "cascade_imminent": bool(prob > 0.85),
+            "latency_ms": latency
+        }
     except Exception as e:
-        raise HTTPException(status_code = 500, detail = str(e))
+        logger.error(f"Inference Error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
