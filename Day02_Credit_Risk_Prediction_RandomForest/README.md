@@ -1,22 +1,22 @@
-# Credit Risk Prediction
+# Credit Risk Prediction : 
 
 ---
 
-## 📌 Project Overview
+## Problem  : 
 
 Credit risk assessment is a critical problem for financial institutions such as banks and lending platforms.
 
 Incorrectly approving a risky borrower can lead to significant financial loss. Machine learning models can help predict whether a loan applicant is likely to default based on historical financial data.
 
-In this project, we build a **Random Forest classifier** to predict whether a borrower represents **good credit risk** or **bad credit risk**.
+For this problem, we have a **Random Forest classifier** to predict whether a borrower represents **good credit risk** or **bad credit risk**.
 
 The implementation focuses on building a clean end-to-end machine learning pipeline, including exploratory data analysis, preprocessing, baseline modeling, hyperparameter tuning, and evaluation.
 
 ---
 
-## 📊 Dataset
+## Dataset : 
 
-**Dataset Used:** [German Credit Dataset (UCI Machine Learning Repository)](https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data))
+**Dataset Used :** [German Credit Dataset (UCI Machine Learning Repository)](https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data))
 
 This dataset contains financial and demographic information about loan applicants.
 
@@ -30,20 +30,20 @@ This dataset contains financial and demographic information about loan applicant
 | Employment Duration | Years of employment |
 | Housing | Housing status |
 
-**Target Variable**
+**Target Variable :**
 
 | Value | Meaning |
 |---|---|
 | 0 | Good credit |
 | 1 | Bad credit (High Risk) |
 
-**Dataset Size**
+**Dataset Size :**
 - 1000 rows
 - 20 features
 
 ---
 
-## ⚙️ Machine Learning Pipeline
+## Pipeline : 
 
 ```
 Raw Dataset
@@ -67,7 +67,7 @@ Feature Importance Analysis
 
 ---
 
-## 🔎 Exploratory Data Analysis (EDA)
+## EDA :
 
 EDA was performed to understand dataset structure, feature distributions, and potential data issues.
 
@@ -76,7 +76,7 @@ Key checks included:
 - Examining statistical properties using `df.describe()`
 - Checking missing values using `df.isnull().sum()`
 
-**Example visualization:**
+**Example visualization :**
 
 ```python
 plt.hist(df["age"], bins=20)
@@ -88,17 +88,17 @@ This histogram shows how applicant ages are distributed across the dataset.
 
 ---
 
-## 🧹 Data Preprocessing
+## Data Preprocessing : 
 
-### 1. Data Cleaning
+### 1. Data Cleaning : 
 
-- Verified dataset structure
-- Checked for missing values
-- Ensured numerical columns were correctly formatted
+- Verified dataset structure.
+- Checked for missing values.
+- Ensured numerical columns were correctly formatted.
 
 The German Credit dataset does not contain significant missing values, so minimal cleaning was required.
 
-### 2. Feature Encoding
+### 2. Feature Encoding : 
 
 Categorical features were converted into numerical format so that they could be used by the machine learning model.
 
@@ -106,9 +106,9 @@ Tree-based models like Random Forest can work directly with integer-encoded cate
 
 ---
 
-## 🔀 Train-Test Split
+## Train-Test Split : 
 
-The dataset is divided into:
+The dataset is divided into :
 - **80%** Training Data
 - **20%** Testing Data
 
@@ -116,7 +116,7 @@ Stratified sampling is used to preserve the distribution of credit risk classes.
 
 ---
 
-## 🌲 Random Forest — Baseline Model
+## Random Forest(Baseline Model) : 
 
 A baseline Random Forest classifier was first trained before performing hyperparameter tuning.
 
@@ -131,7 +131,7 @@ Random Forest is an ensemble learning algorithm that combines multiple decision 
 
 ---
 
-## 🔧 Hyperparameter Tuning
+## Hyperparameter Tuning : 
 
 After establishing the baseline model, hyperparameter tuning was performed using **GridSearchCV**.
 
@@ -143,7 +143,7 @@ After establishing the baseline model, hyperparameter tuning was performed using
 | `min_samples_leaf` | Minimum samples per leaf |
 | `max_features` | Features considered per split |
 
-**Example parameter grid:**
+**Example parameter grid :**
 
 ```python
 n_estimators = [100, 200, 300]
@@ -154,7 +154,7 @@ max_features = ["sqrt", "log2"]
 
 ---
 
-## 📈 Model Evaluation Metrics
+## Evaluation Metrics : 
 
 Because credit risk datasets can be imbalanced, multiple metrics were used.
 
@@ -170,7 +170,7 @@ Because credit risk datasets can be imbalanced, multiple metrics were used.
 
 ---
 
-## 📊 Results
+## Results : 
 
 ### Baseline Model
 
@@ -182,7 +182,7 @@ Because credit risk datasets can be imbalanced, multiple metrics were used.
 | F1 Score | ~0.66 |
 | ROC-AUC | ~0.79 |
 
-### Tuned Model
+### Tuned Model : 
 
 | Metric | Value |
 |---|---|
@@ -196,7 +196,7 @@ Hyperparameter tuning improved the model's ability to detect high-risk borrowers
 
 ---
 
-## 📊 Feature Importance
+## Feature Importance : 
 
 Random Forest provides built-in feature importance scores based on **impurity reduction**.
 
@@ -211,11 +211,11 @@ Feature importance helps identify which attributes most influence credit risk pr
 
 ---
 
-## ⏱ Complexity Analysis
+## Complexity Analysis : 
 
 ### Time Complexity
 
-Training complexity for Random Forest:
+Training complexity for Random Forest :
 
 ```
 O(T × N log N)
@@ -227,7 +227,7 @@ Where:
 
 Each decision tree requires sorting operations during split evaluation, resulting in approximately `O(N log N)` complexity per tree.
 
-### Space Complexity
+### Space Complexity : 
 
 Random Forest stores multiple decision trees:
 
@@ -243,10 +243,10 @@ Additional memory is required to store the dataset and trained trees.
 
 ---
 
-## 📚 Key Learnings
+## Observations : 
 
-- Random Forest reduces overfitting through **ensemble learning**
-- Hyperparameter tuning improves model performance
-- Feature importance provides **interpretability**
-- ROC-AUC is critical for evaluating classification models with imbalanced datasets
-- Building structured ML pipelines improves **model reproducibility**
+- Random Forest reduces overfitting through **ensemble learning**.
+- Hyperparameter tuning improves model performance.
+- Feature importance provides **interpretability**.
+- ROC-AUC is critical for evaluating classification models with imbalanced datasets.
+- Building structured ML pipelines improves **model reproducibility**.
