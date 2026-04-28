@@ -251,12 +251,11 @@ This challenge focuses on building strong intuition around:
 
 ---
 
-# Progress
+# Progress : 
 
-Current Progress
+Completed.
 
-Day **5 / 30**
+Day **30 / 30**
 
-This repository is updated **daily as the challenge progresses**.
 
 ---
