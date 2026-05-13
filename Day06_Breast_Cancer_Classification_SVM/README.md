@@ -432,7 +432,7 @@ ROC-AUC is particularly useful for binary classification.
 
 ![Confusion Matrix](cf2.png)
 
-The confusion matrix shows the number of:
+The confusion matrix shows the number of : 
 
 - TP
 - TN
@@ -443,11 +443,11 @@ This helps analyze classification errors.
 
 ---
 
-# ROC Curve
+# ROC Curve : 
 
 ![ROC Curve](roc2.png)
 
-The ROC curve visualizes the tradeoff between:
+The ROC curve visualizes the tradeoff between :
 
 ```
 True Positive Rate
@@ -458,15 +458,15 @@ The **Area Under the Curve (ROC-AUC)** measures how well the model distinguishes
 
 ---
 
-# Time Complexity
+# Time Complexity : 
 
-Training complexity of SVM is approximately:
+Training complexity of SVM is approximately :
 
 ```
 O(n² × d)
 ```
 
-Where:
+Where :
 
 - n = number of samples
 - d = number of features
@@ -475,7 +475,7 @@ Kernel-based SVM requires computing pairwise similarities between samples.
 
 ---
 
-# Prediction Complexity
+# Prediction Complexity : 
 
 Prediction depends on the number of support vectors.
 
@@ -483,16 +483,16 @@ Prediction depends on the number of support vectors.
 O(s × d)
 ```
 
-Where:
+Where :
 
 - s = number of support vectors
 - d = number of features
 
 ---
 
-# Space Complexity
+# Space Complexity : 
 
-Space complexity mainly depends on storing support vectors:
+Space complexity mainly depends on storing support vectors :
 
 ```
 O(s × d)
@@ -500,9 +500,9 @@ O(s × d)
 
 ---
 
-# When to Use SVM
+# Situations to use SVM : 
 
-SVM performs well when:
+SVM performs well when :
 
 ```
 dataset size is small to medium
@@ -510,7 +510,7 @@ feature space is high dimensional
 clear margin exists between classes
 ```
 
-Common applications include:
+Common applications :
 
 - bioinformatics
 - text classification
@@ -518,9 +518,9 @@ Common applications include:
 
 ---
 
-# When to Avoid SVM
+# Situations to avoid SVM : 
 
-SVM may struggle when:
+SVM may struggle when :
 
 ```
 dataset is extremely large
@@ -532,21 +532,11 @@ In such cases, tree-based models or NN may scale better.
 
 ---
 
-# Key Learnings
-
-- SVM maximizes the margin between classes.
-- Only support vectors define the decision boundary.
-- Kernel functions enable nonlinear classification.
-- Feature Scaling is critical for SVM performance.
-- Hyperparameter tuning significantly affects model behavior.
-
----
-
-# Why Support Vector Machine?
+# Reasons to use Support Vector Machine : 
 
 Support Vector Machines are powerful classifiers for datasets where classes can be separated using a clear margin.
 
-Advantages:
+Advantages :
 
 - Effective in high dimensional spaces.
 - Works well when number of features > number of samples.
@@ -557,7 +547,7 @@ This makes SVM suitable for medical datasets like breast cancer detection where 
 
 ---
 
-# Engineering Tradeoffs
+# Engineering Tradeoffs : 
 
 | Aspect | SVM |
 |------|------|
@@ -569,9 +559,9 @@ This makes SVM suitable for medical datasets like breast cancer detection where 
 
 ---
 
-# Failure Case Analysis
+# Failure Case Analysis : 
 
-Observed limitations:
+Observed limitations :
 
 - Training becomes computationally expensive as dataset size increases. 
 - Sensitive to hyperparameters **C** and **gamma**.
@@ -583,7 +573,7 @@ Misclassified samples were inspected to understand boundary ambiguity in overlap
 
 ---
 
-# Training Time Scaling Experiment
+# Training Time Scaling Experiment : 
 
 Training time was measured by increasing Dataset size fractions.
 
@@ -597,7 +587,7 @@ This makes SVM less suitable for extremely large tabular datasets.
 
 ---
 
-# Inference Constraints
+# Inference Constraints : 
 
 Prediction requires computing similarity between test sample and support vectors.
 
@@ -609,7 +599,7 @@ Implications:
 
 ---
 
-# Kernel Selection Insight
+# Kernel Selection Insight : 
 
 Two kernels were compared:
 
@@ -622,7 +612,7 @@ RBF performed better due to non-linear separability in feature space.
 
 ---
 
-# PCA Decision Boundary Visualization Insight
+# PCA Decision Boundary Visualization Insight : 
 
 Dimensionality reduction using PCA enabled visualization of:
 
@@ -646,10 +636,10 @@ This provides geometric intuition of kernel transformation.
 
 # Model Updates
 
-### v1 — Initial Implementation  
+### v1; Initial Implementation  
 SVM with scaling, kernel comparison, ROC curve and PCA boundary visualization.
 
-### v2 — Engineering Upgrade (12-3-2026)  
+### v2; Engineering Upgrade (12-3-2026)  
 - Added training time measurement.  
 - Added inference latency analysis.  
 - Added failure case inspection.  
