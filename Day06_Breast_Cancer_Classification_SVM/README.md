@@ -585,7 +585,7 @@ Observation:
 
 This makes SVM less suitable for extremely large tabular datasets.
 
-![Experiment Visualization](expd6.png)
+![Experiment Visualization](exp_d6.png)
 
 ---
 
