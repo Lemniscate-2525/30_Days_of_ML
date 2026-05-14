@@ -202,7 +202,7 @@ Maximizing the margin improves model generalization.
 
 ---
 
-# Blessing of Dimensionality
+# Blessing of Dimensionality : 
 
 In high-dimensional feature spaces, it becomes easier to find a separating hyperplane.
 
@@ -218,7 +218,7 @@ It explains why **linear SVM performs well in high-dimensional datasets** such a
 
 
 
-# Decision Boundary, Margin and Support Vectors
+# Decision Boundary, Margin and Support Vectors : 
 
 To better understand how Support Vector Machines work, the dataset was reduced to **two dimensions using PCA** and the decision boundary was visualized.
 
@@ -228,7 +228,7 @@ This visualization shows three key geometric concepts of SVM:
 
 ---
 
-## Hyperplane
+## Hyperplane : 
 
 The **hyperplane** is the decision boundary that separates the two classes.
 
@@ -238,7 +238,7 @@ For a linear SVM, the hyperplane is defined by:
 w · x + b = 0
 ```
 
-Where:
+Where;
 
 - **w** → weight vector  
 - **x** → feature vector  
@@ -249,7 +249,7 @@ In higher dimensions, it becomes a **plane or hyperplane**.
 
 ---
 
-## Margin
+## Margin : 
 
 The **margin** is the distance between the hyperplane and the closest data points from each class.
 
@@ -265,11 +265,11 @@ Maximizing the margin reduces overfitting and makes the classifier more robust.
 
 ---
 
-## Support Vectors
+## Support Vectors : 
 
 The **support vectors** are the data points closest to the decision boundary.
 
-These points are critical because:
+These points are critical because :
 
 - They completely define the position of the hyperplane
 - Removing non-support vector points usually does not change the boundary
@@ -279,7 +279,7 @@ In the visualization, support vectors are shown as **highlighted or circled poin
 
 ---
 
-## Intuition
+## Intuition : 
 
 Instead of trying to correctly classify all points with a complex boundary, SVM focuses on finding the boundary that is **most confident and stable**.
 
@@ -287,9 +287,9 @@ By maximizing the margin and relying only on support vectors, SVM achieves stron
 
 ---
 
-# Hyperparameters
+# Hyperparameters : 
 
-Key hyperparameters in SVM:
+Key hyperparameters in SVM :
 
 | Parameter | Description |
 |------|------|
@@ -308,7 +308,7 @@ margin size
 classification error
 ```
 
-Small C:
+Small C : 
 
 ```
 large margin
@@ -316,7 +316,7 @@ more misclassifications allowed
 risk of underfitting
 ```
 
-Large C:
+Large C :
 
 ```
 small margin
@@ -330,14 +330,14 @@ risk of overfitting
 
 Gamma controls how far the influence of each training point extends.
 
-Small gamma:
+Small gamma :
 
 ```
 smooth decision boundary
 possible underfitting
 ```
 
-Large gamma:
+Large gamma :
 
 ```
 complex boundary
@@ -346,7 +346,7 @@ risk of overfitting
 
 ---
 
-# Kernel Functions
+# Kernel Functions : 
 
 When data cannot be separated linearly, SVM uses **kernel functions**.
 
@@ -412,7 +412,7 @@ Benefits:
 
 ---
 
-# Model Evaluation
+# Model Evaluation : 
 
 The model is evaluated using multiple classification metrics.
 
@@ -428,7 +428,7 @@ ROC-AUC is particularly useful for binary classification.
 
 ---
 
-# Confusion Matrix
+# Confusion Matrix : 
 
 ![Confusion Matrix](cf2.png)
 
@@ -584,6 +584,8 @@ Observation:
 
 
 This makes SVM less suitable for extremely large tabular datasets.
+
+![Experiment Visualization](expd6.png)
 
 ---
 
