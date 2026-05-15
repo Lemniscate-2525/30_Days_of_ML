@@ -2,13 +2,13 @@
 
 ---
 
-## Problem
+## Problem : 
 
 Spam detection is a classical Natural Language Processing (NLP) problem where machine learning models automatically classify messages as spam or legitimate communication.
 
 In this project, we build an **end-to-end probabilistic text classification pipeline** using **Multinomial Naive Bayes** and compare it with **Bernoulli Naive Bayes and Logistic Regression.**
 
-Focus Areas:
+Focus Areas :
 
 - NLP Exploratory Data Analysis
 - TF-IDF Feature Engineering
@@ -20,9 +20,9 @@ Focus Areas:
 
 ---
 
-## Dataset
+## Dataset : 
 
-**Dataset:** SMS Spam Collection
+**Dataset :** SMS Spam Collection
 
 - ~5572 SMS messages
 - Binary classification
@@ -37,9 +37,9 @@ Target Encoding:
 
 ---
 
-## Text Exploratory Data Analysis
+## Text Exploratory Data Analysis : 
 
-### Class Distribution
+### Class Distribution :
 
 Ham messages form the majority class; spam is the minority. Accuracy alone is misleading here. Recall and F1 Score are the important metrics.
 
@@ -47,7 +47,7 @@ Ham messages form the majority class; spam is the minority. Accuracy alone is mi
 
 ---
 
-### Message Length Distribution
+### Message Length Distribution : 
 
 Spam messages tend to be longer due to promotional content, links, and structured language. This length separation provides intuition about class separability even before modeling.
 
@@ -55,7 +55,7 @@ Spam messages tend to be longer due to promotional content, links, and structure
 
 ---
 
-### WordCloud Visualization
+### WordCloud Visualization : 
 
 WordCloud shows token frequency visually. Spam messages cluster around words like `free`, `win`, `claim`, `call`. Ham messages contain conversational vocabulary with no strong promotional pattern.
 
@@ -69,25 +69,25 @@ WordCloud shows token frequency visually. Spam messages cluster around words lik
 
 ---
 
-## Text Preprocessing Pipeline
+## Text Preprocessing Pipeline : 
 
 Steps:
 
-1. Label encoding: `spam → 0`, `ham → 1`
-2. TF-IDF Vectorization with `max_features = 3000` and English stopword removal
-3. Stratified Train-Test Split (80/20)
+1. Label encoding: `spam → 0`, `ham → 1`.
+2. TF-IDF Vectorization with `max_features = 3000` and English stopword removal.
+3. Stratified Train-Test Split (80/20).
 
 TF-IDF internally handles tokenization, lowercasing, and stopword removal in one step.
 
 ---
 
-## TF-IDF Mathematical Intuition
+## TF-IDF Mathematical Intuition : 
 
 TF-IDF assigns importance to a word based on how frequently it appears in a document and how rare it is across all documents.
 
-$$\text{TF-IDF}(t, d) = \text{TF}(t, d) \times \log\!\left(\frac{N}{\text{DF}(t)}\right)$$
+$$\text{TF-IDF}(t, d) = \text{TF}(t, d) \times \log\left(\frac{N}{\text{DF}(t)}\right)$$
 
-Where:
+Where;
 
 - $t$ = a specific token (word) in the vocabulary
 - $d$ = a specific document (SMS message)
@@ -100,13 +100,13 @@ A word like "free" appearing frequently in spam but rarely in ham gets a high TF
 
 ---
 
-## Bayes Theorem
+## Bayes Theorem : 
 
-Naive Bayes is built on Bayes theorem:
+Naive Bayes is built on Bayes theorem :
 
 $$P(y \mid x) = \frac{P(x \mid y)\, P(y)}{P(x)}$$
 
-Where:
+Where;
 
 - $y$ = the class label (spam or ham)
 - $x$ = the feature vector representing the message (TF-IDF weights of all tokens)
@@ -115,7 +115,7 @@ Where:
 - $P(y)$ = prior probability; how often class $y$ appears in the training data (e.g., 13% spam, 87% ham)
 - $P(x)$ = evidence; the overall probability of observing these words, constant across all classes
 
-Since $P(x)$ is constant across classes, the classifier simplifies to:
+Since $P(x)$ is constant across classes, the classifier simplifies to : 
 
 $$P(y \mid x) \propto P(x \mid y)\, P(y)$$
 
@@ -123,17 +123,17 @@ The model predicts the class with the highest posterior probability. $P(y)$ is t
 
 ---
 
-## Multinomial Naive Bayes: Model Physics
+## Multinomial Naive Bayes :
 
 For text classification, the feature vector represents token frequencies (or TF-IDF weights).
 
-The "Naive" assumption is that all words are conditionally independent given the class. This is never true in reality (words co-occur in structured sentences), but the independence assumption dramatically simplifies computation and works surprisingly well in practice for bag-of-words representations.
+The *"Naive"* assumption is that all words are conditionally independent given the class. This is never true in reality (words co-occur in structured sentences), but the independence assumption dramatically simplifies computation and works surprisingly well in practice for bag-of-words representations.
 
-**Likelihood model:**
+**Likelihood model :**
 
 $$P(x \mid y) = \prod_{i} P(w_i \mid y)^{x_i}$$
 
-Where:
+Where;
 
 - $w_i$ = the $i$-th word in the vocabulary
 - $x_i$ = the count (or TF-IDF weight) of word $w_i$ in the current message
@@ -142,31 +142,32 @@ Where:
 
 Each word contributes its class-conditional probability, raised to the power of how many times it appears. The model treats the message as a "bag of tokens" with no word order.
 
-**Taking log to avoid numerical underflow:**
+**Taking log to avoid numerical underflow :**
 
 $$\text{score}(y) = \log P(y) + \sum_{i} x_i \cdot \log P(w_i \mid y)$$
 
-Where:
+Wher;
 
 - $\log P(y)$ = log prior; the log of how often class $y$ appears in training
 - $x_i$ = count of word $i$ in the message (acts as a weight; frequent words contribute more)
 - $\log P(w_i \mid y)$ = log-likelihood of word $i$ under class $y$; a large negative number for rare words, closer to zero for common ones
 - $\sum_{i}$ = sum over all vocabulary words
 
-**How the physics works in practice:** When you send the message "Congratulations, you have won a FREE prize, call now," the model computes:
+**Model Working in practice :** When we send the message "Congratulations, you have won a FREE prize, call now," the model computes;
 
-- $\log P(\text{spam})$: the base rate of spam in training
-- Adds $\log P(\text{"free"} \mid \text{spam})$: large value (free appears often in spam)
-- Adds $\log P(\text{"won"} \mid \text{spam})$: large value
-- Adds $\log P(\text{"call"} \mid \text{spam})$: large value
+- $\log P(\text{spam})$: the base rate of spam in training.
+- Adds $\log P(\text{"free"} \mid \text{spam})$: large value (free appears often in spam).
+- Adds $\log P(\text{"won"} \mid \text{spam})$: large value.
+- Adds $\log P(\text{"call"} \mid \text{spam})$: large value.
 
-The spam score accumulates high values from multiple discriminative tokens simultaneously. The ham score accumulates low values for the same tokens. The model assigns spam.
+The spam score accumulates high values from multiple discriminative tokens simultaneously. The ham score accumulates low values for the same tokens.
+The model assigns spam.
 
 ---
 
-## Laplace Smoothing ($\alpha$ Parameter)
+## Laplace Smoothing ($\alpha$ Parameter) : 
 
-Without smoothing, if a token never appears in training spam messages:
+Without smoothing, if a token never appears in training spam messages;
 
 $$P(w \mid \text{spam}) = 0$$
 
@@ -176,7 +177,7 @@ Laplace smoothing adds a pseudocount $\alpha$ to every token:
 
 $$P(w \mid y) = \frac{\text{count}(w, y) + \alpha}{\text{total\_words}_y + \alpha \cdot V}$$
 
-Where:
+Where;
 
 - $w$ = the word being estimated
 - $y$ = the class (spam or ham)
@@ -207,7 +208,7 @@ Where:
 - $P(w_i \mid y)$ = probability that word $w_i$ appears in a message of class $y$, estimated from training
 - $(1 - P(w_i \mid y))$ = probability that word $w_i$ is absent from a message of class $y$
 
-The key difference from Multinomial: Bernoulli explicitly penalizes the absence of words too. If the word "free" almost always appears in spam, then a message that does not contain "free" gets a nudge toward ham, because the model says "spam messages usually have free; this one does not." Multinomial NB simply ignores absent words; Bernoulli uses them as evidence.
+The key difference from Multinomial; Bernoulli explicitly penalizes the absence of words too. If the word "free" almost always appears in spam, then a message that does not contain "free" gets a nudge toward ham, because the model says "spam messages usually have free; this one does not." Multinomial NB simply ignores absent words; Bernoulli uses them as evidence.
 
 **In log-score form:**
 
@@ -217,15 +218,15 @@ Bernoulli NB outperforms Multinomial NB here (0.98 vs 0.97 accuracy) because spa
 
 ---
 
-### Gaussian Naive Bayes
+### Gaussian Naive Bayes : 
 
 Gaussian NB is used when features are continuous real-valued numbers rather than token counts. Instead of estimating $P(w_i \mid y)$ from counts, it assumes each feature follows a Gaussian (normal) distribution within each class.
 
-**Likelihood model:**
+**Likelihood model :**
 
-$$P(x_i \mid y) = \frac{1}{\sqrt{2\pi\,\sigma_y^2}} \exp\!\left(-\frac{(x_i - \mu_y)^2}{2\sigma_y^2}\right)$$
+$$P(x_i \mid y) = \frac{1}{\sqrt{2\pi\,\sigma_y^2}} \exp\left(-\frac{(x_i - \mu_y)^2}{2\sigma_y^2}\right)$$
 
-Where:
+Where;
 
 - $x_i$ = the value of feature $i$ for the current message (e.g., message length, word count, punctuation count)
 - $\mu_y$ = the mean of feature $i$ across all training messages of class $y$; estimated from data
@@ -237,55 +238,53 @@ The model learns $\mu_y$ and $\sigma_y^2$ for every feature and every class duri
 
 $$\text{score}(y) = \log P(y) + \sum_{i} \log P(x_i \mid y)$$
 
-**Why Gaussian NB is not used here:** TF-IDF features are sparse and non-negative; they are count-derived and highly skewed. They do not resemble Gaussian distributions. Gaussian NB would be a poor fit for text. It is more appropriate for tasks with genuinely continuous features such as sensor measurements, medical test values, or financial ratios. For SMS text classification, Multinomial and Bernoulli NB are the correct probabilistic choices.
+**Reason to avoid Gaussian NB :** TF-IDF features are sparse and non-negative; they are count-derived and highly skewed. They do not resemble Gaussian distributions. Gaussian NB would be a poor fit for text. It is more appropriate for tasks with genuinely continuous features such as sensor measurements, medical test values, or financial ratios. For SMS text classification, Multinomial and Bernoulli NB are the correct probabilistic choices.
 
 ---
 
-**Multinomial NB vs Logistic Regression:** Logistic Regression learns a discriminative boundary directly via gradient descent. It is more flexible but slower to train, requires more data to generalize, and does not have a closed-form probabilistic interpretation from first principles. NB makes strong independence assumptions but compensates with extreme training speed and good calibration on text data.
+**Multinomial NB vs Logistic Regression :** Logistic Regression learns a discriminative boundary directly via gradient descent. It is more flexible but slower to train, requires more data to generalize, and does not have a closed-form probabilistic interpretation from first principles. NB makes strong independence assumptions but compensates with extreme training speed and good calibration on text data.
 
 ---
 
-## Evaluation Metrics
+## Evaluation Metrics : 
 
 Spam detection prioritizes **Recall** for the spam class. A missed spam (false negative) is costlier than a false alarm (false positive) in most real-world deployments. F1 score balances precision and recall when both matter.
 
-### Multinomial NB
+### Multinomial NB : 
 
 | Class | Precision | Recall | F1 Score | Support |
 |-------|-----------|--------|----------|---------|
-| 0 (Spam) | 0.98 | 0.83 | 0.90 | 149 |
+| 0 (Spam) | 0.98 | 0.83 | 0.90 | 149 | 
 | 1 (Ham) | 0.97 | 1.00 | 0.99 | 966 |
-| **Accuracy** | | | **0.97** | 1115 |
-| Macro Avg | 0.98 | 0.91 | 0.94 | 1115 |
-| Weighted Avg | 0.98 | 0.97 | 0.97 | 1115 |
 
-ROC AUC: **0.9864**
 
-### Bernoulli NB
+Accuracy : 0.97
+ROC AUC : **0.9864**
+
+
+### Bernoulli NB : 
 
 | Class | Precision | Recall | F1 Score | Support |
 |-------|-----------|--------|----------|---------|
 | 0 (Spam) | 1.00 | 0.87 | 0.93 | 149 |
 | 1 (Ham) | 0.98 | 1.00 | 0.99 | 966 |
-| **Accuracy** | | | **0.98** | 1115 |
-| Macro Avg | 0.99 | 0.93 | 0.96 | 1115 |
-| Weighted Avg | 0.98 | 0.98 | 0.98 | 1115 |
 
-### Logistic Regression
+Accuracy : 0.98
+
+
+### Logistic Regression : 
 
 | Class | Precision | Recall | F1 Score | Support |
 |-------|-----------|--------|----------|---------|
 | 0 (Spam) | 1.00 | 0.71 | 0.83 | 149 |
 | 1 (Ham) | 0.96 | 1.00 | 0.98 | 966 |
-| **Accuracy** | | | **0.96** | 1115 |
-| Macro Avg | 0.98 | 0.86 | 0.90 | 1115 |
-| Weighted Avg | 0.96 | 0.96 | 0.96 | 1115 |
 
-ROC AUC: **0.9839**
+Accuracy : 0.96
+ROC AUC : **0.9839**
 
 ---
 
-## Confusion Matrix (Multinomial NB)
+## Confusion Matrix (Multinomial NB) : 
 
 ![Confusion Matrix](cf3.png)
 
@@ -298,7 +297,7 @@ Only 2 spam messages slipped through; 26 ham messages were incorrectly flagged. 
 
 ---
 
-## ROC Curve Comparison
+## ROC Curve Comparison : 
 
 ![ROC Curve](roc3.png)
 
@@ -306,7 +305,7 @@ Both Multinomial NB and Logistic Regression achieve near-identical ROC curves. B
 
 ---
 
-## Top Spam Indicative Tokens
+## Top Spam Indicative Tokens : 
 
 Model coefficients (log-probabilities) reveal the most influential tokens in spam classification.
 
@@ -316,7 +315,7 @@ Tokens like `free`, `call`, `txt`, `win`, and `claim` have the highest log-proba
 
 ---
 
-## Engineering Tradeoffs
+## Engineering Tradeoffs : 
 
 | Model | Training Speed | Inference Latency | Memory | Expressiveness |
 |-------|---------------|------------------|--------|----------------|
@@ -326,40 +325,40 @@ Tokens like `free`, `call`, `txt`, `win`, and `claim` have the highest log-proba
 
 ---
 
-## Failure Case Analysis
+## Failure Case Analysis : 
 
-**Conversational spam:** Messages like "Hey, I saw you won something last week" contain spam-adjacent tokens (won) embedded in conversational structure. The bag-of-words model cannot distinguish a casual mention from a genuine spam trigger because it ignores word order and sentence context entirely.
+**Conversational spam :** Messages like "Hey, I saw you won something last week" contain spam-adjacent tokens (won) embedded in conversational structure. The bag-of-words model cannot distinguish a casual mention from a genuine spam trigger because it ignores word order and sentence context entirely.
 
-**Ham containing promotional tokens:** A legitimate promotional SMS from a known brand, such as "Your free delivery from Amazon has shipped," contains tokens like "free" that the model associates strongly with spam. The model flags it based on token identity, not sender trust or conversational coherence.
+**Ham containing promotional tokens :** A legitimate promotional SMS from a known brand, such as "Your free delivery from Amazon has shipped," contains tokens like "free" that the model associates strongly with spam. The model flags it based on token identity, not sender trust or conversational coherence.
 
-**Word order and syntax are invisible:** Multinomial NB represents every message as a bag of tokens. The sentence "This is not a scam" and "This is a scam" would produce nearly identical feature vectors (differing only in the presence of "not," which is often removed as a stopword). Negation, conditionals, and grammatical structure are completely lost.
+**Word order and syntax are invisible :** Multinomial NB represents every message as a bag of tokens. The sentence "This is not a scam" and "This is a scam" would produce nearly identical feature vectors (differing only in the presence of "not," which is often removed as a stopword). Negation, conditionals, and grammatical structure are completely lost.
 
-**Obfuscated spam vocabulary:** Spammers adapt to detection by using character substitution ("fr33," "c@ll now," "W1N") or synonym rotation ("complimentary" instead of "free"). If the training data does not contain these variants, the model assigns them low spam probability and misses the signal.
+**Obfuscated spam vocabulary :** Spammers adapt to detection by using character substitution ("fr33," "c@ll now," "W1N") or synonym rotation ("complimentary" instead of "free"). If the training data does not contain these variants, the model assigns them low spam probability and misses the signal.
 
-**Context and sender identity absent:** A message saying "Call me when you're free" is indistinguishable from a spam trigger on the word "free" alone without knowing the sender. Naive Bayes has no mechanism for encoding relationship context, message history, or sender reputation.
+**Context and sender identity absent :** A message saying "Call me when you're free" is indistinguishable from a spam trigger on the word "free" alone without knowing the sender. Naive Bayes has no mechanism for encoding relationship context, message history, or sender reputation.
 
-**Class imbalance effect on recall:** With ~87% ham in training data, the prior $P(\text{ham})$ is much larger than $P(\text{spam})$. This pushes posterior probabilities toward ham for borderline cases. The 26 false positives (ham flagged as spam) and 2 false negatives (spam passing through) reflect this prior imbalance.
+**Class imbalance effect on recall :** With ~87% ham in training data, the prior $P(\text{ham})$ is much larger than $P(\text{spam})$. This pushes posterior probabilities toward ham for borderline cases. The 26 false positives (ham flagged as spam) and 2 false negatives (spam passing through) reflect this prior imbalance.
 
 ---
 
-## Time Complexity
+## Time Complexity : 
 
-**Training:** $O(n \cdot d)$
+**Training :** $O(n \cdot d)$
 
-Where:
+Where;
 
 - $n$ = number of training documents (SMS messages); 4,457 here (80% of 5,572)
 - $d$ = vocabulary size; 3,000 features after TF-IDF filtering
 
 Training simply counts token frequencies per class; one pass through the data. Measured training time: **NB: 0.00203s, LR: 0.02816s**. Logistic Regression is 14x slower due to iterative gradient descent.
 
-**Prediction:** $O(d)$
+**Prediction :** $O(d)$
 
 Where $d$ = vocabulary size (3,000). For each message, compute the log-probability score by summing over $d$ vocabulary terms. Constant in $n$; the model does not slow down as the dataset grows.
 
 ---
 
-## Space Complexity
+## Space Complexity : 
 
 The model stores the vocabulary and the class-conditional log-probabilities: two matrices of shape $(C \times V)$ where:
 
