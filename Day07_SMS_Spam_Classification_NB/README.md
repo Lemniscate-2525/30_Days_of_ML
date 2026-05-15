@@ -1,7 +1,3 @@
-<img width="1621" height="803" alt="image" src="https://github.com/user-attachments/assets/c11a9fdc-2887-4b74-bb4a-b568ef5ae904" /># SMS Spam Classification
-
----
-
 ## Problem : 
 
 Spam detection is a classical Natural Language Processing (NLP) problem where machine learning models automatically classify messages as spam or legitimate communication.
