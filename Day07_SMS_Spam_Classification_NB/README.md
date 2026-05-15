@@ -189,7 +189,7 @@ Where;
 - $y$ = the class (spam or ham)
 - $\text{count}(w, y)$ = how many times word $w$ appeared in training messages of class $y$
 - $\alpha$ = smoothing parameter; the pseudocount added to every word (default: 1)
-- $\text{total\_words}_y$ = total number of word occurrences across all training messages of class $y$
+- $\mathrm{totalwords}_y$ = total number of word occurrences across all training messages of class $y$
 - $V$ = vocabulary size; the total number of unique words in the training set (3,000 here)
 
 - Small $\alpha$ (e.g., 0.01): trusts training data more; rare tokens get very low but nonzero probability
