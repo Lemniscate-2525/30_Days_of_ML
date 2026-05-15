@@ -1,4 +1,4 @@
-# SMS Spam Classification
+<img width="1621" height="803" alt="image" src="https://github.com/user-attachments/assets/c11a9fdc-2887-4b74-bb4a-b568ef5ae904" /># SMS Spam Classification
 
 ---
 
@@ -180,11 +180,12 @@ Laplace smoothing adds a pseudocount $\alpha$ to every token;
 $$
 P(w \mid y) =
 \frac{
-\text{count}(w, y) + \alpha
+count(w, y) + \alpha
 }{
-\text{total\_words}_y + \alpha \cdot V
+N_y + \alpha V
 }
 $$
+
 
 Where;
 
@@ -378,7 +379,7 @@ Total storage: $2 \times 3{,}000 = 6{,}000$ floats. TF-IDF uses a sparse matrix 
 
 ---
 
-## Inference Latency
+## Inference Latency : 
 
 | Model | Inference Latency per Message |
 |-------|------------------------------|
