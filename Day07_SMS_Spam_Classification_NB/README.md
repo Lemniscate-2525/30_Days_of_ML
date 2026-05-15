@@ -1,6 +1,6 @@
 ## Problem : 
 
-Spam detection is a classical Natural Language Processing (NLP) problem where machine learning models automatically classify messages as spam or legitimate communication.
+Spam detection is a classical NLP problem where machine learning models automatically classify messages as spam or legitimate communication.
 
 In this project, we build an **end-to-end probabilistic text classification pipeline** using **Multinomial Naive Bayes** and compare it with **Bernoulli Naive Bayes and Logistic Regression.**
 
