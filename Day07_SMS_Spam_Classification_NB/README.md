@@ -169,13 +169,22 @@ The model assigns spam.
 
 Without smoothing, if a token never appears in training spam messages;
 
-$$P(w \mid \text{spam}) = 0$$
+$$
+P(w \mid \text{spam}) = 0
+$$
 
 This single zero multiplies through the entire product, making the posterior zero regardless of all other evidence. One unseen word kills the prediction.
 
-Laplace smoothing adds a pseudocount $\alpha$ to every token:
+Laplace smoothing adds a pseudocount $\alpha$ to every token;
 
-$$P(w \mid y) = \frac{\text{count}(w, y) + \alpha}{\text{total\_words}_y + \alpha \cdot V}$$
+$$
+P(w \mid y) =
+\frac{
+\text{count}(w, y) + \alpha
+}{
+\text{total\_words}_y + \alpha \cdot V
+}
+$$
 
 Where;
 
