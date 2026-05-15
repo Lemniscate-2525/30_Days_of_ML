@@ -57,11 +57,11 @@ WordCloud shows token frequency visually. Spam messages cluster around words lik
 
 #### Spam WordCloud
 
-![Spam WordCloud](eda3.png)
+![Spam WordCloud](eda4.png)
 
 #### Ham WordCloud
 
-![Ham WordCloud](eda4.png)
+![Ham WordCloud](eda3.png)
 
 ---
 
