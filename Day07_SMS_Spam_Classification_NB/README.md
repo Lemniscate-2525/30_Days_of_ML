@@ -112,7 +112,7 @@ This reduces importance of common words and increases importance of discriminati
 
 ---
 
-## Bayes Theorem
+## Bayes Theorem : 
 
 Naive Bayes is based on Bayes theorem:
 
@@ -126,11 +126,11 @@ The model predicts the class with the highest posterior probability.
 
 ---
 
-## Multinomial Naive Bayes Mathematical Model
+## Multinomial Naive Bayes Mathematical Model : 
 
 For text classification, the feature vector represents token frequencies.
 
-Likelihood model:
+Likelihood model :
 
 P(x | y) = Π ( P(w_i | y) ^ x_i )
 
@@ -142,37 +142,39 @@ The class with the highest score is selected.
 
 ---
 
-## Laplace Smoothing (Alpha Parameter)
+## Laplace Smoothing (Alpha Parameter) : 
 
-Without smoothing:
+Without smoothing :
 
-If a token never appears in training spam messages:
+If a token never appears in training spam messages;
 
 P(word | spam) = 0  
 
 This makes the entire probability zero.
 
-To avoid this:
+
+To avoid this;
 
 P(word | y) = ( count(word, y) + alpha ) / ( total_words_y + alpha * V )
 
-Where:
+
+Where; 
 
 - alpha → smoothing parameter
 - V → vocabulary size
 
-Intuition:
+Intuition :
 
 - Small alpha → trust training data more
 - Large alpha → assume more uniform distribution
 
-Standard choice:
+Standard choice :
 
 alpha = 1 (Laplace smoothing)
 
 ---
 
-## Models Compared
+## Models Compared : 
 
 - Multinomial Naive Bayes (Primary)
 - Bernoulli Naive Bayes
@@ -180,7 +182,7 @@ alpha = 1 (Laplace smoothing)
 
 ---
 
-## Evaluation Metrics
+## Evaluation Metrics : 
 
 - Accuracy  
 - Precision  
@@ -192,19 +194,19 @@ Spam detection prioritizes **Recall**.
 
 ---
 
-## Confusion Matrix (Multinomial NB)
+## Confusion Matrix (Multinomial NB) : 
 
 ![Confusion Matrix](cf3.png)
 
 ---
 
-## ROC Curve Comparison
+## ROC Curve Comparison :
 
 ![ROC Curve](roc3.png)
 
 ---
 
-## Top Spam Indicative Tokens
+## Top Spam Indicative Tokens : 
 
 Model coefficients / log probabilities reveal influential tokens.
 
@@ -212,7 +214,7 @@ Model coefficients / log probabilities reveal influential tokens.
 
 ---
 
-## Engineering Tradeoffs
+## Engineering Tradeoffs : 
 
 | Model | Training Speed | Inference Latency | Memory | Expressiveness |
 |------|---------------|------------------|-------|---------------|
@@ -222,9 +224,9 @@ Model coefficients / log probabilities reveal influential tokens.
 
 ---
 
-## Failure Case Analysis
+## Failure Case Analysis : 
 
-Misclassification scenarios:
+Misclassification scenarios :
 
 - Conversational spam messages.
 - Ham containing promotional tokens.  
@@ -233,46 +235,30 @@ Misclassification scenarios:
 
 ---
 
-## Time Complexity
+## Time Complexity : 
 
-Training:
+Training :
 
-\[
-O(N*D)
-\]
+O(n*d)
 
-Prediction:
+Prediction :
 
-\[
-O(D)
-\]
+O(d)
 
 ---
 
-## Space Complexity
+## Space Complexity : 
 
-Model stores:
-
-- Vocabulary  
-- Class conditional probabilities  
-
+Model stores the *vocabulary* and both of the *class conditional probabilities*.  
 Sparse representation reduces memory usage.
 
 ---
 
-## Inference Latency
+## Inference Latency : 
 
-Average prediction latency per message:
+Average prediction latency per message :
 
-Latency = Total Prediction Time / Number of Samples
-
----
-
-## Key Learnings
-
-- Power of probabilistic models in NLP  
-- Importance of sparse feature engineering  
-- Tradeoff between simplicity and modeling capacity  
-- Engineering scalability considerations  
+Latency = Total Prediction Time / Number of Samples; Latency = 
 
 ---
+
