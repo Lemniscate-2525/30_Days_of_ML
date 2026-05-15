@@ -1,8 +1,8 @@
-#  SMS Spam Classification 
+#  SMS Spam Classification : 
 
 ---
 
-##  Project Overview
+##  Problem : 
 
 Spam detection is a classical Natural Language Processing (NLP) problem where machine learning models automatically classify messages as spam or legitimate communication.
 
@@ -20,9 +20,9 @@ Focus Areas:
 
 ---
 
-## Dataset
+## Dataset : 
 
-**Dataset:** SMS Spam Collection  
+**Dataset :** SMS Spam Collection  
 
 - ~5572 SMS messages  
 - Binary classification  
