@@ -239,7 +239,7 @@ Continuous feature values are discretized into bins. Gradient and Hessian statis
 
 Each boosting round fits one tree. With histogram binning, the split search at each node scans $B$ bins (typically 255) rather than $N$ raw values. For a tree of depth $d$ with $T$ total trees;
 
-$$O\!\left(T \cdot d \cdot N \cdot B\right)$$
+$$O\left(T \cdot d \cdot N \cdot B\right)$$
 
 where $N$ is the number of training samples, $d$ is max depth, and $B$ is the number of histogram bins. Since $B \ll N$ (e.g., $B = 255$ vs $N \approx 10^6$), this is dramatically faster than the $O(T \cdot N \log N)$ of exact greedy methods like vanilla Gradient Boosting or XGBoost's exact mode.
 
@@ -247,7 +247,7 @@ With GOSS active, $N$ is further replaced by $a \cdot N + b \cdot (1-a) \cdot N 
 
 With Grid Search over $C$ parameter combinations and $K$ cross-validation folds;
 
-$$O\!\left(C \times K \times T \cdot d \cdot N \cdot B\right)$$
+$$O\left(C \times K \times T \cdot d \cdot N \cdot B\right)$$
 
 This is why the tuned model takes significantly longer to train despite LightGBM's inherent efficiency.
 
@@ -263,7 +263,7 @@ With $T$ in the hundreds and depth in single digits, per-sample inference is sub
 
 LightGBM stores histogram statistics (gradient and hessian sums per bin per feature) rather than raw data. Model storage covers all tree structures, split thresholds, and leaf outputs;
 
-$$O\!\left(T \cdot 2^d + F \cdot B\right)$$
+$$O\left(T \cdot 2^d + F \cdot B\right)$$
 
 where $F$ is the number of features and $B$ is bins per feature. The histogram term $F \cdot B$ dominates during training but is discarded post-training: only the tree structures ($T \cdot 2^d$ nodes) are retained in the saved model. EFB reduces $F$ further, compressing the histogram workspace.
 
