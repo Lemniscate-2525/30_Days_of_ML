@@ -146,7 +146,7 @@ EFB exploits this:
 - Find near-exclusive bundles (small conflict rate allowed as a hyperparameter) using a greedy graph coloring algorithm.
 - Merge each bundle into one synthetic feature by offsetting value ranges so the original features remain distinguishable within the bundle.
 
-**Why this matters:** instead of searching splits over $F$ sparse features separately, LightGBM searches over $B \ll F$ dense bundles. The split search space shrinks dramatically with no meaningful information loss, since exclusive features cannot simultaneously influence a split anyway.
+**Significance :** instead of searching splits over $F$ sparse features separately, LightGBM searches over $B \ll F$ dense bundles. The split search space shrinks dramatically with no meaningful information loss, since exclusive features cannot simultaneously influence a split anyway.
 
 For a retail dataset with many one-hot encoded store attributes, EFB can reduce the effective feature count substantially, making histogram construction and split search faster at every boosting round.
 
