@@ -69,7 +69,7 @@ Most pairwise linear correlations are weak. This confirms that linear models wil
 
 ## Model -> LightGBM : 
 
-### L ightGBM over XGBoost : 
+### LightGBM over XGBoost : 
 
 The Rossmann dataset has approximately one million training rows across 1,115 stores, with mixed feature types, categorical signals, and strong nonlinear interactions. This rules out three natural candidates cleanly; 
 
