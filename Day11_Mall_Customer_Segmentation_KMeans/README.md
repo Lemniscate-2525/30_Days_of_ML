@@ -2,7 +2,7 @@
 
 ---
 
-## Problem Statement : 
+## Problem Statement :  
 
 Segment mall customers into meaningful behavioral groups using two structured behavioral features :
 
