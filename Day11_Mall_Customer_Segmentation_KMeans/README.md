@@ -87,7 +87,7 @@ After scaling, both features contribute equally to the distance metric. This is 
 
 KMeans minimizes within-cluster variance, formally called the **Inertia** or **Distortion** :
 
-$$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \mu_k \|^2$$
+$$J = \sum_{k=1}^{K} \sum_{x_i \in C_k}\ |x_i - \mu_k \|^2$$
 
 Where;
 
@@ -115,7 +115,7 @@ $$\mu_k = \frac{1}{|C_k|} \sum_{x_i \in C_k} x_i$$
 
 Recompute each centroid as the mean of its assigned points. This is the analytical minimizer of squared distance within the cluster.
 
-Each iteration is guaranteed to reduce or maintain $J$. However, the objective is **non-convex**, so the algorithm converges to a local minimum. This is why `n_init=20` is used: run 20 independent initializations and keep the best result.
+Each iteration is guaranteed to reduce or maintain $J$. However, the objective is **non-convex**, so the algorithm converges to a local minimum. This is why `n_init=20` is used to run 20 independent initializations and keep the best result.
 
 ---
 
@@ -135,7 +135,8 @@ KMeans fails on ring-shaped, crescent-shaped, or manifold-structured data. It is
 
 ## Time and Space Complexity : 
 
-Let:
+Let; 
+
 - $n$ = number of samples
 - $k$ = number of clusters
 - $d$ = number of features
