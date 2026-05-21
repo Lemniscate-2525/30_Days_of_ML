@@ -31,15 +31,15 @@ Unlike supervised learning, clustering does not predict a target. It reveals str
 
 ## Pipeline : 
 
-1. EDA: visualize feature distributions and scatter structure
-2. Feature scaling with StandardScaler
-3. Metric sweep across $K \in [2, 10]$: compute inertia, silhouette, DB, CH
-4. Select $K$ using all six methods independently
-5. Train a KMeans model for each selected $K$
-6. Compute geometric metrics: intra-cluster, inter-cluster distances
-7. Measure training time and inference latency per method
-8. Visualize cluster assignments for each method
-9. Compile full comparison table
+1. EDA: visualize feature distributions and scatter structure.
+2. Feature scaling with StandardScaler.
+3. Metric sweep across $K \in [2, 10]$; compute inertia, silhouette, DB, CH.
+4. Select $K$ using all six methods independently.
+5. Train a KMeans model for each selected $K$.
+6. Compute geometric metrics: intra-cluster, inter-cluster distances.
+7. Measure training time and inference latency per method.
+8. Visualize cluster assignments for each method.
+9. Compile full comparison table.
 
 ---
 
@@ -89,7 +89,8 @@ KMeans minimizes within-cluster variance, formally called the **Inertia** or **D
 
 $$J = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \mu_k \|^2$$
 
-Where:
+Where;
+
 - $C_k$ is the set of points assigned to cluster $k$
 - $\mu_k$ is the centroid of cluster $k$
 - $\| \cdot \|$ is the Euclidean norm
@@ -98,7 +99,7 @@ This is also referred to as Within-Cluster Sum of Squares (WCSS). Minimizing $J$
 
 ---
 
-## Optimization : Lloyd's Algorithm
+## Optimization -> Lloyd's Algorithm : 
 
 KMeans uses Lloyd's Algorithm, an optimization procedure :
 
@@ -164,7 +165,7 @@ Store the full data matrix ($n \times d$) and the centroid matrix ($k \times d$)
 
 ## Why Selecting K Matters : 
 
-$K$ is the single most important hyperparameter in KMeans. It directly controls model complexity:
+$K$ is the single most important hyperparameter in KMeans. It directly controls model complexity :
 
 | K too small | K too large |
 |-------------|-------------|
@@ -214,13 +215,15 @@ For each point $i$:
 
 $$s_i = \frac{b_i - a_i}{\max(a_i, b_i)}$$
 
-Where:
+Where;
+
 - $a_i$ = mean distance from $i$ to all other points in its cluster (cohesion)
 - $b_i$ = mean distance from $i$ to all points in the nearest other cluster (separation)
 
 Global score = mean $s_i$ over all points. Range: $[-1, +1]$.
 
-Interpretation:
+Interpretation;
+
 - $s \approx +1$: well inside its cluster, far from others (ideal)
 - $s \approx 0$: on the boundary between two clusters
 - $s \approx -1$: likely assigned to the wrong cluster
@@ -233,11 +236,11 @@ Silhouette is a **local, per-point** measure that captures both cohesion and sep
 
 ### 4. Davies-Bouldin Index : 
 
-Measures the average worst-case similarity between each cluster and its most similar neighbor:
+Measures the average worst-case similarity between each cluster and its most similar neighbor : 
 
 $$DB = \frac{1}{K} \sum_{i=1}^{K} \max_{j \neq i} \frac{S_i + S_j}{M_{ij}}$$
 
-Where:
+Where;
 - $S_i$ = average distance from points in cluster $i$ to centroid $\mu_i$ (spread)
 - $M_{ij} = \| \mu_i - \mu_j \|$ = centroid separation distance
 
@@ -249,7 +252,7 @@ Lower DB is better. A good clustering has tight clusters ($S_i$ small) far from 
 
 ### 5. Calinski-Harabasz Score : 
 
-Variance ratio criterion; ratio of between-cluster dispersion to within-cluster dispersion:
+Variance ratio criterion; ratio of between-cluster dispersion to within-cluster dispersion :
 
 $$CH = \frac{B / (K - 1)}{W / (n - K)}$$
 
