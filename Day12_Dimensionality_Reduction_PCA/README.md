@@ -38,13 +38,9 @@ This makes it an ideal candidate to study what dimensionality reduction actually
 
 Each feature represents an independent geometric axis. A dataset with $d$ features places every sample as a point in $\mathbb{R}^d$.
 
-As $d$ grows, something counterintuitive happens. The volume of the space grows exponentially with dimension :
+As $d$ grows, something counterintuitive happens. The volume of the space grows exponentially with dimension, 
 
-$$\text{Volume of unit hypercube} = 1^d = 1, \quad \text{but volume of inscribed hypersphere} = \frac{\pi^{d/2}}{\Gamma(d/2 + 1)} \cdot r^d \to 0$$
-
-The sphere shrinks relative to the cube. Data points cluster near the corners and edges of the space. Almost all volume is in the shell near the boundary, not the interior. 
-
-This means:
+Thus; 
 
 - Pairwise **distances between points concentrate** around the same value; the nearest and farthest neighbor become indistinguishable.
 - **Density estimation becomes impossible**, we need exponentially more data to fill the space.
@@ -97,7 +93,7 @@ These new axes are chosen to point in the directions of maximum variance in the 
 
 Analogy : 
 
-Imagine a cloud of points shaped like a stretched ellipsoid. 
+Imagine a collection of points shaped like a stretched ellipsoid(3-d ellipse). 
 The longest axis of the ellipsoid is the direction along which the data varies most. 
 PCA finds that axis first, then the second longest orthogonal axis, and so on. 
 By keeping only the first $k$ axes, you project the cloud onto its most informative directions.
@@ -106,9 +102,9 @@ By keeping only the first $k$ axes, you project the cloud onto its most informat
 
 ## PCA Mathematical Derivation : 
 
-### Step 1 : Center the Data : 
+### Step 1 : Centering the Data : 
 
-PCA operates on deviations from the mean. Subtract the mean of each feature:
+PCA operates on deviations from the mean. Subtract the mean of each feature;
 
 $$\tilde{x}_i = x_i - \bar{x}$$
 
@@ -137,7 +133,7 @@ The variance of these projections across all $N$ points is :
 
 $$\text{Var}(z) = \frac{1}{N} \sum_{i=1}^{N} z_i^2 = \frac{1}{N} \sum_{i=1}^{N} (w^\top x_i)^2 = w^\top \left(\frac{1}{N} \tilde{X}^\top \tilde{X}\right) w = w^\top \Sigma w$$
 
-So we want to solve:
+So we want to solve; 
 
 $$\max_w \; w^\top \Sigma w \quad \text{subject to} \quad w^\top w = 1$$
 
@@ -149,7 +145,7 @@ The constraint forces us to find a direction, not a scale.
 ## Lagrange Multipliers :
 
 Lagrange multipliers are the standard tool for constrained optimization. 
-The idea is elegant: if we are maximizing $f(w)$ subject to a constraint $g(w) = 0$, at the optimum the gradient of $f$ must be parallel to the gradient of $g$. 
+The idea is simple if we are maximizing $f(w)$ subject to a constraint $g(w) = 0$, at the optimum the gradient of $f$ must be parallel to the gradient of $g$. 
 
 If they were not parallel, you could move slightly along the constraint surface and increase $f$, contradicting optimality.
 
@@ -181,6 +177,7 @@ This is the eigenvalue equation. The constrained optimization problem has transf
 The equation $\Sigma w = \lambda w$ says: $w$ is a direction that the covariance matrix only stretches, never rotates. When you apply $\Sigma$ to $w$, you get back $w$ scaled by $\lambda$.
 
 **Geometric interpretation :** The covariance matrix $\Sigma$ describes an ellipsoid; the shape of the data cloud. 
+
 The eigenvectors of $\Sigma$ are the axes of that ellipsoid. 
 The eigenvalues are the lengths of those axes (proportional to variance along each axis).
 
@@ -188,14 +185,14 @@ The eigenvalues are the lengths of those axes (proportional to variance along ea
 - The eigenvector with the second largest eigenvalue points along the second longest axis, orthogonal to the first. This is the second principal component.
 - And so on.
 
-**Why does the Eigenvalue equal the Variance?** Substituting $\Sigma w = \lambda w$ back into the variance expression :
+**Eigenvalue being equal to the Variance :** Substituting $\Sigma w = \lambda w$ back into the variance expression :
 
 $$\text{Var}(z) = w^\top \Sigma w = w^\top (\lambda w) = \lambda w^\top w = \lambda$$
 
 The variance of the projection onto eigenvector $w$ is exactly $\lambda$. 
 The eigenvalue is not just a scaling factor; it is literally the amount of variance captured by that component.
 
-This is why we sort eigenvectors by descending eigenvalue. We are sorting directions by how much variance they carry.
+This is why we sort eigenvectors by descending eigenvalue. We are sorting directions directly by the variance they carry.
 
 ---
 
@@ -205,7 +202,7 @@ Select the top $k$ eigenvectors (those with the $k$ largest eigenvalues) and sta
 
 $$W_k \in \mathbb{R}^{d \times k}$$
 
-Transform the data:
+Transforming the data;
 
 $$Z = \tilde{X} W_k \in \mathbb{R}^{N \times k}$$
 
@@ -236,7 +233,8 @@ The remaining 20 components contribute only 5% of total variance; almost entirel
 
 ## Time and Space Complexity : 
 
-Let:
+Let;
+
 - $N$ = number of samples
 - $d$ = number of original features
 - $k$ = number of selected components
@@ -271,7 +269,7 @@ Store the covariance matrix ($d \times d$) and the projection matrix ($d \times 
 
 ## Geometric Assumptions : 
 
-PCA assumes:
+PCA assumes; 
 
 - **Variance equals information :** High-variance directions are assumed to be signal. Low-variance directions are assumed to be noise. This is reasonable in many settings but fails when the signal is weak and the noise is large.
 - **Linear structure :** PCA finds linear projections. If the meaningful structure in the data lies on a nonlinear manifold (e.g., a swiss roll or a sphere), PCA cannot find it. Kernel PCA or autoencoders are needed.
@@ -287,7 +285,8 @@ PCA assumes:
 | Logistic Regression (Before PCA) | 0.9737 | 0.9722 | 0.9859 | 0.9790 | 0.9974 | 0.0246s | 0.000530s |
 | Logistic Regression (After PCA) | 0.9825 | 0.9859 | 0.9859 | 0.9859 | 0.9977 | 0.0287s | 0.000623s |
 
-Original dimension: 30. Reduced dimension: 10 components (capturing 95% variance).
+Original dimension : 30.
+Reduced dimension : 10 components (capturing 95% variance).
 
 ---
 
@@ -295,7 +294,7 @@ Original dimension: 30. Reduced dimension: 10 components (capturing 95% variance
 
 After PCA, accuracy improved from 97.37% to 98.25% and F1 from 0.979 to 0.986. This is not always expected; dimensionality reduction does not always improve classification performance. 
 
-Here it works because :
+Here it works well :
 
 - The 20 discarded components were dominated by correlated noise between geometrically redundant features. 
 - Logistic Regression is a linear classifier. It benefits from decorrelated inputs; the orthogonal principal components remove the multicollinearity that complicates gradient descent on the original features.
