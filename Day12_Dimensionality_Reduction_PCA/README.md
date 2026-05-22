@@ -318,7 +318,7 @@ Benign tumors (blue) spread along positive PC1, reflecting larger, more variable
 
 ## Failure Case Analysis : 
 
-**Aggressive dimensionality reduction discards discriminative variance :** If the threshold is set too low (e.g., 80% variance), components that carry weak but class-relevant signal get discarded. Recall drops first — the model fails to catch minority class positives.
+**Aggressive dimensionality reduction discards discriminative variance :** If the threshold is set too low (e.g., 80% variance), components that carry weak but class-relevant signal get discarded. Recall drops first; the model fails to catch minority class positives.
 
 **Nonlinear manifold structure :** PCA finds linear subspaces. If the true data manifold is curved (e.g., two interleaved spirals), PCA projects both spirals onto the same line, destroying separability entirely. Use Kernel PCA or UMAP instead.
 
