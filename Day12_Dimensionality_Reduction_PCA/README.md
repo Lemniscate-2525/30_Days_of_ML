@@ -6,16 +6,17 @@
 
 Predict whether a tumor is malignant or benign using 30 real-valued numerical features derived from digitized images of fine needle aspirate (FNA) of breast masses.
 
-Target variable: `diagnosis` : binary classification label (Malignant / Benign).
+Target variable ->  `diagnosis`; Binary classification label (Malignant / Benign).
 
-Objective: Study the impact of PCA as a preprocessing step. Compare classifier performance and efficiency before and after dim reduction.
+Objective : To study the impact of PCA as a preprocessing step. Compare classifier performance and efficiency before and after dim reduction.
 
 ---
 
-## Problem Overview : 
+## Overview : 
 
 Breast cancer diagnosis from image features presents a classic high-dimensional structured data problem. 
 With 30 features, many of which are geometrically related; the raw feature space contains substantial redundancy. 
+
 This makes it an ideal candidate to study what dimensionality reduction actually buys you in practice; in terms of both computational efficiency and generalization.
 
 ---
