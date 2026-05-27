@@ -2,6 +2,7 @@ import time
 
 import pandas as pd
 import numpy as np
+
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -20,7 +21,7 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 
 # Dataset : 
-fp = "/content/creditcard.csv"
+fp = "/content/creditcard - Copy.csv"
 df = pd.read_csv(fp)
 
 # EDA : 
@@ -48,6 +49,9 @@ df['Amount'] = scaler.fit_transform(df[['Amount']])
 
 X = df.drop('Class', axis = 1)
 y = df['Class']
+
+df['Class'].isna().sum()
+df['Class'].value_counts()
 
 # Train/Test Split : 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, stratify = y, random_state = 42)
@@ -83,7 +87,7 @@ tuned_train_time = time.time() - start_time
 
 start_inf = time.time()
 pred_tuned = np.where(det_tuned.predict(X_test) == -1,1,0)
-tuned_inf_lat = (time.time() - start_time)/len(X_test)
+tuned_inf_lat = (time.time() - start_inf)/len(X_test)
 
 # Tuned Model Metrics : 
 scores_tuned = -det_tuned.decision_function(X_test)
