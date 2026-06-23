@@ -252,12 +252,12 @@ With a 75/25 class split and a business context (income prediction), the followi
 | KNN | 0.6893 | 0.5842 | 0.6324 | 0.8704 | 0.0162 | 5.75e-04 |
 | RF | 0.8218 | 0.5402 | 0.6519 | 0.9100 | 7.7548 | 2.02e-05 |
 | XGB | 0.8067 | 0.6364 | 0.7115 | 0.9267 | 1.8354 | 4.68e-06 |
-| Tuned XGB | 0.8013 | 0.6500 | 0.7178 | - | 44.843 | 6.51e-06 |
+| Tuned XGB | 0.8013 | 0.6500 | 0.7178 | 0.9288 | 44.843 | 6.51e-06 |
 | Stacking | 0.7939 | 0.6400 | 0.7087 | 0.9263 | 0.0654 | 8.17e-08 |
 
-Note: Tuned XGB ROC-AUC was not correctly captured in the output due to a bug in the results dictionary (`"ROC_AUC": (y_test, tuned_prob)` missing the `roc_auc_score` call). The stacking meta-learner training time (0.065s) reflects only the LogReg fit on OOF features, not the full OOF generation cost.
-
+The stacking meta-learner training time (0.065s) reflects only the LogReg fit on OOF features, not the full OOF generation cost.
 XGB and Stacking achieve the highest ROC-AUC (0.9267 and 0.9263 respectively). 
+
 Stacking does not dramatically exceed its best base learner here; which is expected on a well-behaved structured dataset with moderate imbalance and low feature redundancy. 
 The gain from stacking is marginal but consistent, which is exactly the use case it is designed for.
 
