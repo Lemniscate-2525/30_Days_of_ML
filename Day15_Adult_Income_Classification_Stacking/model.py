@@ -148,7 +148,7 @@ res.append({
     "Precision" : precision_score(y_test,tuned_preds),
     "Recall" : recall_score(y_test,tuned_preds),
     "F1" : f1_score(y_test,tuned_preds),
-    "ROC_AUC" : (y_test,tuned_prob),
+    "ROC_AUC" : roc_auc_score(y_test,tuned_prob),
     "Train_Time" : tuned_time,
     "Latency" : tuned_latency,
     "Probs" : tuned_prob
