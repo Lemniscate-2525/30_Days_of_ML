@@ -20,3 +20,5 @@ services:
       - .:/app
     depends_on:
       - api
+    environment:
+      - API_URL=http://api:8000/predict
