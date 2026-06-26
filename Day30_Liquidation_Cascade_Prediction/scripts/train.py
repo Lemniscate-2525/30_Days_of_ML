@@ -16,13 +16,13 @@ def main():
     print(f"[SYSTEM] Initializing Training on {device}")
     train_loader, _ = get_dataloaders()
     
-    raw_model = LlamaModel(vocab_size, d_model, num_layers, num_heads, seq_len).to(device)
-  
-    try:
-        model = torch.compile(raw_model)
-      
-    except Exception:
-        model = raw_model
+    model = LlamaModel(
+    vocab_size,
+    d_model,
+    num_layers,
+    num_heads,
+    seq_len
+    ).to(device)
 
     optimizer = torch.optim.AdamW(model.parameters(), lr = lr, weight_decay = 1e-2)
     criterion = nn.BCEWithLogitsLoss()
@@ -44,10 +44,10 @@ def main():
           
             total_loss += loss.item()
             
-        print(f"Epoch {e+1:02d}/{EPOCHS} | Loss: {total_loss/len(train_loader):.4f} | Time: {time.time()-start:.2f}s")
+        print(f"Epoch {e+1:02d}/{epochs} | Loss: {total_loss/len(train_loader):.4f} | Time: {time.time()-start:.2f}s")
 
     # Saving trained weights : 
-    torch.save(raw_model.state_dict(), model_save_path)
+    torch.save(model.state_dict(), model_save_path)
   
 if __name__ == "__main__":
     main()
