@@ -3,9 +3,12 @@ import requests
 import numpy as np
 import plotly.graph_objects as go
 import time
+import os
 
-# --- Config & State ---
-API_URL = "http://api:8000/predict"
+API_URL = os.getenv(
+    "API_URL",
+    "http://127.0.0.1:8000/predict"
+)
 st.set_page_config(page_title="Project Ascension | L3 Radar", layout="wide", initial_sidebar_state="collapsed")
 
 # Custom CSS for Quant Terminal look
@@ -43,7 +46,7 @@ with side_col:
                 else:
                     st.error(f"API Reject: {response.status_code}")
             except Exception as e:
-                st.error("Engine Disconnected.")
+                st.exception(e)
 
 with main_col:
     st.markdown("### 📊 LOB Tick Trajectory (Window: 128ms)")
