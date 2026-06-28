@@ -1,41 +1,25 @@
-# Titanic Survival Prediction
+# Titanic Survival Prediction 
 
-## Problem
+## Problem Statement : 
 
-Predict whether a passenger survived the Titanic disaster.
+Predict whether a passenger survived the Titanic disaster. This is a **binary classification** problem.
 
-Binary classification problem.
+**Target variable :** `Survived`
+- $0$ : Did not survive
+- $1$ : Survived
 
-Target variable:
-
-Survived  
-0 → Did not survive  
-1 → Survived
-
-Dataset size: 891 samples.
+**Dataset size :** 891 samples, sourced from the [Kaggle Titanic competition](https://www.kaggle.com/competitions/titanic/data) (`train.csv`).
 
 ---
 
-# Dataset
-
-Titanic Dataset
-
-https://www.kaggle.com/competitions/titanic/data
-
-Used file:
-
-train.csv
-
----
-
-# Machine Learning Pipeline
+## ML Pipeline : 
 
 1. Data Loading
 2. Data Exploration
 3. Handling Missing Values
 4. Feature Engineering
 5. Encoding Categorical Variables
-6. Train Test Split
+6. Train/Test Split
 7. Decision Tree Training
 8. Model Evaluation
 9. Tree Visualization
@@ -43,213 +27,147 @@ train.csv
 
 ---
 
-# Handling Missing Values
+## Handling Missing Values : 
 
-Age column contained missing values.
+**Age :** missing values replaced with the median age of the dataset.
 
-We replaced them with the median age.
+**Cabin :** approximately 77% of values were missing, making the raw column unusable. Instead, the **deck** was extracted from the first letter of the cabin number:
 
-Cabin had many missing values (~77%).
+$$\text{C85} \rightarrow \text{Deck C}$$
 
-Instead of using the raw cabin value, the deck information was extracted.
-
-Deck corresponds to the first letter of the cabin number.
-
-Example:
-
-C85 → Deck C
-
-Missing values were labeled as "Unknown".
+Passengers with no cabin record were labeled `"Unknown"`. This converts a mostly-missing column into a usable categorical feature.
 
 ---
 
-# Feature Encoding
+## Feature Encoding : 
 
-Categorical features were converted to numeric values using one-hot encoding.
-
-Example:
-
-Embarked values:
-
-S, C, Q
-
-Converted to binary columns:
-
-Embarked_C  
-Embarked_Q
-
-The first category was dropped to avoid multicollinearity.
+Categorical features were converted to numeric values using **one-hot encoding**. For example, `Embarked` with values $\{S, C, Q\}$ becomes binary columns `Embarked_C` and `Embarked_Q`. The first category is dropped to avoid multicollinearity.
 
 ---
 
-# Decision Tree Model
+## Decision Tree Model : 
 
-The model used:
-
-```
-DecisionTreeClassifier(max_depth = 4)
+```python
+DecisionTreeClassifier(max_depth=4)
 ```
 
-Tree depth was limited to control overfitting.
-
-Decision trees tend to grow very deep and memorize training data.
-
-Restricting the depth improves generalization.
+Tree depth is capped at 4 to control overfitting. Without a depth limit, a decision tree will keep splitting until every leaf is pure, which means it will memorize the training data rather than learning generalizable patterns. Restricting depth forces the model to find splits that work broadly, not just on individual training examples.
 
 ---
 
-# Mathematical Concepts
+### Entropy : 
 
-## Entropy
+Entropy measures the **impurity** of a node: how mixed the class labels are among the samples it contains.
 
-Entropy measures impurity in a node.
+$$H(S) = -\sum_{k} p_k \log_2(p_k)$$
 
-Formula:
+where $p_k$ is the proportion of samples belonging to class $k$ in the node, and the sum runs over all classes.
 
-Entropy = − Σ p log₂(p)
-
-If all samples belong to one class → entropy = 0.
-
-If classes are evenly mixed → entropy = 1.
+- All samples belong to one class: $H(S) = 0$ (perfectly pure, no uncertainty)
+- Classes are evenly split: $H(S) = 1$ (maximum impurity)
 
 ---
 
-## Information Gain
+### Information Gain : 
 
-Trees choose splits using Information Gain.
+At each node, the tree evaluates every possible split and selects the one that reduces impurity the most. This reduction is called **Information Gain**:
 
-Information Gain =
+$$IG = H(\text{parent}) - \sum_{v} \frac{|S_v|}{|S|} \cdot H(S_v)$$
 
-Entropy(parent) − Weighted Entropy(children)
-
-The split with highest information gain is chosen.
+where $S_v$ is the subset of samples going to child node $v$, $|S_v|$ is its size, and $|S|$ is the total number of samples in the parent. The weighted sum accounts for the fact that larger children contribute more to the overall impurity after the split. The split with the highest $IG$ is chosen.
 
 ---
 
-## Gini Impurity
+### Gini Impurity : 
 
-Alternative impurity measure used by CART trees.
+An alternative to entropy used by CART-style trees:
 
-Gini = 1 − Σ(p²)
+$$G(S) = 1 - \sum_{k} p_k^2$$
 
-Lower Gini indicates purer nodes.
-
----
-
-# Overfitting in Decision Trees
-
-Decision Trees easily overfit because they can create very deep structures.
-
-The tree continues splitting until leaf nodes become pure.
-
-This may lead to rules that memorize the training dataset rather than learning general patterns.
-
-Example of overfitting rule:
-
-If PassengerID = 438 → Survived
-
-Such rules do not generalize.
-
-To control overfitting we limit tree depth.
+where $p_k$ is the proportion of class $k$ in the node. A lower Gini value indicates a purer node. Gini tends to be computationally cheaper than entropy since it avoids the logarithm.
 
 ---
 
-# Model Evaluation
+## Overfitting in Decision Trees : 
 
-Metrics used:
+Decision trees naturally overfit: without constraints, they split until every leaf is pure, producing rules that memorize individual training samples rather than learning general patterns.
 
-Accuracy  
-Precision  
-Recall  
-F1 Score  
-Confusion Matrix
-
----
-
-# Cross Validation
-
-To ensure the model generalizes well and is not dependent on a single train-test split, 5-fold cross validation was performed.
-
-The dataset is divided into 5 folds. The model is trained on 4 folds and validated on the remaining fold. This process repeats until every fold has served as the validation set.
-
-Example output:
+**eg :**
 
 ```
-Cross Validation Scores: [0.80 0.83 0.79 0.82 0.81]
+If PassengerID == 438 → Survived
+```
+
+Such a rule is perfectly accurate on training data and completely useless on unseen data. Limiting `max_depth` prevents the tree from reaching this level of specificity, forcing it to find splits that hold across many samples.
+
+---
+
+## Model Evaluation : 
+
+**Metrics used :** Accuracy, Precision, Recall, F1 Score, Confusion Matrix.
+
+### Cross Validation : 
+
+5-fold cross validation was performed to ensure the evaluation is not dependent on a single train/test split. The dataset is divided into 5 equal folds; the model trains on 4 and validates on the remaining 1, rotating until every fold has served as the validation set.
+
+```
+Cross Validation Scores: [0.80, 0.83, 0.79, 0.82, 0.81]
 Mean CV Score: 0.81
 Std Dev: 0.014
 ```
 
-The mean score provides a more reliable estimate of model performance compared to a single train-test split.
+The mean score provides a more reliable performance estimate than any single split.
 
-# Model Visualization
+---
 
-## Decision Tree Structure
+## Visualizations : 
+
+### Decision Tree Structure : 
 
 ![Decision Tree](tree.png)
 
-The decision tree visualization helps understand how the model splits features such as sex, passenger class, and fare to determine survival probability.
+The tree visualization shows exactly how the model makes decisions; which features it splits on (sex, passenger class, fare), at what thresholds, and what survival probability each leaf assigns.
 
----
-
-## Confusion Matrix
+### Confusion Matrix : 
 
 ![Confusion Matrix](cf.png)
 
-The confusion matrix shows the number of correct and incorrect predictions for each class.
-
-# Feature Importance
-
-Decision Trees provide feature importance scores.
-
-Important predictors typically include:
-
-Sex  
-Pclass  
-Fare  
-Age
-
-Gender is usually the strongest predictor of survival.
+Shows the count of true positives, true negatives, false positives, and false negatives, giving a complete picture of where the model is correct and where it fails.
 
 ---
 
-# Time Complexity
+## Feature Importance : 
 
-Training complexity:
+Decision trees expose feature importance scores based on how much each feature reduces impurity across all splits. Top predictors for Titanic survival:
 
-O(F * N log N)
-
-Where
-
-F = number of features  
-N = number of samples
-
-The algorithm evaluates possible splits across features and sorts feature values.
-
-Prediction complexity:
-
-O(depth)
-
-Each prediction follows a path from root to leaf.
+- **Sex:** strongest predictor by a significant margin
+- **Pclass:** passenger class encodes both socioeconomic status and deck location
+- **Fare:** correlated with class and cabin position
+- **Age:** children had higher survival priority
 
 ---
 
-# Space Complexity
+## Time and Space Complexity : 
 
-Space complexity depends on number of nodes in the tree.
+### Training : 
 
-Worst case:
+At each node, the algorithm evaluates all possible split thresholds across all $F$ features.
+Sorting feature values dominates the cost :
 
-O(N)
+$$O(f \cdot n \log n)$$
 
-When tree grows very deep.
+where $f$ is the number of features and $N$ is the number of training samples.
 
----
+### Prediction : 
 
-# Key Learning Points
+Each prediction follows a single root-to-leaf path; 
 
-Handling missing values  
-Categorical encoding  
-Decision tree structure  
-Overfitting control  
-Model interpretability
+$$O(\text{depth})$$
+
+### Space
+
+The tree stores one node per split. In the worst case (fully grown tree), this is :
+
+$$O(n)$$
+
+nodes. With `max_depth=4`, the upper bound is $2^4 - 1 = 15$ internal nodes regardless of dataset size.
