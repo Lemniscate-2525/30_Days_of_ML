@@ -242,7 +242,7 @@ Variables :
 
 **Training complexity (per epoch, convolution dominant) :**
 
-$$O\!\left(N \cdot \sum_l F_l \cdot C_l \cdot k^2 \cdot H'_l \cdot W'_l\right)$$
+$$O\left(N \cdot \sum_l F_l \cdot C_l \cdot k^2 \cdot H'_l \cdot W'_l\right)$$
 
 For our two conv layers :
 - Conv1 : $N \times 16 \times 1 \times 9 \times 28 \times 28 \approx N \times 112{,}896$
@@ -254,19 +254,19 @@ Conv2 dominates; this is typical. Deeper feature maps with more channels are the
 
 **Inference complexity per sample :**
 
-$$O\!\left(\sum_l F_l \cdot C_l \cdot k^2 \cdot H'_l \cdot W'_l + d_{\text{fc}} \cdot h\right)$$
+$$O\left(\sum_l F_l \cdot C_l \cdot k^2 \cdot H'_l \cdot W'_l + d_{\text{fc}} \cdot h\right)$$
 
 All the same operations as training, but for one sample with no gradient computation. Constant in $N$.
 
 **Space complexity (parameters) :**
 
-$$O\!\left(\sum_l F_l \cdot C_l \cdot k^2 + d_{\text{fc}} \cdot h\right) = O(206{,}922 \text{ params})$$
+$$O\left(\sum_l F_l \cdot C_l \cdot k^2 + d_{\text{fc}} \cdot h\right) = O(206{,}922 \text{ params})$$
 
 The convolution layers are extremely parameter-efficient, $4{,}800$ parameters handle all spatial feature extraction across the entire image. The FC layer accounts for 97% of parameter storage. This is why modern vision architectures minimize or eliminate FC layers.
 
 **Activation memory during training :**
 
-$$O\!\left(N \cdot \sum_l F_l \cdot H'_l \cdot W'_l\right)$$
+$$O\left(N \cdot \sum_l F_l \cdot H'_l \cdot W'_l\right)$$
 
 Feature maps must be stored for backpropagation. For batch size 64; $64 \times (16 \times 28 \times 28 + 32 \times 14 \times 14) \approx 64 \times 19{,}264 \approx 1.2M$ floats per batch.
 
