@@ -22,6 +22,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("MARKET MICROSTRUCTURE RADAR")
+st.caption(f"Connected to Engine: {API_URL}")
 st.markdown("---")
 
 # --- Layout ---
@@ -49,7 +50,7 @@ with side_col:
                 st.exception(e)
 
 with main_col:
-    st.markdown("### 📊 LOB Tick Trajectory (Window: 128ms)")
+    st.markdown("### 📈 Synthetic Level-3 Tick Stream (128 Tick Observation Window)")
     if 'ticks' in st.session_state:
         fig = go.Figure()
         fig.add_trace(go.Scatter(
@@ -61,10 +62,12 @@ with main_col:
             fillcolor='rgba(0, 255, 204, 0.1)'
         ))
         fig.update_layout(
+            title='Synthetic Market Microstructure Window',
+            hovermode='x unified',
             paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-            height=450, margin=dict(l=0, r=0, t=30, b=0),
-            xaxis=dict(showgrid=False, zeroline=False, color='#8B949E'),
-            yaxis=dict(showgrid=True, gridcolor='#30363D', color='#8B949E')
+            height=450, margin=dict(l=0, r=0, t=50, b=0),
+            xaxis=dict(title='Tick Index (0–127)',showgrid=False, zeroline=False, color='#8B949E'),
+            yaxis=dict(title='Encoded Market State (Token ID)',showgrid=True, gridcolor='#30363D', color='#8B949E')
         )
         st.plotly_chart(fig, use_container_width=True)
     else:
@@ -75,21 +78,29 @@ if 'data' in st.session_state:
     data = st.session_state['data']
     prob = data['probability'] * 100
     is_imminent = data['cascade_imminent']
+    status = 'HIGH RISK' if is_imminent else 'NORMAL'
+    latency=data['latency_ms']
+    latency_color='#00C851' if latency<100 else '#FFD54F' if latency<500 else '#FF4444'
+    rtt=st.session_state['rtt']
+    rtt_color='#00C851' if rtt<100 else '#FFD54F' if rtt<500 else '#FF4444'
+    st.progress(min(prob/100,1.0))
+    st.caption(f'System Status: {status}')
+
     
     with top_col1:
         st.markdown(f"<div class='metric-box {'critical' if is_imminent else 'stable'}'>"
                     f"<h4 style='margin:0; color:#8B949E;'>CASCADE PROBABILITY</h4>"
                     f"<h1 style='margin:0; color:{'#FF4444' if is_imminent else '#00C851'};'>{prob:.2f}%</h1>"
-                    f"</div>", unsafe_allow_html=True)
+                    f"<p style='margin-top:10px; font-size:16px; color:#8B949E;'>STATUS</p>"f"<h3 style='margin-top:0; color:{'#FF4444' if is_imminent else '#00C851'};'>{status}</h3>"f"</div>", unsafe_allow_html=True)
     
     with top_col2:
         st.markdown(f"<div class='metric-box'>"
                     f"<h4 style='margin:0; color:#8B949E;'>MODEL LATENCY</h4>"
-                    f"<h1 style='margin:0; color:#58A6FF;'>{data['latency_ms']:.2f} ms</h1>"
+                    f"<h1 style='margin:0; color:{latency_color};'>{data['latency_ms']:.2f} ms</h1>"
                     f"</div>", unsafe_allow_html=True)
         
     with top_col3:
         st.markdown(f"<div class='metric-box'>"
                     f"<h4 style='margin:0; color:#8B949E;'>NETWORK RTT</h4>"
-                    f"<h1 style='margin:0; color:#D2A8FF;'>{st.session_state['rtt']:.2f} ms</h1>"
+                    f"<h1 style='margin:0; color:{rtt_color};'>{st.session_state['rtt']:.2f} ms</h1>"
                     f"</div>", unsafe_allow_html=True)
