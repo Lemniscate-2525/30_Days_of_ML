@@ -31,11 +31,56 @@ main_col, side_col = st.columns([3, 1])
 
 with side_col:
     st.markdown("### Execution Control")
-    if st.button("PULSE L3 FEED", use_container_width=True, type="primary"):
-        with st.spinner("Intercepting Tick Data..."):
-            # Synthetic 128-tick burst with a heavy liquidation drop
-            ticks = np.random.randint(40, 60, 128)
-            ticks[90:120] = np.random.randint(10, 25, 30) # Floor falls out
+
+    mode = st.radio(
+        "Input Source",
+        ["Random Demo", "Manual Tick Entry"]
+    )
+
+    manual_text = ""
+    if mode == "Manual Tick Entry":
+        manual_text = st.text_area(
+            "Paste 128 comma-separated integers (0-99)",
+            height=180,
+            placeholder="12,45,33,56,..."
+        )
+
+    uploaded_file = st.file_uploader(
+        "Upload Tick CSV",
+        type=["csv"]
+    )
+
+    if st.button("RUN INFERENCE", use_container_width=True, type="primary"):
+        with st.spinner("Analyzing Order Flow..."):
+
+            if mode == "Random Demo":
+                ticks = np.random.randint(40, 60, 128)
+                ticks[90:120] = np.random.randint(10, 25, 30)
+            else:
+                if uploaded_file is not None:
+                    import pandas as pd
+                    try:
+                        df=pd.read_csv(uploaded_file,header=None)
+                        ticks=df.iloc[:,0].astype(int).tolist()
+                    except Exception:
+                        st.error("Unable to read CSV.")
+                        st.stop()
+                else:
+                    try:
+                        ticks=[int(x.strip()) for x in manual_text.replace("\n",",").split(",") if x.strip()]
+                    except Exception:
+                        st.error("Unable to parse input. Use comma-separated integers.")
+                        st.stop()
+
+                if len(ticks)!=128:
+                    st.error(f"Expected 128 values. Got {len(ticks)}.")
+                    st.stop()
+
+                if any(t<0 or t>99 for t in ticks):
+                    st.error("Values must be between 0 and 99.")
+                    st.stop()
+
+                ticks=np.array(ticks)
             
             start_time = time.time()
             try:
