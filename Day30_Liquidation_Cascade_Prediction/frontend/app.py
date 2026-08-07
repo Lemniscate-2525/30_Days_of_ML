@@ -7,7 +7,7 @@ import os
 
 API_URL = os.getenv(
     "API_URL",
-    "http://127.0.0.1:8000/predict"
+    "https://liquid-cascade-api.onrender.com/predict"
 )
 st.set_page_config(page_title="Project Ascension | L3 Radar", layout="wide", initial_sidebar_state="collapsed")
 
