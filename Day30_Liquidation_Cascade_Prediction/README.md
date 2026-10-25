@@ -37,9 +37,9 @@ The injected crash pattern is physically motivated; real flash crashes show exac
 2. EDA: class distribution, token ID distribution (normal vs crash).
 3. Precompute RoPE frequency matrices for sequence length 128.
 4. Train LlamaModel (4 layers, 8 heads, 256d) for 5 epochs.
-5. Attempt `torch.compile` kernel fusion (falls back gracefully if unavailable).
-6. Evaluate: AUROC, PR-AUC, inference latency.
-7. Plot BCE loss and Precision-Recall curve.
+5. Save the trained model weights.
+6. Evaluate the fixed 1,000-sample holdout: AUROC, trapezoidal PR-AUC, Average Precision, and inference time.
+7. Review the metrics in the evaluation script output; do not interpret synthetic-data performance as real-market validation.
 
 ---
 
