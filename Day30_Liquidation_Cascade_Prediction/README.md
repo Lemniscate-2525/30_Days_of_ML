@@ -245,28 +245,30 @@ Batch inference (all 128 ticks at once): one full forward pass, dominated by att
 
 ---
 
-## Results : 
+## Reproducible Holdout Evaluation
 
-| Epoch | Loss | Time |
-|-------|------|------|
-| 1 | 0.0829 | 320.56 |
-| 2 | 0.0013 | 286.35 |
-| 3 | 0.0002 | 284.80 |
-| 4 | 0.0002 | 285.46 |
-| 5 | 0.0001 | 285.80 |
+The earlier metrics and curve in this section were produced before the dataset split was pinned to a fixed seed. Since the old generator made a new random dataset each time the training or evaluation script ran, those values are not a reproducible baseline for the fixed holdout below. They are intentionally not carried forward as verified results.
 
-**Final Metrics :**
+The current pipeline creates a deterministic synthetic dataset and a fixed, shuffled 80/20 split using independent random seeds:
 
-| Metric | Value |
-|--------|-------|
-| AUROC | 1.0000 |
-| PR-AUC | 1.0000 |
-| Inference Latency | 49.73ms per trajectory |
+| Partition | Samples | Normal | Cascade |
+|-----------|--------:|-------:|--------:|
+| Training | 4,000 | 3,610 | 390 |
+| Held-out test | 1,000 | 890 | 110 |
 
-AUROC and PR-AUC of 1.0 confirm perfect separation of crash from normal sequences. The model has completely learned the injected crash signature (token IDs 10-15 and 90-100 in specific tick ranges). The PR-AUC of 1.0 is especially significant given the 10% positive rate; a random classifier would achieve PR-AUC of 0.10.
-Perfect PR-AUC means zero false positives at any recall threshold.
+The training script uses only the training partition. The evaluation script recreates the same data and split, loads the saved weights, and reports metrics on the 1,000 held-out samples. The held-out partition is never used for gradient updates.
 
-![BCE Loss and Precision-Recall Curve](visd30.png)
+Run both scripts from this project directory:
+
+```bash
+pip install -r requirements.txt
+python scripts/train.py
+python scripts/evaluate.py
+```
+
+Evaluation reports AUROC, trapezoidal PR-AUC, Average Precision (AP), the holdout sample count and positive rate, and warmed-up amortized inference time per sequence. AP and trapezoidal PR-AUC are related but distinct metrics, so both are reported explicitly.
+
+**Important limitation:** this is still a synthetic benchmark. The generator injects a highly consistent cascade signature at fixed token positions, so strong holdout metrics demonstrate learning of that synthetic rule, not proven prediction performance on real exchange L3 data.
 
 ---
 
