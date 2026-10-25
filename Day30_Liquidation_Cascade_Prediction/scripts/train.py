@@ -59,3 +59,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# The model-weights workflow retrains this checkpoint on the deterministic training split.
