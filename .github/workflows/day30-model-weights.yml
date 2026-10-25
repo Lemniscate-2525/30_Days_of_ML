@@ -1,0 +1,45 @@
+name: Train and commit Day 30 model weights
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Day30_Liquidation_Cascade_Prediction/core/**"
+      - "Day30_Liquidation_Cascade_Prediction/scripts/train.py"
+      - ".github/workflows/day30-model-weights.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  train-and-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: Day30_Liquidation_Cascade_Prediction/requirements.txt
+
+      - name: Install training dependencies
+        run: python -m pip install --upgrade pip && python -m pip install torch numpy scikit-learn
+
+      - name: Train reproducible model
+        working-directory: Day30_Liquidation_Cascade_Prediction
+        run: python -u scripts/train.py
+
+      - name: Commit trained checkpoint
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Day30_Liquidation_Cascade_Prediction/weights/llama_l3_engine.pth
+          git commit -m "Add reproducibly trained Day 30 model weights"
+          git push
