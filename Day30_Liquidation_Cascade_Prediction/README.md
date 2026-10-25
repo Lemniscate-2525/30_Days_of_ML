@@ -249,11 +249,11 @@ Batch inference (all 128 ticks at once): one full forward pass, dominated by att
 
 | Epoch | Loss | Time |
 |-------|------|------|
-| 1 | 0.0829 | 320.56 |
-| 2 | 0.0013 | 286.35 |
-| 3 | 0.0002 | 284.80 |
-| 4 | 0.0002 | 285.46 |
-| 5 | 0.0001 | 285.80 |
+| 1 | 0.0682 | 88.64 |
+| 2 | 0.0003 | 85.34 |
+| 3 | 0.0002 | 83.37 |
+| 4 | 0.0002 | 84.10 |
+| 5 | 0.0001 | 85.60 |
 
 **Final Metrics :**
 
@@ -261,7 +261,7 @@ Batch inference (all 128 ticks at once): one full forward pass, dominated by att
 |--------|-------|
 | AUROC | 1.0000 |
 | PR-AUC | 1.0000 |
-| Inference Latency | 49.73ms per trajectory |
+| Inference Latency | 8.14ms per trajectory |
 
 AUROC and PR-AUC of 1.0 confirm perfect separation of crash from normal sequences. The model has completely learned the injected crash signature (token IDs 10-15 and 90-100 in specific tick ranges). The PR-AUC of 1.0 is especially significant given the 10% positive rate; a random classifier would achieve PR-AUC of 0.10.
 Perfect PR-AUC means zero false positives at any recall threshold.
