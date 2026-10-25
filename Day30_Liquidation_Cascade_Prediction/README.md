@@ -296,11 +296,3 @@ Perfect PR-AUC means zero false positives at any recall threshold.
 - The synthetic data achieves perfect metrics because the crash signal is deterministic. Production validation on real L3 data, with regime-aware train-test splits and proper class weighting, is the mandatory next step before deployment.
 
 ---
-
-## Trained Model Checkpoint
-
-The reproducibly trained checkpoint is available at [`weights/llama_l3_engine.pth`](weights/llama_l3_engine.pth) (approximately 16.9 MB). It was trained for five epochs on the deterministic 4,000-sample synthetic training split. The 1,000-sample holdout remains reserved for evaluation.
-
-To regenerate the checkpoint, run `python scripts/train.py` from this project directory. The GitHub Actions workflow at [`.github/workflows/day30-model-weights.yml`](../../.github/workflows/day30-model-weights.yml) can also train and commit the checkpoint automatically.
-
-**Important:** This is a synthetic-data demonstration. Its metrics do not establish performance on real market data.
